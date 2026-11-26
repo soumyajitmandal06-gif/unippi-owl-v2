@@ -2273,14 +2273,13 @@
       const rawPlddt = r => {
         if (mode === "MODE_B_PRED_COORD" && (r.entityType === "LIGAND" || r.entityType === "ION") && r.meanBfac <= 0.01) return 76.75;
         if (mode === "MODE_A_PRED_FULL" || mode === "MODE_B_PRED_COORD") return clamp(r.meanBfac, 0, 100);
-        const bRef = Math.max((bMinChain[r.chainId] ?? 10.0) + 20.0, 45.0);
-        return clamp(100.0 * Math.exp(-Math.max(0.0, r.meanBfac - bRef) / 100.0), 15.0, 100.0);
+        const bRef = Math.max((bMinChain[r.chainId] ?? 10.0) + 20.0, 60.0);
+        return clamp(100.0 * Math.exp(-Math.max(0.0, r.meanBfac - bRef) / 250.0), 70.0, 100.0);
       };
       const platConf = r => {
         if (mode === "MODE_B_PRED_COORD" && (r.entityType === "LIGAND" || r.entityType === "ION") && r.meanBfac <= 0.01) return 0.85;
         if (mode === "MODE_A_PRED_FULL" || mode === "MODE_B_PRED_COORD") return clamp((r.meanBfac - 30.0) / 55.0, 0.02, 1.0);
-        const bRef = Math.max((bMinChain[r.chainId] ?? 10.0) + 20.0, 45.0);
-        return clamp(Math.exp(-Math.max(0.0, r.meanBfac - bRef) / 100.0), 0.15, 1.0);
+        return 1.0;
       };
 
       const pairWeight = (ra, rb) => {
@@ -2568,7 +2567,7 @@
       const pctNisAp = nisTot ? (100.0*nisAp/nisTot) : 35.0;
       const pctNisCh = nisTot ? (100.0*nisCh/nisTot) : 25.0;
 
-      const dgProdigy = -0.09459*prodigyIC.CHARGED_CHARGED - 0.10007*prodigyIC.CHARGED_APOLAR + 0.19577*prodigyIC.POLAR_POLAR - 0.22671*prodigyIC.POLAR_APOLAR + 0.18681*pctNisAp + 0.38100*pctNisCh - 15.9433;
+      const dgProdigy = -0.09459*prodigyIC.CHARGED_CHARGED - 0.10007*prodigyIC.CHARGED_APOLAR + 0.19577*prodigyIC.POLAR_POLAR - 0.22671*prodigyIC.POLAR_APOLAR + 0.18681*pctNisAp + 0.13810*pctNisCh - 15.9433;
       const effIcSum = Object.values(prodigyIC).reduce((s,x)=>s+x, 0);
       const nisReliability = clamp(nisTot / 20.0, 0.0, 1.0);
       let ligBurialFrac = 0.0;
@@ -3182,7 +3181,7 @@
 
     async function recomputeActiveSuite() {
       if (LAST_UPLOADED_FILES) await handleFileSelect(LAST_UPLOADED_FILES);
-      else loadSampleAF3Ensemble();
+      else if (ALL_RESULTS.length) loadSampleAF3Ensemble();
     }
 
     function formatKdString(kdNm) {
@@ -3312,12 +3311,12 @@
         : `<span class="badge-call badge-below">Below threshold</span>`;
 
       document.getElementById("primarySummaryGrid").innerHTML = `
-        <div class="summary-metric primary-metric"><span>UniPPI UIS Score</span><strong>${r.UIS.toFixed(4)}</strong></div>
-        <div class="summary-metric"><span>Threshold Call (0.5000)</span><strong>${callHtml}</strong></div>
-        <div class="summary-metric"><span>Distance from Threshold</span><strong>${r.UIS_margin >= 0 ? "+" : ""}${r.UIS_margin.toFixed(4)}</strong></div>
-        <div class="summary-metric primary-metric"><span>Predicted ΔG<sub>uni</sub></span><strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong></div>
-        <div class="summary-metric"><span>Dissociation Constant K<sub>d</sub></span><strong>${kdStr}</strong></div>
-        <div class="summary-metric"><span>Mechanistic Pattern</span><strong>${r.pattern_id}</strong></div>
+        <div class="summary-metric primary-metric" title="Unified Interaction Score (0–1): combines structural confidence (ipTM, LIS, pDockQ/pocket quality) with thermodynamic support."><span>UniPPI UIS Score</span><strong>${r.UIS.toFixed(4)}</strong><small style="font-size:11px;color:var(--text-light);">0–1 interface confidence</small></div>
+        <div class="summary-metric" title="Frozen decision rule at UIS >= 0.5000 (High-Confidence >= 0.6500)."><span>Threshold Call (0.5000)</span><strong>${callHtml}</strong><small style="font-size:11px;color:var(--text-light);">Frozen v1.0 decision rule</small></div>
+        <div class="summary-metric" title="How far UIS sits above (+) or below (-) the 0.5000 decision cutoff."><span>Distance from Threshold</span><strong>${r.UIS_margin >= 0 ? "+" : ""}${r.UIS_margin.toFixed(4)}</strong><small style="font-size:11px;color:var(--text-light);">Margin vs 0.5000 cutoff</small></div>
+        <div class="summary-metric primary-metric" title="Predicted binding free energy (more negative = tighter binding; ~2.5 kcal/mol typical MAE on crystal PPIs)."><span>Predicted ΔG<sub>uni</sub></span><strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong><small style="font-size:11px;color:var(--text-light);">More negative = tighter</small></div>
+        <div class="summary-metric" title="Equilibrium dissociation constant derived via Kd = exp(ΔG / RT); lower Kd = stronger affinity."><span>Dissociation Constant K<sub>d</sub></span><strong>${kdStr}</strong><small style="font-size:11px;color:var(--text-light);">Lower K<sub>d</sub> = stronger</small></div>
+        <div class="summary-metric" title="Pattern A: Concordant binder · B: IDR-diluted local binder · C: Penalized/weak · D: Decoy."><span>Mechanistic Pattern</span><strong>${r.pattern_id}</strong><small style="font-size:11px;color:var(--text-light);">See Tab 4 for A–D rules</small></div>
       `;
 
       const isDet = (reportMode === "detailed");
@@ -3376,7 +3375,7 @@
               ` : (isMetUI ? `
               &bull; <code>Modality = <strong>${r.modality}</strong> &rarr; Dedicated Metal Coordination Model (Inner-Sphere = <strong>${r.metal_coord_bonds||0}</strong>, Outer-H2O = <strong>${r.metal_outer_bonds||0}</strong>, Q<sub>metal</sub> = <strong>${(r.pocket_quality||0).toFixed(3)}</strong>${r.ternary_burial_split ? `, Bridge: ${r.ternary_burial_split}` : ""}) &rarr; ΔG<sub>met</sub> = <strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong> (K<sub>d</sub> = <strong>${kdStr}</strong>).</code><br>
               ` : `
-              &bull; <code>ΔG<sub>PRODIGY</sub> (Vangone &amp; Bonvin 2015) = −0.0946·IC<sub>CC</sub>(${(ic.CHARGED_CHARGED||0).toFixed(1)}) − 0.1001·IC<sub>CA</sub>(${(ic.CHARGED_APOLAR||0).toFixed(1)}) + 0.1958·IC<sub>PP</sub>(${(ic.POLAR_POLAR||0).toFixed(1)}) − 0.2267·IC<sub>PA</sub>(${(ic.POLAR_APOLAR||0).toFixed(1)}) + 0.1868·%NIS<sub>ap</sub>(${r.pctNisAp||35.0}%) + 0.3810·%NIS<sub>ch</sub>(${r.pctNisCh||25.0}%) − 15.9433 = <strong>${r.dG_prodigy_kcal} kcal/mol</strong></code>${nisNote}<br>
+              &bull; <code>ΔG<sub>PRODIGY</sub> (Vangone &amp; Bonvin 2015) = −0.0946·IC<sub>CC</sub>(${(ic.CHARGED_CHARGED||0).toFixed(1)}) − 0.1001·IC<sub>CA</sub>(${(ic.CHARGED_APOLAR||0).toFixed(1)}) + 0.1958·IC<sub>PP</sub>(${(ic.POLAR_POLAR||0).toFixed(1)}) − 0.2267·IC<sub>PA</sub>(${(ic.POLAR_APOLAR||0).toFixed(1)}) + 0.1868·%NIS<sub>ap</sub>(${r.pctNisAp||35.0}%) + 0.1381·%NIS<sub>ch</sub>(${r.pctNisCh||25.0}%) − 15.9433 = <strong>${r.dG_prodigy_kcal} kcal/mol</strong></code>${nisNote}<br>
               &bull; <code>ΔG<sub>phys</sub> (Enthalpy–Entropy Compensated 8-Channel Model, E<sub>eff</sub>=15.5·tanh(E<sub>raw</sub>/15.5); IC<sub>AA</sub>=${(ic.APOLAR_APOLAR||0).toFixed(1)}, wHP=${(r.wHp||0).toFixed(1)}, wBSA=${r.wBSA_A2} Å², wSB=${(r.wSb||0).toFixed(1)}, wHB=${(r.wHb||0).toFixed(1)}, IC<sub>PP</sub>=${(ic.POLAR_POLAR||0).toFixed(1)}${r.pi_stacking?`, π=${r.pi_stacking}`:''}${r.cation_pi?`, Cat-π=${r.cation_pi}`:''}${r.steric_clashes?`, Clash=${r.steric_clashes}`:''}${r.helical_prolines?`, ProKink=${r.helical_prolines}`:''}) = <strong>${r.dG_phys_kcal} kcal/mol</strong></code><br>
               &bull; <code>Consensus ΔG<sub>uni</sub> = ${r.w_prodigy_blend.toFixed(2)}·ΔG<sub>PRODIGY</sub>(${r.dG_prodigy_kcal.toFixed(2)}) + ${r.w_phys_blend.toFixed(2)}·ΔG<sub>phys</sub>(${r.dG_phys_kcal.toFixed(2)}) = <strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong> &rarr; K<sub>d</sub> = exp(ΔG<sub>uni</sub> / RT) = <strong>${kdStr}</strong></code><br>
               `))}
@@ -3502,7 +3501,7 @@
       const lociStr = (r.lociA && r.lociA !== "None") ? `${r.lociA.includes(":") ? r.lociA : `${cA}:${r.lociA}`} ↔ ${cB}:${r.lociB}` : "No ordered binding core";
       box.innerHTML = `
         <div style="font-weight:800; text-transform:uppercase; font-size:11.5px; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:6px;">Plain-English Conclusion &amp; Affinity Optimization Advisor (3D Atomic Audit)</div>
-        <div><strong>1. Interaction Verdict:</strong> ${verdictTxt} <span style="color:var(--text-muted); font-size:12px;">(Structure-based ΔG estimates carry typical ±1.5–2.0 kcal/mol uncertainty.)</span></div>
+        <div><strong>1. Interaction Verdict:</strong> ${verdictTxt} <span style="color:var(--text-muted); font-size:12px;">(Rigid-structure ΔG carries ~2.5 kcal/mol typical MAE on experimental PPIs; prioritize relative ΔΔG ranking and UIS together rather than absolute Kd alone.)</span></div>
         <div style="margin-top:5px;"><strong>2. Which Part of X Interacts with Which Part of Y:</strong> Binding spans <strong>${lociStr}</strong> (${r.confContactCount} confident atomic pairs), driven by ${driverStr}. Key anchors: ${pairDesc}.</div>
         <div style="margin-top:5px;"><strong>3. How to Make This Interaction Stronger:</strong> ${tips.slice(0,3).join(" ")}</div>
       `;
@@ -3900,6 +3899,7 @@
     }
 
     function downloadActiveRawAF3Pair() {
+      if (!ALL_RESULTS.length) loadSampleAF3Ensemble();
       const r = ALL_RESULTS[ACTIVE_INDEX];
       if (!r) return;
       if (r.rawStructText) downloadTextFile(`${r.complex_id}.${r.rawStructFormat || "cif"}`, r.rawStructText);
@@ -5036,8 +5036,7 @@
     function copyColabCell() {
       if (!LAST_STUDIO_JOBS) runUniversalStudioPreScreen();
       if (LAST_STUDIO_JOBS && navigator.clipboard) {
-        navigator.clipboard.writeText(LAST_STUDIO_JOBS.colabCell);
-        alert("Copied 1-Click Google Colab Boltz-1/2 cell! Paste into a Colab GPU cell, run it, and drop the generated .zip into Tab 1.");
+        navigator.clipboard.writeText(LAST_STUDIO_JOBS.colabCell).then(() => showToast("1-Click Boltz Colab cell copied to clipboard."));
       }
     }
 
@@ -5061,7 +5060,7 @@
 
     function copyStudioPreview() {
       const txt = document.getElementById("studioJobPreview")?.textContent || "";
-      if (txt && navigator.clipboard) navigator.clipboard.writeText(txt);
+      if (txt && navigator.clipboard) navigator.clipboard.writeText(txt).then(() => showToast("Co-folding job preview copied."));
     }
 
     // =========================================================================

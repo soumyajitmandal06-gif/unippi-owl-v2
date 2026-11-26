@@ -1198,14 +1198,14 @@ def analyze_interface_pair(
         b = 76.75 if (mode == "MODE_B_PRED_COORD" and res.entity_type in ("LIGAND", "ION") and res.mean_bfactor <= 0.01) else res.mean_bfactor
         if mode in ("MODE_A_PRED_FULL", "MODE_B_PRED_COORD"):
             return clamp(b, 0.0, 100.0)
-        b_ref = max(b_min_chain.get(res.chain_id, 10.0) + 20.0, 45.0)
-        return clamp(100.0 * math.exp(-max(0.0, b - b_ref) / 100.0), 15.0, 100.0)
+        b_ref = max(b_min_chain.get(res.chain_id, 10.0) + 20.0, 60.0)
+        return clamp(100.0 * math.exp(-max(0.0, b - b_ref) / 250.0), 70.0, 100.0)
 
     def residue_plateau_conf(res: Residue) -> float:
         if mode in ("MODE_A_PRED_FULL", "MODE_B_PRED_COORD"):
             return 0.85 if (mode == "MODE_B_PRED_COORD" and res.entity_type in ("LIGAND", "ION") and res.mean_bfactor <= 0.01) else clamp((res.mean_bfactor - 30.0) / 55.0, 0.02, 1.0)
         b_ref = max(b_min_chain.get(res.chain_id, 10.0) + 20.0, 45.0)
-        return clamp(math.exp(-max(0.0, res.mean_bfactor - b_ref) / 100.0), 0.15, 1.0)
+        return 1.0
 
     pae_mat = conf_data.get("res_pae_matrix", None)
 
@@ -1635,7 +1635,7 @@ def analyze_interface_pair(
         + 0.19577 * prodigy_ic["POLAR_POLAR"]
         - 0.22671 * prodigy_ic["POLAR_APOLAR"]
         + 0.18681 * pct_nis_apolar
-        + 0.38100 * pct_nis_charged
+        + 0.13810 * pct_nis_charged
         - 15.9433
     )
 
