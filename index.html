@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="UniPPI-OWL v2.1 (MARVAS) — Universal Protein–Protein &amp; Protein–RNA/DNA Structure-to-Affinity &amp; Atomic Interface Auditing Resource.">
+  <meta name="description" content="UniPPI-OWL v2.2 — Universal Protein–Protein &amp; Protein–RNA/DNA Structure-to-Affinity &amp; Atomic Interface Auditing Resource.">
     <link rel="canonical" href="https://soumyajitmandal06-gif.github.io/unippi-owl-v2/">
-  <meta name="keywords" content="UniPPI-OWL, UniPPI-OWL v2.0, MARVAS, AlphaFold3 binding free energy, protein-RNA interaction, molecular glue, protein-ligand affinity, PAE, ipTM, PRODIGY">
-  <meta property="og:title" content="UniPPI-OWL v2.1 (MARVAS) | Universal Protein–Protein &amp; Protein–RNA Affinity Resource">
+  <meta name="keywords" content="UniPPI-OWL, UniPPI-OWL v2.0, AlphaFold3 binding free energy, protein-RNA interaction, molecular glue, protein-ligand affinity, PAE, ipTM, PRODIGY">
+  <meta property="og:title" content="UniPPI-OWL v2.2 | Universal Protein–Protein &amp; Protein–RNA Affinity Resource">
   <meta property="og:url" content="https://soumyajitmandal06-gif.github.io/unippi-owl-v2/">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "UniPPI-OWL",
-    "alternateName": ["unippiowl", "unippi-owl", "UniPPI-OWL v2.0", "UniPPI-v2.1-MARVAS"],
+    "alternateName": ["unippiowl", "unippi-owl", "UniPPI-OWL v2.0", "UniPPI-v2.2"],
     "url": "https://soumyajitmandal06-gif.github.io/unippi-owl-v2/",
     "applicationCategory": "ScientificApplication",
     "operatingSystem": "Web Browser, Linux, Windows, macOS",
@@ -24,7 +24,7 @@
     }
   }
   </script>
-  <title>UniPPI-OWL v2.1 (MARVAS) | Protein–Protein &amp; Protein–RNA Affinity Resource</title>
+  <title>UniPPI-OWL v2.2 | Protein–Protein &amp; Protein–RNA Affinity Resource</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.0.4/3Dmol-min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
@@ -494,7 +494,7 @@
 
   <header class="resource-nav">
     <div class="resource-nav-inner">
-      <a class="wordmark" href="#top"><strong>UniPPI-OWL</strong><span>v2.1-MARVAS</span></a>
+      <a class="wordmark" href="#top"><strong>UniPPI-OWL</strong><span>v2.2</span></a>
             <nav class="resource-links">
         <a href="#analyze" onclick="switchWorkspaceTab('auditor')">3D Auditor</a>
         <a href="#tabPanelStudio" onclick="switchWorkspaceTab('studio')">X vs. Y Studio</a>
@@ -509,7 +509,7 @@
     <section class="hero" id="about" style="padding:20px 24px; gap:20px;">
       <div>
         <div class="eyebrow">POST-ALPHAFOLD3 STRUCTURE-TO-AFFINITY CALCULATOR</div>
-        <h1 style="font-size:26px;">UniPPI-OWL <span style="font-size:14px; font-weight:600; color:var(--primary);">v2.1-MARVAS</span></h1>
+        <h1 style="font-size:26px;">UniPPI-OWL <span style="font-size:14px; font-weight:600; color:var(--primary);">v2.2</span></h1>
         <p class="lead" style="margin-bottom:12px; font-size:14px;">
           A lightweight, zero-server browser &amp; CLI tool that calculates <strong>inter-molecular binding strength (ΔG, K<sub>d</sub>, UIS)</strong>, confidence-weighted buried surface area (<strong>wBSA</strong>), and atomic contact maps directly from <strong>AlphaFold 3 <code>.zip</code> / <code>.cif</code> + <code>.json</code></strong> or experimental <strong>PDB/mmCIF</strong> structures.
         </p>
@@ -519,8 +519,8 @@
         </div>
       </div>
 
-      <aside class="model-card" aria-label="UniPPI-v2.1-MARVAS model summary">
-        <div class="model-card-head"><span>UniPPI-v2.1 Engine</span><span>CLIENT-SIDE</span></div>
+      <aside class="model-card" aria-label="UniPPI-v2.2 model summary">
+        <div class="model-card-head"><span>UniPPI-v2.2 Engine</span><span>CLIENT-SIDE</span></div>
         <div class="model-row"><span>Scoring models</span><strong>PPI + RNA/DNA + Ligand + Metal + Ternary Glue</strong></div>
         <div class="model-row"><span>IDR protection</span><strong>w<sub>i,j</sub> PAE Damping + Local LIS</strong></div>
         <div class="model-row"><span>Decision threshold</span><strong>UIS ≥ 0.5000 (High-Conf: 0.6500)</strong></div>
@@ -568,7 +568,7 @@
       </div>
 
       <div class="param-bar">
-        <label>Heavy-Atom Cutoff d<sub>min</sub> (Å)
+        <label>Contact Display Cutoff d<sub>min</sub> (Å; physics 5.5 Å)
           <input type="number" id="cutoffInput" value="5.5" step="0.5" min="3.5" max="8.0" onchange="recomputeActiveSuite()">
         </label>
         <label>Temperature (Kelvin)
@@ -582,6 +582,9 @@
         </label>
         <label>Ionic Strength (mM NaCl)
           <input type="number" id="ionicInput" value="150" step="10" min="10" max="1000" onchange="recomputeActiveSuite()">
+        </label>
+        <label>Helical Proline Penalty (kcal/mol)
+          <input type="number" id="prolinePenaltyInput" value="0.0" step="0.5" min="0.0" max="3.0" onchange="recomputeActiveSuite()">
         </label>
         <label>Intra-Chain Domain Split (Optional)
           <input type="text" id="splitChainInput" placeholder="e.g. A:1-236,237-406" onchange="recomputeActiveSuite()">
@@ -603,7 +606,7 @@
 
     <div id="statusBanner" class="status-banner ok" style="display:none;">
       <span id="statusText">Analysis complete.</span>
-      <span style="font-family:var(--font-mono); font-size:12px;">Model: UniPPI-v2.1-MARVAS · Frozen Threshold: 0.5000 · Parity: 100% CLI Match</span>
+      <span style="font-family:var(--font-mono); font-size:12px;">Model: UniPPI-v2.2 · Frozen Threshold: 0.5000 · Parity: 100% CLI Match</span>
     </div>
 
     <section class="card" id="leaderboardCard" style="display:none;">
@@ -665,7 +668,7 @@
       </div>
 
       <div class="meta-strip">
-        Decision threshold: <code>0.5000</code> · High-confidence cutoff: <code>0.6500</code> · Scientific model: <code>UniPPI-v2.1-MARVAS</code> · Confidence regime: <code id="activeModeBadge">MODE_A_PRED_FULL</code>
+        Decision threshold: <code>0.5000</code> · High-confidence cutoff: <code>0.6500</code> · Scientific model: <code>UniPPI-v2.2</code> · Confidence regime: <code id="activeModeBadge">MODE_A_PRED_FULL</code>
       </div>
 
       <div class="summary-grid" id="primarySummaryGrid"></div>
@@ -679,6 +682,7 @@
         <div id="stepByStepMathBox" style="margin-bottom:14px; padding:14px 16px; border-radius:8px; background:var(--bg-subtle); border:1px solid var(--border-strong); font-size:13px;"></div>
 
         <div id="patternCallout" style="padding:14px 16px; border-radius:8px; background:var(--bg-subtle); border-left:4px solid var(--primary); font-size:14px;"></div>
+        <div id="plainEnglishConclusionBox" style="margin-top:14px; padding:16px 18px; border-radius:8px; background:#f0fdf4; border:1px solid #86efac; border-left:4px solid var(--emerald); font-size:13.5px; line-height:1.6;"></div>
       </div>
     </section>
 
@@ -768,7 +772,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
           <div>
             <div class="section-kicker">Wet-Lab Mutagenesis &amp; Escape-Site Prioritizer</div>
-            <h3 style="font-size:15px;">Top Interface Energetic Hotspots &amp; Estimated Alanine-Scan Impact (Click any row to highlight in 3D)</h3>
+            <h3 style="font-size:15px;">Top Interface Hotspots &amp; Contact-Weighted Priority Ranking (Click any row to highlight in 3D)</h3>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="downloadHotspotsCSV()">Download Hotspots CSV</button>
         </div>
@@ -783,7 +787,7 @@
                 <th>wHB</th>
                 <th>wHP</th>
                 <th>wπ / Cat-π</th>
-                <th>Est. ΔΔG<sub>pert</sub> (kcal/mol)</th>
+                <th>Hotspot Priority Score</th>
                 <th>Hotspot Tier</th>
               </tr>
             </thead>
@@ -843,11 +847,19 @@
           </div>
         </div>
 
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:14px; font-size:12px;">
+          <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:7px; padding:9px 11px;"><strong>1. Known PDB + Custom Lab Seq/Drug:</strong> Load PDB/CIF into X (or Y) — <em>uses real 3D solvent-exposed surface patches</em> — paste custom sequence/SMILES into the other slot &rarr; Pre-Screen + Co-Fold.</div>
+          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:7px; padding:9px 11px;"><strong>2. Both Custom (e.g. Drug + Viral RNA):</strong> Pick Ligand/RNA/Protein/Ion in X &amp; Y, paste SMILES/sequences &rarr; Compatibility Score (≥0.50), RNA Pocket Map, Selectivity Audit &amp; Boltz-1/2 Co-Fold.</div>
+          <div style="background:#faf5ff; border:1px solid #e9d5ff; border-radius:7px; padding:9px 11px;"><strong>3. Multi-Component (X + Y + Z1…Zn):</strong> Add molecular glues, cofactors (ATP), or catalytic ions (Mg²⁺/Zn²⁺) via <code>+ Add Component (Z)</code>.</div>
+          <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:7px; padding:9px 11px;"><strong>4. Same-Protein Domains:</strong> Load 1 PDB into Slot X &rarr; click <em>Audit Domains in Tab 1</em> to score Domain 1 ↔ Domain 2 immediately.</div>
+        </div>
+
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
-          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('marvas_eif4a')">MARVAS 5-Comp Preset: eIF4A1 + RNA + RocA + ATP + Mg²⁺</button>
-          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('marvas_ulk1')">MARVAS Preset: ULK1 Kinase + Inhibitor SMILES</button>
-          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('marvas_nsp14')">MARVAS Preset: CoV Nsp14 + Nsp10 + Zn²⁺</button>
-          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('custom_rna')">Universal Preset: Custom Lab Protein + Custom Lab RNA</button>
+          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('drug_viral_rna')">Drug vs. Viral RNA Preset: Small-Molecule SMILES + Viral RNA</button>
+          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('marvas_eif4a')">5-Comp Glue Preset: Helicase eIF4A1 + RNA + RocA + ATP + Mg²⁺</button>
+          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('marvas_ulk1')">Kinase Preset: ULK1 + Inhibitor SMILES</button>
+          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('marvas_nsp14')">Viral Complex Preset: CoV Nsp14 + Nsp10 + Zn²⁺</button>
+          <button class="btn btn-secondary btn-sm" onclick="loadStudioPreset('custom_rna')">Universal Preset: Custom Protein + Custom RNA</button>
         </div>
 
         <div class="studio-grid">
@@ -931,13 +943,16 @@
           <button class="btn btn-secondary btn-sm" onclick="exportStudioJob('chai')">Download Chai-1 .FASTA</button>
           <button class="btn btn-secondary btn-sm" onclick="exportStudioJob('colab')">Download Boltz-1 Colab/CLI Runner (.sh)</button>
           <button id="btnMergeXYStructs" class="btn btn-secondary btn-sm" style="display:none; border-color:var(--emerald); color:var(--emerald);" onclick="mergeLoadedXYIntoTab1()">Merge Loaded X + Y PDBs &amp; Score in Tab 1</button>
+          <button class="btn btn-secondary btn-sm" style="border-color:var(--primary); color:var(--primary);" onclick="copyColabCell()">Copy 1-Click Colab Cell</button>
           <button class="btn btn-secondary btn-sm" onclick="copyStudioPreview()">Copy Preview</button>
         </div>
 
         <div id="studioOutputPanel" style="display:none;">
           <div id="studioWarningBanner" style="display:none; background:var(--amber-bg); color:var(--amber); border:1px solid #fcd34d; padding:10px 14px; border-radius:6px; margin-bottom:12px; font-size:12.5px; font-weight:600;"></div>
+          <div id="studioSummaryCards" class="summary-grid" style="margin-bottom:14px;"></div>
+          <div id="studioVerdictBox" style="padding:14px 16px; border-radius:8px; background:var(--primary-soft); border:1px solid var(--border); border-left:4px solid var(--primary); font-size:13.5px; line-height:1.6; margin-bottom:14px;"></div>
+          <div id="studioSiteMapWrap" style="margin-bottom:14px;"></div>
           <div id="studioPrescreenGrid" class="descriptor-grid" style="margin-bottom:14px;"></div>
-          <div id="studioVerdictBox" style="padding:12px 14px; border-radius:8px; background:var(--primary-soft); border-left:4px solid var(--primary); font-size:13px; margin-bottom:14px;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <strong style="font-size:12.5px; color:var(--text-muted); text-transform:uppercase;">Generated Co-Folding Job Preview (Run in AF3 Server / Boltz-1 / Chai-1, then drop output .ZIP/.CIF into Tab 1)</strong>
             <select id="studioPreviewFormat" style="padding:4px 8px; font-size:12px; border:1px solid var(--border-strong); border-radius:5px;" onchange="renderStudioJobPreview()">
@@ -955,11 +970,11 @@
       <section class="card">
         <div class="card-head">
           <div>
-            <div class="section-kicker">MARVAS Escape-Mutant &amp; Apo-vs-Holo Statistical Auditor</div>
+            <div class="section-kicker">Escape-Mutant &amp; Apo-vs-Holo Statistical Auditor</div>
             <h2>WT vs. Mutant / Apo vs. Holo Ensemble Diff Mode</h2>
             <p style="color:var(--text-muted); font-size:13.5px;">
               Upload two structures or 5-model AF3 <code>.zip</code> ensembles (e.g., <strong>Condition A = WT or Drug-Bound Holo</strong> vs. <strong>Condition B = Escape Mutant or Apo</strong>).
-              UniPPI-OWL scores both ensembles with the locked Step 3C physics engine and computes <strong>ΔUIS</strong>, <strong>ΔΔG</strong>, <strong>K<sub>d</sub> fold-change</strong>, <strong>two-tailed Welch's t-test p-values</strong>, and an automated <strong>Contact Rewiring Audit (LOST vs. GAINED contacts)</strong>.
+              UniPPI-OWL scores both ensembles with the locked UniPPI-v2.2 physics engine and computes <strong>ΔUIS</strong>, <strong>ΔΔG</strong>, <strong>K<sub>d</sub> fold-change</strong>, <strong>Hedges' <em>g</em> effect size</strong>, <strong>two-tailed Welch's <em>t</em>-test <em>p</em>-values</strong>, and an automated <strong>Contact Rewiring Audit (LOST vs. GAINED contacts)</strong>.
             </p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -998,7 +1013,9 @@
         </div>
 
         <div id="diffResultsWrap" style="display:none;">
-          <div id="diffHeadlineBanner" style="padding:12px 16px; border-radius:8px; margin-bottom:14px; font-family:var(--font-mono); font-size:13px; border-left:4px solid var(--primary); background:var(--bg-subtle);"></div>
+          <div id="diffSummaryCards" class="summary-grid" style="margin-bottom:14px;"></div>
+          <div id="diffHeadlineBanner" style="padding:12px 16px; border-radius:8px; margin-bottom:12px; font-family:var(--font-mono); font-size:13px; border-left:4px solid var(--primary); background:var(--bg-subtle);"></div>
+          <div id="diffPlainConclusionBox" style="padding:15px 18px; border-radius:8px; margin-bottom:14px; background:#f8fafc; border:1px solid var(--border-strong); border-left:4px solid var(--primary); font-size:13.5px; line-height:1.6;"></div>
           <div class="table-wrap" style="margin-bottom:16px;">
             <table>
               <thead>
@@ -1007,6 +1024,7 @@
                   <th>Condition A (Mean ± SD)</th>
                   <th>Condition B (Mean ± SD)</th>
                   <th>Delta (B − A)</th>
+                  <th>Hedges' <em>g</em></th>
                   <th>Welch's t-Test (p-value)</th>
                   <th>Interpretation</th>
                 </tr>
@@ -1068,7 +1086,7 @@
 
       <div class="scope-grid">
         <div class="scope-box">
-          <strong>What UniPPI-OWL v2.1-MARVAS Evaluates:</strong>
+          <strong>What UniPPI-OWL v2.2 Evaluates:</strong>
           <ul>
             <li>Confidence-weighted multi-modal atomic physics: 8-channel Protein–Protein solvation + dedicated 9-channel Protein–RNA/DNA recognition (phosphate salt bridges, base-specific vs. ribose 2'-OH vs. backbone H-bonds, plane-normal nucleobase π-stacking, 60°-cone cation–π, and Sequence-Specificity Index SSI).</li>
             <li>Dedicated Small-Molecule Pocket, Directional Halogen-Bond (≥120° σ-hole), Inner/Outer-Sphere Metal Coordination (Zn²⁺/Mg²⁺/Ca²⁺/Mn²⁺), Automatic <strong>Ternary Molecular-Glue &amp; Metal-Bridge</strong> detection, and custom <strong>Same-Protein Intra-Chain Domain Slicing</strong>.</li>
@@ -1078,7 +1096,7 @@
           </ul>
         </div>
         <div class="scope-box">
-          <strong>UniPPI-OWL v2.1-MARVAS Scope Boundaries (Does Not):</strong>
+          <strong>UniPPI-OWL v2.2 Scope Boundaries (Does Not):</strong>
           <ul>
             <li>Replace explicit-solvent molecular dynamics (MD) or wet-lab isothermal titration calorimetry (ITC) / SPR measurements.</li>
             <li>Use black-box neural network voting to hide disagreements between global ipTM and local interface energetics.</li>
@@ -1092,12 +1110,12 @@
   <footer>
     <div class="footer-inner">
       <div>
-        <strong>UniPPI-OWL v2.1-MARVAS</strong> · Universal Multi-Modal Biomolecular Affinity, Ternary Glue &amp; Ensemble Diff Resource<br>
+        <strong>UniPPI-OWL v2.2</strong> · Universal Multi-Modal Biomolecular Affinity, Ternary Glue &amp; Ensemble Diff Resource<br>
         Architected by <strong>Soumyajit Mandal</strong> (Department of Biochemistry, Central University of Rajasthan, India)<br>
         Dual-Layer Python CLI + Zero-Server JavaScript SPA · Built for High-Throughput Post-AlphaFold3 Democratization
       </div>
       <div style="text-align:right; font-family:var(--font-mono); font-size:12px;">
-        Frozen Scientific Model: <code>UniPPI-v2.1-MARVAS</code><br>
+        Frozen Scientific Model: <code>UniPPI-v2.2</code><br>
         Decision Threshold: <code>UIS = 0.5000</code><br>
         License: Open-Source MIT / BSD-3
       </div>
@@ -1105,7 +1123,7 @@
   </footer>
 
   <script>
-    const MODEL_VERSION = "UniPPI-v2.1-MARVAS";
+    const MODEL_VERSION = "UniPPI-v2.2";
     const UIS_THRESHOLD = 0.5000;
     const UIS_HIGH_CONF = 0.6500;
     const R_GAS_KCAL = 1.98720425864083e-3;
@@ -1312,7 +1330,7 @@
             if (dc >= 1.20 && dc <= 2.25 && dc < bestCd) { bestCd = dc; cBond = ca; }
           }
           if (!cBond) continue;
-          const dCut = hx.element === "F" ? 3.30 : 3.70;
+          const dCut = 3.70;
           const vxc = [cBond.x-hx.x, cBond.y-hx.y, cBond.z-hx.z];
           const lxc = Math.hypot(vxc[0], vxc[1], vxc[2]);
           if (lxc < 1e-4) continue;
@@ -1358,7 +1376,73 @@
     const ONE_TO_THREE = Object.fromEntries(Object.entries(THREE_TO_ONE).map(([k,v]) => [v,k]));
     const NUC_TO_ONE = { A:"a", C:"c", G:"g", U:"u", T:"t", DA:"a", DC:"c", DG:"g", DT:"t", ADE:"a", CYT:"c", GUA:"g", URA:"u", THY:"t" };
     const MODIFIED_NUC_MAP = { I:"G", INO:"G", PSU:"U", H2U:"U", "5MU":"U", "4SU":"U", OMU:"U", "6MA":"A", "1MA":"A", A2M:"A", M6A:"A", MIA:"A", T6A:"A", "5MC":"C", OMC:"C", "4AC":"C", "3MC":"C", OMG:"G", "7MG":"G", G7M:"G", "2MG":"G", M2G:"G", "1MG":"G", YYG:"G", DI:"DG", "5CM":"DC", BRU:"DT" };
-    const HALOGEN_ELEMENTS = new Set(["F","CL","BR","I"]);
+    const HALOGEN_ELEMENTS = new Set(["CL","BR","I"]);
+    const MAX_ASA_TIEN2013 = {
+      ALA:129, ARG:274, ASN:195, ASP:193, CYS:167, GLU:223, GLN:225, GLY:104, HIS:224, ILE:197,
+      LEU:201, LYS:236, MET:224, PHE:240, PRO:159, SER:155, THR:172, TRP:285, TYR:263, VAL:174
+    };
+    const COVALENT_PAIR_KEYS = new Set(["C-S","C-N","C-O","S-S","O-P","C-C"]);
+    const PHOSPHO_PTM_RES = new Set(["SEP","TPO","PTR"]);
+    const PHOSPHO_PTM_O = new Set(["O1P","O2P","O3P","OP1","OP2","OP3"]);
+    const NUCLEIC_BB_ATOMS = new Set(["OP1","OP2","O1P","O2P","O3'","O4'","O5'","P"]);
+    const AF3_ALLOWED_CCDS = new Set(["ATP","ADP","AMP","GTP","GDP","FAD","NAD","NAP","NDP","HEM","CLA","BGC","MAN","GAL","NAG","FUC","SIA","PLM","OLA","MYR","CIT","CHL","SAH","SAM","COA","FMN","TPP"]);
+
+    function getAtomChargeAtPhJS(res, atom, phVal, ligAni, ligCat) {
+      const cname = res.canonicalName, an = atom.name;
+      if (PHOSPHO_PTM_RES.has(res.resName) && PHOSPHO_PTM_O.has(an)) return [0.0, 1.0 + 1.0 / (1.0 + Math.pow(10, 6.1 - phVal))];
+      if (res.entityType === "NUCLEIC" && ["OP1","OP2","O1P","O2P"].includes(an)) return [0.0, 1.0 / (1.0 + Math.pow(10, 1.0 - phVal))];
+      if (cname === "ARG" && ["NE","NH1","NH2"].includes(an)) return [1.0 / (1.0 + Math.pow(10, phVal - 12.5)), 0.0];
+      if (cname === "LYS" && an === "NZ") return [1.0 / (1.0 + Math.pow(10, phVal - 10.5)), 0.0];
+      if (cname === "HIS" && ["ND1","NE2"].includes(an)) return [1.0 / (1.0 + Math.pow(10, phVal - 6.0)), 0.0];
+      if (cname === "ASP" && ["OD1","OD2"].includes(an)) return [0.0, 1.0 / (1.0 + Math.pow(10, 3.9 - phVal))];
+      if (cname === "GLU" && ["OE1","OE2"].includes(an)) return [0.0, 1.0 / (1.0 + Math.pow(10, 4.1 - phVal))];
+      if (res.entityType === "LIGAND") {
+        if (ligCat.has(an)) return [1.0 / (1.0 + Math.pow(10, phVal - 9.8)), 0.0];
+        if (ligAni.has(an)) return [0.0, 1.0 / (1.0 + Math.pow(10, 3.5 - phVal))];
+      }
+      return [0.0, 0.0];
+    }
+
+    function getHbondRoleJS(res, atom, ligAni, ligCat) {
+      if (!["N","O","S"].includes(atom.element)) return "";
+      const an = atom.name, cname = res.canonicalName;
+      if (res.entityType === "PROTEIN") {
+        if (PHOSPHO_PTM_RES.has(res.resName) && PHOSPHO_PTM_O.has(an)) return "A";
+        if (an === "N") return cname === "PRO" ? "" : "D";
+        if (an === "O" || an === "OXT") return "A";
+        if ((cname==="ARG" && ["NE","NH1","NH2"].includes(an)) || (cname==="LYS" && an==="NZ") || (cname==="TRP" && an==="NE1")) return "D";
+        if ((cname==="ASN" && an==="ND2") || (cname==="GLN" && an==="NE2")) return "D";
+        if ((cname==="ASP" && ["OD1","OD2"].includes(an)) || (cname==="GLU" && ["OE1","OE2"].includes(an))) return "A";
+        if ((cname==="ASN" && an==="OD1") || (cname==="GLN" && an==="OE1") || (cname==="MET" && an==="SD")) return "A";
+        if ((cname==="SER" && an==="OG") || (cname==="THR" && an==="OG1") || (cname==="TYR" && an==="OH")) return "DA";
+        if ((cname==="HIS" && ["ND1","NE2"].includes(an)) || (cname==="CYS" && an==="SG")) return "DA";
+        return "DA";
+      }
+      if (res.entityType === "NUCLEIC") {
+        if (an === "O2'") return "DA";
+        if (NUCLEIC_BB_ATOMS.has(an)) return "A";
+        if (an === "N9" || (an === "N1" && ["C","DC","CYT","U","URA","T","DT","THY"].includes(cname))) return "";
+        if ((["A","DA","ADE"].includes(cname) && an === "N6") || (["C","DC","CYT"].includes(cname) && an === "N4")) return "D";
+        if ((["G","DG","GUA"].includes(cname) && (an === "N1" || an === "N2")) || (["U","URA","T","DT","THY"].includes(cname) && an === "N3")) return "D";
+        if (NUCLEOBASE_HB_ATOMS.has(an)) return "A";
+        return "DA";
+      }
+      if (res.entityType === "LIGAND") {
+        if (ligAni.has(an)) return "A";
+        if (ligCat.has(an)) return "D";
+        return "DA";
+      }
+      return "";
+    }
+
+    function isValidHbondPairJS(ra, aa, rb, ab, ligAniA, ligCatA, ligAniB, ligCatB) {
+      const roleA = getHbondRoleJS(ra, aa, ligAniA, ligCatA);
+      const roleB = getHbondRoleJS(rb, ab, ligAniB, ligCatB);
+      if (!roleA || !roleB) return false;
+      if (roleA === "D" && roleB === "D") return false;
+      if (roleA === "A" && roleB === "A") return false;
+      return true;
+    }
 
     const PRODIGY_CLASS = {
       ARG:"CHARGED", LYS:"CHARGED", ASP:"CHARGED", GLU:"CHARGED", SEP:"CHARGED", TPO:"CHARGED", PTR:"CHARGED",
@@ -1378,7 +1462,7 @@
     const dist3 = (a, b) => Math.hypot(a[0]-b[0], a[1]-b[1], a[2]-b[2]);
     const meanArr = (arr, def=0.0) => arr.length ? arr.reduce((s,x)=>s+x,0)/arr.length : def;
 
-    function fnv1aHashHex(ascii) {
+    function sha256Hex16(ascii) {
       function rightRotate(v, amount) { return (v >>> amount) | (v << (32 - amount)); }
       const mathPow = Math.pow, maxWord = mathPow(2, 32);
       let result = "", words = [], asciiBitLength = ascii.length * 8;
@@ -1472,6 +1556,18 @@
       return tokens;
     }
 
+    function deduplicateAltlocsJS(atoms) {
+      const rankMap = { "": 0, "A": 1, "1": 2 };
+      const best = new Map();
+      atoms.forEach((a, idx) => {
+        const k = `${a.chainId}|${a.resSeq}|${a.ins}|${a.isHet?1:0}|${a.resName}|${a.name}`;
+        const r = rankMap[a.altLoc || ""] ?? 10;
+        const prev = best.get(k);
+        if (!prev || r < prev[0]) best.set(k, [r, idx, a]);
+      });
+      return [...best.values()].sort((x, y) => x[1] - y[1]).map(x => x[2]);
+    }
+
     function parseStructureText(text, filename) {
       const ext = filename.toLowerCase();
       const atoms = [];
@@ -1504,7 +1600,7 @@
             const resName = (row["label_comp_id"] || row["auth_comp_id"] || "UNK").toUpperCase();
             if (CRYSTAL_BUFFER_JUNK.has(resName)) continue;
             let alt = row["label_alt_id"] || ".";
-            if (![".","?","","A","1"].includes(alt)) continue;
+            if (alt === "." || alt === "?") alt = "";
             const modelNum = row["pdbx_PDB_model_num"] || "1";
             if (!["1",".","?"].includes(modelNum)) continue;
             let name = (row["label_atom_id"] || row["auth_atom_id"] || "CA").trim();
@@ -1512,7 +1608,8 @@
             if (resName === "GLY" && name === "CB") continue;
             const chainId = row["auth_asym_id"] || row["label_asym_id"] || "A";
             const rSeqStr = row["auth_seq_id"] || row["label_seq_id"] || "1";
-            const resSeq = (rSeqStr !== "." && rSeqStr !== "?") ? parseInt(rSeqStr, 10) : 1;
+            const parsedSeqC = (rSeqStr !== "." && rSeqStr !== "?") ? parseInt(rSeqStr, 10) : 1;
+            const resSeq = Number.isNaN(parsedSeqC) ? 1 : parsedSeqC;
             let ins = row["pdbx_PDB_ins_code"] || "";
             if (ins === "." || ins === "?") ins = "";
             const x = parseFloat(row["Cartn_x"]), y = parseFloat(row["Cartn_y"]), z = parseFloat(row["Cartn_z"]);
@@ -1520,7 +1617,7 @@
             const bfac = (row["B_iso_or_equiv"] && row["B_iso_or_equiv"] !== "." && row["B_iso_or_equiv"] !== "?") ? parseFloat(row["B_iso_or_equiv"]) : 0.0;
             const element = inferElement(name, row["type_symbol"] || "", resName);
             if (element === "H" || isNaN(x)) continue;
-            atoms.push({ serial: parseInt(row["id"]||"0",10), name, resName, chainId, resSeq, ins, x, y, z, occ, bfac, element, isHet: group==="HETATM" });
+            atoms.push({ serial: parseInt(row["id"]||"0",10), name, altLoc: alt, resName, chainId, resSeq, ins, x, y, z, occ, bfac, element, isHet: group==="HETATM" });
           }
         }
       } else {
@@ -1532,22 +1629,22 @@
             const resName = line.slice(17,20).trim().toUpperCase();
             if (CRYSTAL_BUFFER_JUNK.has(resName)) continue;
             const alt = line.slice(16,17).trim();
-            if (!["","A","1"].includes(alt)) continue;
             const name = line.slice(12,16).trim();
             if (resName === "GLY" && name === "CB") continue;
             const chainId = line.slice(21,22).trim() || "A";
-            const resSeq = parseInt(line.slice(22,26).trim() || "0", 10);
+            const parsedSeqP = parseInt(line.slice(22,26).trim() || "0", 10);
+            const resSeq = Number.isNaN(parsedSeqP) ? 0 : parsedSeqP;
             const ins = line.slice(26,27).trim();
             const x = parseFloat(line.slice(30,38)), y = parseFloat(line.slice(38,46)), z = parseFloat(line.slice(46,54));
             const occ = parseFloat(line.slice(54,60).trim() || "1.0");
             const bfac = parseFloat(line.slice(60,66).trim() || "0.0");
             const element = inferElement(name, line.length >= 78 ? line.slice(76,78) : "", resName);
             if (element === "H" || isNaN(x)) continue;
-            atoms.push({ serial: parseInt(line.slice(6,11).trim()||"0",10), name, resName, chainId, resSeq, ins, x, y, z, occ, bfac, element, isHet: line.startsWith("HETATM") });
+            atoms.push({ serial: parseInt(line.slice(6,11).trim()||"0",10), name, altLoc: alt, resName, chainId, resSeq, ins, x, y, z, occ, bfac, element, isHet: line.startsWith("HETATM") });
           }
         }
       }
-      return { atoms, meta };
+      return { atoms: deduplicateAltlocsJS(atoms), meta };
     }
 
     function buildResidues(atoms, autoSplitMonomer=true) {
@@ -1701,19 +1798,17 @@
     }
 
     function isHelical(idx, chainRes, mode) {
-      if (idx < 3 || idx >= chainRes.length - 3) return false;
-      if ((mode === "MODE_A_PRED_FULL" || mode === "MODE_B_PRED_COORD") && chainRes[idx].meanBfac < 50.0) return false;
-      const ci = chainRes[idx].centroid;
-      if (idx + 4 < chainRes.length && idx - 4 >= 0) {
-        const dNext = dist3(chainRes[idx+4].centroid, ci);
-        const dPrev = dist3(chainRes[idx-4].centroid, ci);
-        const dSpan = dist3(chainRes[idx-4].centroid, chainRes[idx+4].centroid);
-        if (dNext >= 5.0 && dNext <= 7.0 && dPrev >= 5.0 && dPrev <= 7.0 && dSpan >= 10.2) return true;
-      }
-      return false;
+      if (idx < 4 || idx >= chainRes.length - 4) return false;
+      const rCur = chainRes[idx];
+      if ((mode === "MODE_A_PRED_FULL" || mode === "MODE_B_PRED_COORD") && rCur.meanBfac < 50.0) return false;
+      const rPrev = chainRes[idx - 4], rNext = chainRes[idx + 4];
+      if ((rNext.resSeq - rCur.resSeq) !== 4 || (rCur.resSeq - rPrev.resSeq) !== 4) return false;
+      const dNext = dist3(rNext.centroid, rCur.centroid);
+      const dPrev = dist3(rPrev.centroid, rCur.centroid);
+      const dSpan = dist3(rPrev.centroid, rNext.centroid);
+      return (dNext >= 5.0 && dNext <= 7.0 && dPrev >= 5.0 && dPrev <= 7.0 && dSpan >= 10.2);
     }
 
-    
     function toSanitizedPDBString(orderedResidues, meta=null) {
       const pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       const remap = {};
@@ -1814,8 +1909,12 @@
         return "res";
       };
       const unitA = getChainUnit(resA), unitB = getChainUnit(resB);
-      const sha256_id = fnv1aHashHex([seqA, seqB].sort().join("::"));
-      const activeCutoff = clamp(parseFloat(document.getElementById('cutoffInput')?.value || '5.5') || 5.5, 3.5, 8.0);
+      const sha256_id = sha256Hex16([seqA, seqB].sort().join("::"));
+      const activeCutoff = clamp(parseFloat(document.getElementById("cutoffInput")?.value || "5.5") || 5.5, 3.5, 8.0);
+      const phVal = clamp(parseFloat(document.getElementById("phInput")?.value || "7.2") || 7.2, 4.0, 9.5);
+      const curSalt_mM = clamp(parseFloat(document.getElementById("ionicInput")?.value || "150") || 150.0, 10.0, 1000.0);
+      const proPenRaw = parseFloat(document.getElementById("prolinePenaltyInput")?.value ?? "0.0");
+      const prolinePenalty = Number.isNaN(proPenRaw) ? 0.0 : clamp(proPenRaw, 0.0, 3.0);
 
       const polyB = [...resA, ...resB].filter(r => (r.entityType === "PROTEIN" || r.entityType === "NUCLEIC") && r.atoms.length).map(r => r.meanBfac);
       const bMinGlobal = polyB.length ? Math.min(...polyB) : Math.min(...[...resA, ...resB].map(r => r.meanBfac), 10.0);
@@ -1827,12 +1926,14 @@
       const paeMat = confData.res_pae_matrix;
 
       const rawPlddt = r => {
+        if (mode === "MODE_B_PRED_COORD" && (r.entityType === "LIGAND" || r.entityType === "ION") && r.meanBfac <= 0.01) return 76.75;
         if (mode === "MODE_A_PRED_FULL" || mode === "MODE_B_PRED_COORD") return clamp(r.meanBfac, 0, 100);
         const bRef = Math.max((bMinChain[r.chainId] ?? 10.0) + 20.0, 45.0);
         return clamp(100.0 * Math.exp(-Math.max(0.0, r.meanBfac - bRef) / 100.0), 15.0, 100.0);
       };
       const platConf = r => {
-        if (mode === "MODE_A_PRED_FULL" || mode === "MODE_B_PRED_COORD") return clamp((r.meanBfac - 30.0)/55.0, 0.02, 1.0);
+        if (mode === "MODE_B_PRED_COORD" && (r.entityType === "LIGAND" || r.entityType === "ION") && r.meanBfac <= 0.01) return 0.85;
+        if (mode === "MODE_A_PRED_FULL" || mode === "MODE_B_PRED_COORD") return clamp((r.meanBfac - 30.0) / 55.0, 0.02, 1.0);
         const bRef = Math.max((bMinChain[r.chainId] ?? 10.0) + 20.0, 45.0);
         return clamp(Math.exp(-Math.max(0.0, r.meanBfac - bRef) / 100.0), 0.15, 1.0);
       };
@@ -1852,13 +1953,16 @@
       const isDuplexPair = (modality === "RNA-RNA" || modality === "DNA-DNA" || modality === "RNA-DNA");
       const isLigandPair = (modality === "PROTEIN-LIGAND" || modality === "RNA-LIGAND" || modality === "DNA-LIGAND" || modality === "TERNARY-GLUE" || modality === "LIGAND-LIGAND");
       const isMetalPair = (modality === "PROTEIN-METAL" || modality === "RNA-METAL" || modality === "DNA-METAL" || modality === "LIGAND-METAL" || modality === "METAL-BRIDGE");
+      const isIntraDomain = (modality === "INTRA-DOMAIN (MONOMER)");
       const isNonPpi = isNucleicPair || isLigandPair || isMetalPair;
-      let nSb=0, nHb=0, nHp=0, nPi=0, nSs=0, nClash=0, nCb8=0;
+
+      let nSb=0, nHb=0, nHp=0, nPi=0, nSs=0, nCov=0, nClash=0, nCb8=0;
       let nHbBase=0, nHb2oh=0, nHbBb=0, nCatPi=0, nXb=0, nMetalCoord=0, nMetalOuter=0;
       let wSb=0, wHb=0, wHp=0, wPi=0, wClash=0;
       let wHbBase=0, wHb2oh=0, wHbBb=0, wPiRna=0, wCatPi=0, wXb=0, wMetalCoord=0, wMetalOuter=0;
       const weightsSeen = [], intfPae = [], contacts = [];
-      const intfA = new Set(), intfB = new Set();
+      const cb8IntfA = new Set(), cb8IntfB = new Set();
+      const heavy55IntfA = new Set(), heavy55IntfB = new Set();
       const resContrib = new Map();
       const prodigyIC = { CHARGED_CHARGED:0, CHARGED_APOLAR:0, POLAR_POLAR:0, POLAR_APOLAR:0, APOLAR_APOLAR:0, CHARGED_POLAR:0 };
 
@@ -1869,6 +1973,7 @@
         if (!voxelGridB.has(vk)) voxelGridB.set(vk, []);
         voxelGridB.get(vk).push(rb);
       }
+
       for (const ra of resA) {
         const rax = Math.floor(ra.centroid[0]/voxelSize), ray = Math.floor(ra.centroid[1]/voxelSize), raz = Math.floor(ra.centroid[2]/voxelSize);
         const candB = [];
@@ -1880,21 +1985,24 @@
             }
           }
         }
+        const ligAniA = getLigandAnionicOxygensJS(ra), ligCatA = getLigandCationicNitrogensJS(ra);
+        const cna = ra.canonicalName;
+        const apA = HYDROPHOBIC_RES.has(cna) || ra.entityType === "LIGAND";
+
         for (const rb of candB) {
+          if (isIntraDomain && (ra.origChainId || ra.chainId) === (rb.origChainId || rb.chainId) && Math.abs(ra.resSeq - rb.resSeq) <= 2) continue;
           if (dist3(ra.centroid, rb.centroid) > 16.0) continue;
           const cbDist = dist3(ra.cbCoord, rb.cbCoord);
           const [wij, pairPae] = pairWeight(ra, rb);
           if (cbDist <= 8.0) {
-            nCb8++; intfA.add(ra.key); intfB.add(rb.key);
+            nCb8++; cb8IntfA.add(ra.key); cb8IntfB.add(rb.key);
             intfPae.push(pairPae); weightsSeen.push(wij);
           }
 
-          let minD = 999.0, pSb=0, pHb=0, pHp=0, pSs=0, pClash=0, hpDistSum=0.0;
+          let minD = 999.0, pSbCnt=0, pSbW=0.0, pHb=0, pHp=0, pSs=0, pCov=0, pClash=0, hpDistSum=0.0;
           let pHbBase=0, pHb2oh=0, pHbBb=0, pMetalCoord=0, pMetalOuter=0;
-          const ligAniA = getLigandAnionicOxygensJS(ra), ligAniB = getLigandAnionicOxygensJS(rb);
-          const ligCatA = getLigandCationicNitrogensJS(ra), ligCatB = getLigandCationicNitrogensJS(rb);
-          const cna = ra.canonicalName, cnb = rb.canonicalName;
-          const apA = HYDROPHOBIC_RES.has(cna) || ra.entityType === "LIGAND";
+          const ligAniB = getLigandAnionicOxygensJS(rb), ligCatB = getLigandCationicNitrogensJS(rb);
+          const cnb = rb.canonicalName;
           const apB = HYDROPHOBIC_RES.has(cnb) || rb.entityType === "LIGAND";
 
           for (const aa of ra.atoms) {
@@ -1910,28 +2018,33 @@
                 const mEl = isMetA ? aa.element : ab.element;
                 const otherEl = isMetA ? ab.element : aa.element;
                 const dMcut = ["ZN","FE","CU","CO","NI"].includes(mEl) ? 2.65 : 2.75;
-                if (d <= dMcut && ["O","N","S"].includes(otherEl)) { pSb++; pMetalCoord++; continue; }
+                if (d <= dMcut && ["O","N","S"].includes(otherEl)) { pMetalCoord++; continue; }
                 if (["MG","CA","MN"].includes(mEl) && d > dMcut && d <= 4.15 && otherEl === "O") { pMetalOuter++; continue; }
               }
+
+              const covKey = aa.element < ab.element ? `${aa.element}-${ab.element}` : `${ab.element}-${aa.element}`;
+              if (d <= 1.95 && COVALENT_PAIR_KEYS.has(covKey)) { pCov++; continue; }
               if (d < 2.2) pClash++;
 
-              const isPtmA = ["SEP","TPO","PTR"].includes(ra.resName) && ["O1P","O2P","O3P","OP1","OP2","OP3","OG","OG1","OH"].includes(aa.name);
-              const isPtmB = ["SEP","TPO","PTR"].includes(rb.resName) && ["O1P","O2P","O3P","OP1","OP2","OP3","OG","OG1","OH"].includes(ab.name);
-              const catA = (cna==="ARG"&&["NE","NH1","NH2"].includes(aa.name)) || (cna==="LYS"&&aa.name==="NZ") || (cna==="HIS"&&["ND1","NE2"].includes(aa.name)) || ligCatA.has(aa.name);
-              const aniA = (cna==="ASP"&&["OD1","OD2"].includes(aa.name)) || (cna==="GLU"&&["OE1","OE2"].includes(aa.name)) || (ra.entityType==="NUCLEIC"&&["OP1","OP2","O1P","O2P"].includes(aa.name)) || isPtmA || ligAniA.has(aa.name);
-              const catB = (cnb==="ARG"&&["NE","NH1","NH2"].includes(ab.name)) || (cnb==="LYS"&&ab.name==="NZ") || (cnb==="HIS"&&["ND1","NE2"].includes(ab.name)) || ligCatB.has(ab.name);
-              const aniB = (cnb==="ASP"&&["OD1","OD2"].includes(ab.name)) || (cnb==="GLU"&&["OE1","OE2"].includes(ab.name)) || (rb.entityType==="NUCLEIC"&&["OP1","OP2","O1P","O2P"].includes(ab.name)) || isPtmB || ligAniB.has(ab.name);
-
-              if (d <= 4.0 && ((catA && aniB) || (aniA && catB))) { pSb += (isPtmA || isPtmB) ? 2 : 1; continue; }
-              if (d <= 3.5 && ["N","O","S"].includes(aa.element) && ["N","O","S"].includes(ab.element)) {
-                pHb++;
-                if (isNucleicPair) {
-                  const nucAt = ra.entityType === "NUCLEIC" ? aa : ab;
-                  if (nucAt.name === "O2'") pHb2oh++;
-                  else if (NUCLEOBASE_HB_ATOMS.has(nucAt.name)) pHbBase++;
-                  else pHbBb++;
-                }
+              const [qpa, qna] = getAtomChargeAtPhJS(ra, aa, phVal, ligAniA, ligCatA);
+              const [qpb, qnb] = getAtomChargeAtPhJS(rb, ab, phVal, ligAniB, ligCatB);
+              const sbEff = (qpa * qnb) + (qna * qpb);
+              if (d <= 4.0 && sbEff >= 0.25) {
+                pSbW += sbEff;
+                pSbCnt += (sbEff >= 1.40 ? 2 : 1);
                 continue;
+              }
+              if (d <= 3.5 && !((qpa >= 0.5 && qpb >= 0.5) || (qna >= 0.5 && qnb >= 0.5))) {
+                if (isValidHbondPairJS(ra, aa, rb, ab, ligAniA, ligCatA, ligAniB, ligCatB)) {
+                  pHb++;
+                  if (isNucleicPair) {
+                    const nucAt = ra.entityType === "NUCLEIC" ? aa : ab;
+                    if (nucAt.name === "O2'") pHb2oh++;
+                    else if (NUCLEOBASE_HB_ATOMS.has(nucAt.name)) pHbBase++;
+                    else pHbBb++;
+                  }
+                  continue;
+                }
               }
               if (d <= 4.5 && ["C","S"].includes(aa.element) && ["C","S"].includes(ab.element)) {
                 if (apA && apB && !["C","CA"].includes(aa.name) && !["C","CA"].includes(ab.name)) {
@@ -1950,10 +2063,23 @@
             }
           }
 
-          if (minD > activeCutoff) continue;
+          if (minD <= 5.5) {
+            heavy55IntfA.add(ra.key); heavy55IntfB.add(rb.key);
+            const clsA = (PHOSPHO_PTM_RES.has(ra.resName) || (cna === "HIS" && phVal <= 6.0)) ? "CHARGED" : (PRODIGY_CLASS[cna] || (ra.entityType === "LIGAND" ? "APOLAR" : "POLAR"));
+            const clsB = (PHOSPHO_PTM_RES.has(rb.resName) || (cnb === "HIS" && phVal <= 6.0)) ? "CHARGED" : (PRODIGY_CLASS[cnb] || (rb.entityType === "LIGAND" ? "APOLAR" : "POLAR"));
+            let pairCls = [clsA, clsB].sort().join("_");
+            if (pairCls === "APOLAR_CHARGED") pairCls = "CHARGED_APOLAR";
+            else if (pairCls === "APOLAR_POLAR") pairCls = "POLAR_APOLAR";
+            if (prodigyIC[pairCls] !== undefined) prodigyIC[pairCls] += wij;
+          }
+
+          const evalCutoff = Math.max(5.5, activeCutoff);
+          if (minD > evalCutoff) continue;
+          if (cbDist > 8.0 && minD <= 5.5) { intfPae.push(pairPae); weightsSeen.push(wij); }
+
           let pPi = 0, pPiW = 0.0, pCatPi = 0;
           const pXb = isLigandPair ? countDirectionalHalogenBondsJS(ra, rb) : 0;
-          if (isNucleicPair || isLigandPair) {
+          if (!isMetalPair && minD <= 5.5) {
             const ringsA = getAllRingsForResidueJS(ra), ringsB = getAllRingsForResidueJS(rb);
             if (ringsA.length && ringsB.length) {
               let bestPw = 0.0;
@@ -2003,59 +2129,51 @@
                 }
               }
             }
-          } else if (AROMATIC_RINGS[cna] && AROMATIC_RINGS[cnb]) {
-            const [ringA] = getRingCentroidAndNormalJS(ra);
-            const [ringB] = getRingCentroidAndNormalJS(rb);
-            if (ringA && ringB && dist3(ringA, ringB) <= 5.5) { pPi = 1; pPiW = 1.0; }
           }
 
-          intfA.add(ra.key); intfB.add(rb.key);
-          if (cbDist > 8.0) { intfPae.push(pairPae); weightsSeen.push(wij); }
-
-          const clsA = ["SEP","TPO","PTR"].includes(ra.resName) ? "CHARGED" : (PRODIGY_CLASS[cna] || (ra.entityType === "LIGAND" ? "APOLAR" : "POLAR"));
-          const clsB = ["SEP","TPO","PTR"].includes(rb.resName) ? "CHARGED" : (PRODIGY_CLASS[cnb] || (rb.entityType === "LIGAND" ? "APOLAR" : "POLAR"));
-          let pairCls = [clsA, clsB].sort().join("_");
-          if (pairCls === "APOLAR_CHARGED") pairCls = "CHARGED_APOLAR";
-          else if (pairCls === "APOLAR_POLAR") pairCls = "POLAR_APOLAR";
-          if (prodigyIC[pairCls] !== undefined) prodigyIC[pairCls] += wij;
-
-          const effSb = Math.min(pSb, 2), effHb = Math.min(pHb, isDuplexPair ? 3 : 2);
+          const effSbCnt = Math.min(pSbCnt, 2), effSbW = Math.min(pSbW, 2.0);
+          const effHb = Math.min(pHb, isDuplexPair ? 3 : 2);
           const effHbBase = Math.min(pHbBase, effHb);
           const effHb2oh = Math.min(pHb2oh, effHb - effHbBase);
           const effHbBb = Math.min(pHbBb, effHb - effHbBase - effHb2oh);
           const effHp = Math.min(pHp, 6), effHpW = Math.min(hpDistSum, 6.0), effClash = Math.min(pClash, 3);
           const effMcoord = Math.min(pMetalCoord, 2);
           const effMouter = (pMetalOuter > 0 && effMcoord === 0) ? 1 : 0;
-          if (wij >= 0.25) {
-            nSb += effSb; nHb += effHb; nHbBase += effHbBase; nHb2oh += effHb2oh; nHbBb += effHbBb;
-            nHp += effHp; nPi += pPi; nCatPi += pCatPi; nXb += pXb; nMetalCoord += effMcoord; nMetalOuter += effMouter; nSs += pSs; nClash += effClash;
-          }
-          wSb += wij*effSb; wHb += wij*effHb; wHbBase += wij*effHbBase; wHb2oh += wij*effHb2oh; wHbBb += wij*effHbBb;
-          wHp += wij*effHpW; wPi += wij*pPi; wPiRna += wij*pPiW; wCatPi += wij*pCatPi; wXb += wij*pXb; wMetalCoord += wij*effMcoord; wMetalOuter += wij*effMouter; wClash += wij*effClash;
 
           if (wij >= 0.25) {
+            nSb += effSbCnt; nHb += effHb; nHbBase += effHbBase; nHb2oh += effHb2oh; nHbBb += effHbBb;
+            nHp += effHp; nPi += pPi; nCatPi += pCatPi; nXb += pXb; nMetalCoord += effMcoord; nMetalOuter += effMouter;
+            nSs += pSs; nCov += pCov; nClash += effClash;
             for (const rk of [ra.key, rb.key]) {
               if (!resContrib.has(rk)) resContrib.set(rk, { sb:0, hb:0, hp:0, pi:0, xb:0 });
               const rc = resContrib.get(rk);
-              rc.sb += wij*effSb; rc.hb += wij*effHb; rc.hp += wij*effHpW; rc.pi += wij*(pPi + pCatPi); rc.xb += wij*pXb;
+              rc.sb += wij*effSbW; rc.hb += wij*effHb; rc.hp += wij*effHpW; rc.pi += wij*(pPi + pCatPi); rc.xb += wij*pXb;
             }
           }
+          wSb += wij*effSbW; wHb += wij*effHb; wHbBase += wij*effHbBase; wHb2oh += wij*effHb2oh; wHbBb += wij*effHbBb;
+          wHp += wij*effHpW; wPi += wij*pPi; wPiRna += wij*pPiW; wCatPi += wij*pCatPi; wXb += wij*pXb; wMetalCoord += wij*effMcoord; wMetalOuter += wij*effMouter; wClash += wij*effClash;
 
           contacts.push({
             resA: `${ra.chainId}:${ra.resName}${ra.resSeq}`, resB: `${rb.chainId}:${rb.resName}${rb.resSeq}`,
             resSeqA: ra.resSeq, resSeqB: rb.resSeq, coordA: ra.cbCoord, coordB: rb.cbCoord,
             minDist: Number(minD.toFixed(2)), pae: Number(pairPae.toFixed(2)), weight: Number(wij.toFixed(3)),
-            sb: effSb, hb: effHb, hbBase: effHbBase, hb2oh: effHb2oh, hbBb: effHbBb,
-            hp: effHp, pi: pPi, catpi: pCatPi, xb: pXb, mcoord: effMcoord, mouter: effMouter, ss: pSs, clash: effClash
+            sb: effSbCnt, hb: effHb, hbBase: effHbBase, hb2oh: effHb2oh, hbBb: effHbBb,
+            hp: effHp, pi: pPi, catpi: pCatPi, xb: pXb, mcoord: effMcoord, mouter: effMouter, cov: pCov, ss: pSs, clash: effClash
           });
         }
       }
 
+      const intfAnyA = new Set([...heavy55IntfA, ...cb8IntfA]);
+      const intfAnyB = new Set([...heavy55IntfB, ...cb8IntfB]);
+      if (intfAnyA.size === 0 && intfAnyB.size === 0 && !forceReportIfEmpty) return null;
+
       const CONF_W_MIN = 0.25;
       const confContactsList = contacts.filter(c => c.weight >= CONF_W_MIN);
-      const meanPaeCoreTmp = meanArr(confContactsList.map(c => c.pae), meanArr(intfPae, 3.5));
-      const ordIntfA = new Set(resA.filter(r => intfA.has(r.key) && platConf(r) >= 0.50).map(r => r.resSeq));
-      const ordIntfB = new Set(resB.filter(r => intfB.has(r.key) && platConf(r) >= 0.50).map(r => r.resSeq));
+      const coreConfContacts = confContactsList.filter(c => c.minDist <= 5.5);
+      const hasOrdCore = coreConfContacts.length > 0;
+      const meanPaeCoreTmp = meanArr(coreConfContacts.map(c => c.pae), meanArr(intfPae, 3.5));
+      const ordIntfA = new Set(resA.filter(r => intfAnyA.has(r.key) && platConf(r) >= 0.50).map(r => r.resSeq));
+      const ordIntfB = new Set(resB.filter(r => intfAnyB.has(r.key) && platConf(r) >= 0.50).map(r => r.resSeq));
       let helPro = 0;
       for (const [cList, ordSeqs] of [[resA, ordIntfA], [resB, ordIntfB]]) {
         cList.forEach((r, idx) => {
@@ -2067,23 +2185,37 @@
         });
       }
 
-      const hasOrdCore = confContactsList.length > 0;
-      const ordKeysA = hasOrdCore ? new Set(resA.filter(r => platConf(r) >= 0.35).map(r => r.key)) : new Set(resA.map(r => r.key));
-      const ordKeysB = hasOrdCore ? new Set(resB.filter(r => platConf(r) >= 0.35).map(r => r.key)) : new Set(resB.map(r => r.key));
-      const freeA = Object.entries(sasaFreeA).reduce((s,[k,x]) => ordKeysA.has(k) ? s+x : s, 0);
-      const freeB = Object.entries(sasaFreeB).reduce((s,[k,x]) => ordKeysB.has(k) ? s+x : s, 0);
-      const compAB = [...resA, ...resB].reduce((s,r) => (ordKeysA.has(r.key) || ordKeysB.has(r.key)) ? s+(sasaComp[r.key]||0) : s, 0);
+      let ordResA = resA, ordResB = resB;
+      let sasaFreeAEff = sasaFreeA, sasaFreeBEff = sasaFreeB, sasaCompEff = sasaComp;
+      let meanW = 0.0;
+      if (hasOrdCore) {
+        const tmpA = resA.filter(r => platConf(r) >= 0.35);
+        const tmpB = resB.filter(r => platConf(r) >= 0.35);
+        ordResA = tmpA.length ? tmpA : resA;
+        ordResB = tmpB.length ? tmpB : resB;
+        if (ordResA.length < resA.length || ordResB.length < resB.length) {
+          sasaFreeAEff = computeResidueSASA(ordResA);
+          sasaFreeBEff = computeResidueSASA(ordResB);
+          sasaCompEff = computeResidueSASA([...ordResA, ...ordResB]);
+        }
+        meanW = meanArr(coreConfContacts.map(c => c.weight), 0.0);
+      } else {
+        meanW = meanArr(weightsSeen, 0.0);
+      }
+      const freeA = ordResA.reduce((s, r) => s + (sasaFreeAEff[r.key] || 0), 0);
+      const freeB = ordResB.reduce((s, r) => s + (sasaFreeBEff[r.key] || 0), 0);
+      const compAB = [...ordResA, ...ordResB].reduce((s, r) => s + (sasaCompEff[r.key] || 0), 0);
       const bsa = Math.max(0.0, (freeA + freeB) - compAB);
-      const meanW = hasOrdCore ? meanArr(confContactsList.map(c => c.weight), 0.0) : meanArr(weightsSeen, 0.0);
       const wBsa = meanW * bsa;
 
       let nisAp=0, nisCh=0, nisTot=0;
-      for (const r of [...resA, ...resB]) {
-        if (hasOrdCore && platConf(r) < 0.35) continue;
-        if (intfA.has(r.key) || intfB.has(r.key)) continue;
-        if ((sasaComp[r.key] || 0) >= 10.0) {
+      for (const r of [...ordResA, ...ordResB]) {
+        if (r.entityType !== "PROTEIN") continue;
+        if (heavy55IntfA.has(r.key) || heavy55IntfB.has(r.key)) continue;
+        const maxAsa = MAX_ASA_TIEN2013[r.canonicalName] || 180.0;
+        if (((sasaCompEff[r.key] || 0) / maxAsa) >= 0.05) {
           nisTot++;
-          const pc = PRODIGY_CLASS[r.canonicalName] || "POLAR";
+          const pc = (PHOSPHO_PTM_RES.has(r.resName) || (r.canonicalName === "HIS" && phVal <= 6.0)) ? "CHARGED" : (PRODIGY_CLASS[r.canonicalName] || "POLAR");
           if (pc === "APOLAR") nisAp++;
           else if (pc === "CHARGED") nisCh++;
         }
@@ -2097,66 +2229,41 @@
       let ligBurialFrac = 0.0;
       if (isLigandPair) {
         const ligIsB = resB.some(r => r.entityType === "LIGAND");
-        const ligList = ligIsB ? resB : resA;
-        const ligFreeMap = ligIsB ? sasaFreeB : sasaFreeA;
+        const ligList = ligIsB ? ordResB : ordResA;
+        const ligFreeMap = ligIsB ? sasaFreeBEff : sasaFreeAEff;
         const ligFreeTot = ligList.reduce((s, r) => s + (ligFreeMap[r.key] || 0), 0);
-        const ligBoundTot = ligList.reduce((s, r) => s + (sasaComp[r.key] || 0), 0);
+        const ligBoundTot = ligList.reduce((s, r) => s + (sasaCompEff[r.key] || 0), 0);
         ligBurialFrac = clamp((ligFreeTot - ligBoundTot) / Math.max(1.0, ligFreeTot), 0.0, 1.0);
       }
+      const effHelPro = isNonPpi ? 0 : helPro;
       const gate = (isNonPpi || effIcSum < 3.0 ? 0.0 : 1.0 / (1.0 + Math.exp(-0.40 * (effIcSum - 11.0)))) * nisReliability;
       const apFrac = prodigyIC.APOLAR_APOLAR / Math.max(1.0, effIcSum);
-      const physW = clamp(0.50 + 0.20*apFrac + (helPro > 0 ? 0.10 : 0.0), 0.50, 0.70);
+      const physW = clamp(0.50 + 0.20*apFrac + ((prolinePenalty > 0.0 && effHelPro > 0) ? 0.10 : 0.0), 0.50, 0.70);
 
-      const phVal = clamp(parseFloat(document.getElementById("phInput")?.value || "7.2") || 7.2, 4.0, 9.5);
-      const acidFrac = 1.0 / (1.0 + Math.pow(10, 4.2 - phVal));
-      const baseFrac = 1.0 / (1.0 + Math.pow(10, phVal - 10.4));
-      const phRef72 = (1.0 / (1.0 + Math.pow(10, 4.2 - 7.2))) * (1.0 / (1.0 + Math.pow(10, 7.2 - 10.4)));
-      const phKappa = (acidFrac * baseFrac) / phRef72;
+      const iM = clamp(curSalt_mM / 1000.0, 0.01, 2.0);
+      const shield = 1.0 - 0.65 * apFrac;
+      const dKap = Math.exp(-0.85 * shield * ((Math.sqrt(iM) / 3.04) - (Math.sqrt(0.15) / 3.04)) * 3.5);
+      const sOut = 1.0 + (0.20 + 0.25 * apFrac) * (iM - 0.15);
+      let dgPhys = 2.10;
+      if (isNucleicPair) {
+        const dKapRna = Math.exp(-0.85 * ((Math.sqrt(iM) / 3.04) - (Math.sqrt(0.15) / 3.04)) * 3.5);
+        const eRawRna = 0.60*wSb*dKapRna + 0.65*wHbBase + 0.55*wHb2oh + 0.35*wHbBb + 0.95*wPiRna + 0.85*wCatPi + 0.10*wHp + 0.0025*wBsa;
+        dgPhys = 2.10 - 16.5 * Math.tanh(eRawRna / 16.5) + 1.50*wClash;
+      } else if (isLigandPair) {
+        const eRawLig = 0.85*wSb*dKap + 0.65*wHb + 0.55*wXb + 0.90*wPiRna + 0.80*wCatPi + 0.14*wHp + 0.0055*wBsa;
+        dgPhys = 1.80 - 15.0 * Math.tanh(eRawLig / 15.0) + 1.50*wClash;
+      } else if (isMetalPair) {
+        const isTransMet = [...resA, ...resB].some(r => r.entityType === "ION" && ["ZN","FE","CU","CO","NI"].includes(r.canonicalName));
+        const kCoord = isTransMet ? 2.60 : 2.15;
+        const effWMet = wMetalCoord + ((nMetalCoord > 0 || nMetalOuter >= 2) ? 0.50 * Math.min(wMetalOuter, 4.0) : 0.0);
+        if (effWMet <= 0.0) dgPhys = 2.10 + 1.50*wClash;
+        else dgPhys = 1.50 - 13.5 * Math.tanh((kCoord * Math.min(effWMet, 6.0) + 0.0040*wBsa) / 13.5) + 1.50*wClash;
+      } else {
+        const eRaw = sOut*(0.110*wHp + 0.195*prodigyIC.APOLAR_APOLAR + 0.0032*wBsa) + (0.78*wSb*dKap + 0.48*wHb + 0.62*wPiRna + 0.75*wCatPi);
+        dgPhys = 2.10 - 15.5 * Math.tanh(eRaw / 15.5) + 0.12*prodigyIC.POLAR_POLAR + 1.50*wClash + prolinePenalty*effHelPro;
+      }
 
-      const evalEnvAtSalt = (salt_mM) => {
-        const iM = clamp(salt_mM / 1000.0, 0.01, 2.0);
-        // Hydrophobic seams shield flanking coiled-coil ion pairs from bulk Debye screening
-        const shield = 1.0 - 0.65 * apFrac;
-        const dKap = Math.exp(-0.85 * shield * ((Math.sqrt(iM) / 3.04) - (Math.sqrt(0.15) / 3.04)) * 3.5);
-        const sOut = 1.0 + (0.20 + 0.25 * apFrac) * (iM - 0.15);
-        let dPhys = 2.10;
-        if (isNucleicPair) {
-          const dKapRna = Math.exp(-0.85 * ((Math.sqrt(iM) / 3.04) - (Math.sqrt(0.15) / 3.04)) * 3.5);
-          const phKappaNuc = baseFrac / (1.0 / (1.0 + Math.pow(10, 7.2 - 10.4)));
-          const eRawRna = 0.60*wSb*dKapRna*phKappaNuc + 0.65*wHbBase + 0.55*wHb2oh + 0.35*wHbBb + 0.95*wPiRna + 0.85*wCatPi + 0.10*wHp + 0.0025*wBsa;
-          const eEffRna = 16.5 * Math.tanh(eRawRna / 16.5);
-          dPhys = 2.10 - eEffRna + 1.50*wClash;
-        } else if (isLigandPair) {
-          const eRawLig = 0.85*wSb*dKap*phKappa + 0.65*wHb + 0.55*wXb + 0.90*wPiRna + 0.80*wCatPi + 0.14*wHp + 0.0055*wBsa;
-          const eEffLig = 15.0 * Math.tanh(eRawLig / 15.0);
-          dPhys = 1.80 - eEffLig + 1.50*wClash;
-        } else if (isMetalPair) {
-          const isTransMet = [...resA, ...resB].some(r => r.entityType === "ION" && ["ZN","FE","CU","CO","NI"].includes(r.canonicalName));
-          const kCoord = isTransMet ? 2.60 : 2.15;
-          const effWMet = wMetalCoord + ((nMetalCoord > 0 || nMetalOuter >= 2) ? 0.50 * Math.min(wMetalOuter, 4.0) : 0.0);
-          if (effWMet <= 0.0) dPhys = 2.10 + 1.50*wClash;
-          else {
-            const eRawMet = kCoord * Math.min(effWMet, 6.0) + 0.0040*wBsa;
-            dPhys = 1.50 - 13.5 * Math.tanh(eRawMet / 13.5) + 1.50*wClash;
-          }
-        } else {
-          const eRaw = sOut*(0.110*wHp + 0.195*prodigyIC.APOLAR_APOLAR + 0.0032*wBsa) + (0.78*wSb*dKap*phKappa + 0.48*wHb + 0.62*wPi);
-          const eEff = 15.5 * Math.tanh(eRaw / 15.5);
-          dPhys = 2.10 - eEff + 0.12*prodigyIC.POLAR_POLAR + 1.50*wClash + 2.20*helPro;
-        }
-        const dUni = (intfA.size === 0 && intfB.size === 0) ? 2.10 : clamp(gate*((1.0-physW)*dgProdigy + physW*dPhys) + (1.0-gate)*dPhys, -22.0, 5.0);
-        return { dPhys, dUni };
-      };
-
-      const curSalt_mM = clamp(parseFloat(document.getElementById("ionicInput")?.value || "150") || 150.0, 10.0, 1000.0);
-      // Coordinate- and PAE-driven evaluation (Prof. Tsugama Point 5 — zero arbitrary energy offset):
-      // Explicit SEP phosphate oxygens (O1P/O2P/O3P) at HXRXXS motifs are already counted in Channel 1 (pSb / wSb)
-      // and weighted by the local PAE matrix (wij) inside evalEnvAtSalt().
-      const isPtmSurfaceReady = (wBsa >= 100.0);
-      const ptmBonus = isPtmSurfaceReady ? 0.0 : 0.0;
-      const { dPhys: rawDgPhys, dUni: rawDgUni } = evalEnvAtSalt(curSalt_mM);
-      const dgPhys = rawDgPhys;
-      const dgUni = clamp(rawDgUni, -22.0, 5.0);
+      const dgUni = (intfAnyA.size === 0 && intfAnyB.size === 0) ? 2.10 : clamp(gate*((1.0-physW)*dgProdigy + physW*dgPhys) + (1.0-gate)*dgPhys, -22.0, 5.0);
       const kdM = Math.exp(dgUni / (R_GAS_KCAL * tempK));
 
       const mutCatalog = [];
@@ -2164,28 +2271,26 @@
         cList.forEach((r, idx) => {
           if (r.entityType !== "PROTEIN" && r.entityType !== "NUCLEIC" && r.entityType !== "LIGAND") return;
           const cname = r.canonicalName;
-          const inHel = isHelical(idx, cList, mode);
+          const inHel = (r.entityType === "PROTEIN") && isHelical(idx, cList, mode);
           const cInfo = resContrib.get(r.key) || { sb:0, hb:0, hp:0, pi:0, xb:0 };
-          const freeS = sasaFreeA[r.key] !== undefined ? sasaFreeA[r.key] : (sasaFreeB[r.key] || 0);
-          const rawBuried = freeS > 1.0 ? Math.max(0.0, (freeS - (sasaComp[r.key]||0)) / freeS) : 0.0;
-          const fBuried = rawBuried;
+          const freeS = sasaFreeAEff[r.key] !== undefined ? sasaFreeAEff[r.key] : (sasaFreeBEff[r.key] || 0);
+          const fBuried = freeS > 1.0 ? Math.max(0.0, (freeS - (sasaCompEff[r.key]||0)) / freeS) : 0.0;
           mutCatalog.push({ key: r.key, label: `${r.chainId}:${cname}${r.resSeq}`, chainId: r.chainId, resSeq: r.resSeq, wtName: cname, entityType: r.entityType, cInfo, fBuried, inHel, coord: r.cbCoord });
         });
       }
 
-      if (intfA.size === 0 && intfB.size === 0 && !forceReportIfEmpty) return null;
-      const confResLabels = new Set([...confContactsList.map(c=>c.resA), ...confContactsList.map(c=>c.resB)]);
+      const confResLabels = new Set([...coreConfContacts.map(c=>c.resA), ...coreConfContacts.map(c=>c.resB)]);
       const intfPlddts = hasOrdCore
         ? [...resA, ...resB].filter(r => confResLabels.has(`${r.chainId}:${r.resName}${r.resSeq}`)).map(rawPlddt)
-        : [...resA, ...resB].filter(r => intfA.has(r.key) || intfB.has(r.key)).map(rawPlddt);
-      const meanPlddt = (intfA.size === 0 && intfB.size === 0) ? 0.0 : meanArr(intfPlddts, 50.0);
-      const meanPae = (intfA.size === 0 && intfB.size === 0) ? 30.0 : (hasOrdCore ? meanArr(confContactsList.map(c=>c.pae), 3.5) : meanArr(intfPae, 8.0));
-      if (hasOrdCore) nCb8 = Math.max(confContactsList.length, weightsSeen.filter(w => w >= CONF_W_MIN).length);
-      const minLen = Math.max(1, Math.min(resA.length, resB.length));
-      const sizeScale = minLen < 50 ? clamp(60.0 / minLen, 1.0, 2.5) : 2.5;
-      const xPd = meanPlddt * Math.log10(nCb8 * sizeScale + 1.0);
-      const pdCoord = nCb8 === 0 ? 0.0 : (0.724 / (1.0 + Math.exp(-0.052 * (xPd - 152.611)))) + 0.018;
-      const pdPae = mode === 'MODE_A_PRED_FULL' ? pdCoord * (1.0 / (1.0 + Math.pow(Math.max(0.0, meanPae - 3.5) / 8.0, 2))) : clamp(pdCoord / 0.742, 0.0, 1.0);
+        : [...resA, ...resB].filter(r => intfAnyA.has(r.key) || intfAnyB.has(r.key)).map(rawPlddt);
+      const meanPlddt = (intfAnyA.size === 0 && intfAnyB.size === 0) ? 0.0 : meanArr(intfPlddts, 50.0);
+      const meanPae = (intfAnyA.size === 0 && intfAnyB.size === 0) ? 30.0 : (hasOrdCore ? meanArr(coreConfContacts.map(c=>c.pae), 3.5) : meanArr(intfPae, 8.0));
+      const nCb8Eff = hasOrdCore ? Math.max(coreConfContacts.length, weightsSeen.filter(w => w >= CONF_W_MIN).length) : nCb8;
+
+      const xPd = meanPlddt * Math.log10(nCb8Eff + 1.0);
+      const pdCoord = nCb8Eff === 0 ? 0.0 : (0.724 / (1.0 + Math.exp(-0.052 * (xPd - 152.611)))) + 0.018;
+      const pdPaeRaw = mode === "MODE_A_PRED_FULL" ? pdCoord * (1.0 / (1.0 + Math.pow(Math.max(0.0, meanPae - 3.5) / 8.0, 2))) : pdCoord;
+      const pdNorm = clamp(pdPaeRaw / 0.742, 0.0, 1.0);
 
       let lis = 0.0;
       if (paeMat) {
@@ -2200,43 +2305,66 @@
         if (valid.length) lis = meanArr(valid, 0.0);
       }
 
-      const iptm = confData.iptm !== null ? confData.iptm : (mode === "MODE_A_PRED_FULL" ? pdPae : clamp(pdCoord / 0.742, 0.0, 1.0));
-      const sigAff = clamp((-rawDgUni - 5.0) / 8.5, 0.0, 1.0);
+      let iptm = confData.iptm !== undefined && confData.iptm !== null ? confData.iptm : null;
+      if (Array.isArray(confData.chain_pair_iptm) && Array.isArray(confData.orig_chain_order) && resA.length && resB.length) {
+        const aSet = [...new Set(resA.map(r => r.origChainId || r.chainId))];
+        const bSet = [...new Set(resB.map(r => r.origChainId || r.chainId))];
+        const pVals = [];
+        for (const caO of aSet) {
+          for (const cbO of bSet) {
+            if (caO !== cbO) {
+              const oi = confData.orig_chain_order.indexOf(caO), oj = confData.orig_chain_order.indexOf(cbO);
+              if (oi >= 0 && oj >= 0 && confData.chain_pair_iptm[oi] && typeof confData.chain_pair_iptm[oi][oj] === "number") {
+                pVals.push(confData.chain_pair_iptm[oi][oj]);
+              }
+            }
+          }
+        }
+        if (pVals.length) iptm = meanArr(pVals, iptm);
+      }
+      if (isIntraDomain) iptm = null;
+      const hasJsonIptm = iptm !== null;
+      if (iptm === null) iptm = pdNorm;
+
+      const sigAff = clamp((-dgUni - 5.0) / 8.5, 0.0, 1.0);
+      const modeBFactor = mode === "MODE_B_PRED_COORD" ? 0.85 : 1.0;
       let pocketQuality = 0.0, rawUis = 0.0;
       if (isLigandPair) {
         pocketQuality = meanW * clamp((ligBurialFrac - 0.15) / 0.65, 0.0, 1.0);
-        rawUis = mode === "MODE_A_PRED_FULL" ? (0.20*iptm + 0.25*lis + 0.30*pocketQuality + 0.25*sigAff) : (0.55*pocketQuality + 0.45*sigAff);
+        rawUis = mode === "MODE_A_PRED_FULL" ? (0.20*iptm + 0.25*lis + 0.30*pocketQuality + 0.25*sigAff) : modeBFactor * (0.55*pocketQuality + 0.45*sigAff);
       } else if (isMetalPair) {
         const effQMet = wMetalCoord + ((nMetalCoord > 0 || nMetalOuter >= 2) ? 0.50 * Math.min(wMetalOuter, 4.0) : 0.0);
         pocketQuality = effQMet > 0.0 ? meanW * clamp(effQMet / 3.0, 0.0, 1.0) : 0.0;
-        rawUis = 0.55*pocketQuality + 0.45*sigAff;
+        rawUis = modeBFactor * (0.55*pocketQuality + 0.45*sigAff);
       } else {
-        rawUis = mode === "MODE_A_PRED_FULL" ? (0.25*iptm + 0.30*lis + 0.25*pdPae + 0.20*sigAff) : (0.55*clamp(pdCoord / 0.742, 0.0, 1.0) + 0.45*sigAff);
+        rawUis = mode === "MODE_A_PRED_FULL" ? (0.25*iptm + 0.30*lis + 0.25*pdNorm + 0.20*sigAff) : modeBFactor * (0.55*pdNorm + 0.45*sigAff);
       }
-      const uisShift = ptmBonus < 0 ? 0.115 : (ptmBonus > 0 ? -0.220 : 0.0);
       const thermoGate = clamp((-dgUni + 0.5) / 6.0, 0.10, 1.0);
-      const uis = Number(clamp((rawUis + uisShift) * thermoGate, 0.0, 1.0).toFixed(4));
+      const uis = Number(clamp(rawUis * thermoGate, 0.0, 1.0).toFixed(4));
       const margin = Number((uis - UIS_THRESHOLD).toFixed(4));
       const call = uis >= UIS_THRESHOLD ? "ABOVE_THRESHOLD" : "BELOW_THRESHOLD";
       const bindClass = uis >= UIS_HIGH_CONF ? "HIGH_CONFIDENCE" : (uis >= 0.42 ? "MODERATE" : "LOW_OR_DECOY");
 
       let patId = "Pattern D", patDesc = "Below-Threshold Decoy or Disordered Hallucination (No physical binding support)";
-      const effHelPro = isNonPpi ? 0 : helPro;
-      if (uis >= UIS_THRESHOLD && iptm >= 0.60 && dgUni <= -5.8 && effHelPro === 0 && nClash < 5) {
+      const kinkPenalized = (prolinePenalty > 0.0 && effHelPro > 0);
+      if (kinkPenalized || nClash >= 5) {
+        patId = "Pattern C"; patDesc = "Thermodynamically Penalized / Steric-Disrupted Interface (Geometric proximity offset by steric clash or kink penalty)";
+      } else if (uis >= UIS_THRESHOLD && iptm >= 0.60 && dgUni <= -5.8) {
         patId = "Pattern A"; patDesc = "Concordant Rigid/Coiled-Coil or Globular Interactor (Global ipTM, Local LIS, and ΔG_uni all support binding)";
-      } else if ((uis >= UIS_THRESHOLD || (lis >= 0.50 && dgUni <= -5.8)) && iptm < 0.60 && dgUni <= -5.8 && effHelPro === 0 && nClash < 5) {
+      } else if ((uis >= UIS_THRESHOLD || (lis >= 0.50 && dgUni <= -5.8)) && iptm < 0.60 && dgUni <= -5.8) {
         patId = "Pattern B"; patDesc = "IDR-Diluted Local Interactor (Strong local interface LIS & ΔG_uni despite low global ipTM from disordered tails)";
-      } else if (effHelPro > 0 || nClash >= 5) {
-        patId = "Pattern C"; patDesc = "Thermodynamically Penalized / Kink-Disrupted Interface (Geometric proximity offset by strained Proline kink or steric clash)";
       } else if (uis >= UIS_THRESHOLD) {
         patId = iptm >= 0.60 ? "Pattern A" : "Pattern B";
         patDesc = "Above-Threshold Interactor (Moderate affinity; inspect contact density & PAE)";
       } else if (wBsa >= 250.0 && dgUni > -5.0) {
         patId = "Pattern C"; patDesc = "Weak / Sub-Threshold Packing (Geometric burial without sufficient stabilizing contacts)";
       }
-      if (mode !== "MODE_A_PRED_FULL" && (patId === "Pattern A" || patId === "Pattern B")) {
+      if (mode === "MODE_C_EXP_CRYSTAL" && (patId === "Pattern A" || patId === "Pattern B")) {
         patId = "Pattern A";
-        patDesc = "Coordinate-Mode Supported Interactor (Interface packing pDockQ_coord and ΔG_uni support binding; no PAE JSON supplied)";
+        patDesc = `Experimental Structure Supported ${modality} Interactor (Interface packing and ΔG_uni support binding)`;
+      } else if (mode === "MODE_B_PRED_COORD" && (patId === "Pattern A" || patId === "Pattern B")) {
+        patId = "Pattern A";
+        patDesc = `Unverified Coordinate-Only Prediction (${modality}; supply PAE JSON for full Mode A verification)`;
       }
 
       const rnaTotSpec = nSb + nHbBase + nHb2oh + nHbBb + nPi + nCatPi;
@@ -2247,19 +2375,19 @@
         UIS: uis, UIS_threshold: UIS_THRESHOLD, UIS_margin: margin, threshold_call: call, binding_class: bindClass,
         pattern_id: patId, pattern_desc: patDesc,
         dG_uni_kcal: Number(dgUni.toFixed(2)), dG_prodigy_kcal: Number(dgProdigy.toFixed(2)), dG_phys_kcal: Number(dgPhys.toFixed(2)),
-        Kd_M: kdM, Kd_nM: Number((kdM * 1e9).toFixed(2)),
-        ipTM: Number(iptm.toFixed(3)), hasJsonIptm: confData.iptm !== null, LIS: Number(lis.toFixed(3)), pDockQ_PAE: Number(pdPae.toFixed(3)), pDockQ_coord: Number(pdCoord.toFixed(3)),
+        Kd_M: kdM, Kd_nM: Number((kdM * 1e9).toFixed(3)),
+        ipTM: Number(iptm.toFixed(3)), hasJsonIptm, LIS: Number(lis.toFixed(3)), pDockQ_PAE: Number(pdNorm.toFixed(3)), pDockQ_coord: Number(pdCoord.toFixed(3)),
         mean_intf_pLDDT: Number(meanPlddt.toFixed(1)), mean_intf_PAE_A: Number(meanPae.toFixed(2)),
         BSA_A2: Number(bsa.toFixed(1)), wBSA_A2: Number(wBsa.toFixed(1)),
-        intf_residues: (new Set(contacts.filter(c=>c.weight>=CONF_W_MIN).map(c=>c.resA))).size + (new Set(contacts.filter(c=>c.weight>=CONF_W_MIN).map(c=>c.resB))).size, n_cb8_contacts: nCb8,
-        salt_bridges: nSb, h_bonds: nHb, hb_base: nHbBase, hb_2oh: nHb2oh, hb_backbone: nHbBb, cation_pi: nCatPi, halogen_bonds: nXb, metal_coord_bonds: nMetalCoord, metal_outer_bonds: nMetalOuter, lig_burial_pct: Number((ligBurialFrac*100.0).toFixed(1)), pocket_quality: Number(pocketQuality.toFixed(3)), rna_specificity_idx: rnaSsi, hydrophobic_contacts: nHp, pi_stacking: nPi, disulfides: nSs, steric_clashes: nClash, wPiRna: Number(wPiRna.toFixed(2)), wCatPi: Number(wCatPi.toFixed(2)), wXb: Number(wXb.toFixed(2)), wMetalCoord: Number(wMetalCoord.toFixed(2)), wMetalOuter: Number(wMetalOuter.toFixed(2)), wHbBase: Number(wHbBase.toFixed(2)), wHb2oh: Number(wHb2oh.toFixed(2)), wHbBb: Number(wHbBb.toFixed(2)),
-        helical_prolines: effHelPro, f_apolar: Number(apFrac.toFixed(3)),
+        intf_residues: (new Set(coreConfContacts.map(c=>c.resA))).size + (new Set(coreConfContacts.map(c=>c.resB))).size, n_cb8_contacts: nCb8Eff,
+        salt_bridges: nSb, h_bonds: nHb, hb_base: nHbBase, hb_2oh: nHb2oh, hb_backbone: nHbBb, cation_pi: nCatPi, halogen_bonds: nXb, metal_coord_bonds: nMetalCoord, metal_outer_bonds: nMetalOuter, covalent_bonds: nCov, lig_burial_pct: Number((ligBurialFrac*100.0).toFixed(1)), pocket_quality: Number(pocketQuality.toFixed(3)), rna_specificity_idx: rnaSsi, hydrophobic_contacts: nHp, pi_stacking: nPi, disulfides: nSs, steric_clashes: nClash, wPiRna: Number(wPiRna.toFixed(2)), wCatPi: Number(wCatPi.toFixed(2)), wXb: Number(wXb.toFixed(2)), wMetalCoord: Number(wMetalCoord.toFixed(2)), wMetalOuter: Number(wMetalOuter.toFixed(2)), wHbBase: Number(wHbBase.toFixed(2)), wHb2oh: Number(wHb2oh.toFixed(2)), wHbBb: Number(wHbBb.toFixed(2)),
+        helical_prolines: effHelPro, proline_warning: effHelPro > 0, f_apolar: Number(apFrac.toFixed(3)),
         elec_density_1000A2: Number((1000.0*(nSb+nHb)/Math.max(100.0, bsa)).toFixed(2)),
         mean_w_intf: Number(meanW.toFixed(3)), pct_disordered: Number((100.0 * [...resA, ...resB].filter(r => rawPlddt(r) < 70.0).length / Math.max(1, resA.length + resB.length)).toFixed(1)), nis_total: nisTot, nis_reliability: Number(nisReliability.toFixed(2)),
         sig_aff: Number(sigAff.toFixed(3)), thermo_gate: Number(thermoGate.toFixed(3)),
         w_prodigy_blend: Number((gate * (1.0 - physW)).toFixed(2)),
         w_phys_blend: Number((1.0 - gate * (1.0 - physW)).toFixed(2)),
-        contacts, mutCatalog,
+        contacts: contacts.filter(c => c.minDist <= activeCutoff), mutCatalog,
         pdbText: toSanitizedPDBString(ordered),
         pdbChainA: (toSanitizedPDBString._lastRemap && toSanitizedPDBString._lastRemap[caId]) || (caId.includes("+") ? (toSanitizedPDBString._lastRemap?.[caId.split("+")[0]] || caId.split("+")[0]) : (caId.length > 1 ? "A" : caId)),
         pdbChainListA: caId.includes("+") ? caId.split("+").map(cid => ({ orig: cid, pdb: toSanitizedPDBString._lastRemap?.[cid] || cid.slice(0,1), unit: getChainUnit(resA.filter(r => r.chainId === cid)) })) : null,
@@ -2270,11 +2398,11 @@
           ? [...resA, ...resB].map(ra => { const ia = resToIdx.get(ra.key); return [...resA, ...resB].map(rb => paeMat[ia][resToIdx.get(rb.key)]); })
           : paeMat,
         lenA: resA.length, lenB: resB.length, fullLenA: resA.length, fullLenB: resB.length, lociA: (() => {
-          const conf = contacts.filter(c=>c.weight>=CONF_W_MIN);
-          if (!conf.length) return 'None';
+          const conf = coreConfContacts;
+          if (!conf.length) return "None";
           const byCh = {};
           for (const c of conf) {
-            const ch = (c.resA || '').split(':')[0] || caId;
+            const ch = (c.resA || "").split(":")[0] || caId;
             if (!byCh[ch]) byCh[ch] = new Set();
             byCh[ch].add(c.resSeqA);
           }
@@ -2284,17 +2412,17 @@
             const segs = []; let s = seqs[0], p = seqs[0];
             for (let k=1; k<seqs.length; k++) { if (seqs[k] - p > 15) { segs.push(s===p?`${s}`:`${s}–${p}`); s = seqs[k]; } p = seqs[k]; }
             segs.push(s===p?`${s}`:`${s}–${p}`);
-            return chKeys.length > 1 ? `${ch}:${segs.join(', ')}` : segs.join(', ');
-          }).join(' | ');
+            return chKeys.length > 1 ? `${ch}:${segs.join(", ")}` : segs.join(", ");
+          }).join(" | ");
         })(),
         lociB: (() => {
-          const seqs = [...new Set(contacts.filter(c=>c.weight>=CONF_W_MIN).map(c=>c.resSeqB))].sort((a,b)=>a-b);
-          if (!seqs.length) return 'None';
+          const seqs = [...new Set(coreConfContacts.map(c=>c.resSeqB))].sort((a,b)=>a-b);
+          if (!seqs.length) return "None";
           const segs = []; let s = seqs[0], p = seqs[0];
           for (let k=1; k<seqs.length; k++) { if (seqs[k] - p > 15) { segs.push(s===p?`${s}`:`${s}–${p}`); s = seqs[k]; } p = seqs[k]; }
-          segs.push(s===p?`${s}`:`${s}–${p}`); return segs.join(', ');
+          segs.push(s===p?`${s}`:`${s}–${p}`); return segs.join(", ");
         })(),
-        confContactCount: contacts.filter(c=>c.weight>=CONF_W_MIN).length, prodigyIC, pctNisAp: Number(pctNisAp.toFixed(1)), pctNisCh: Number(pctNisCh.toFixed(1)), wSb: Number(wSb.toFixed(2)), wHb: Number(wHb.toFixed(2)), wHp: Number(wHp.toFixed(2)), seqA, seqB
+        confContactCount: coreConfContacts.length, prodigyIC, pctNisAp: Number(pctNisAp.toFixed(1)), pctNisCh: Number(pctNisCh.toFixed(1)), wSb: Number(wSb.toFixed(2)), wHb: Number(wHb.toFixed(2)), wHp: Number(wHp.toFixed(2)), seqA, seqB
       };
     }
 
@@ -2635,7 +2763,7 @@
             const oi = origChainOrder.indexOf(chains[ca][0]?.origChainId || ca);
             const oj = origChainOrder.indexOf(chains[cb][0]?.origChainId || cb);
             const pairIptm = (Array.isArray(chainPairIptm) && oi >= 0 && oj >= 0 && oi !== oj && chainPairIptm[oi] && typeof chainPairIptm[oi][oj] === "number") ? chainPairIptm[oi][oj] : iptm;
-            const res = analyzePairJS(stem, ca, cb, chains[ca], chains[cb], ordered, resToIdx, mode, { iptm: pairIptm, res_pae_matrix: paeMat }, pairSasaComp, sasaFree[ca], sasaFree[cb], tempK, lambdaPae, isBinary);
+            const res = analyzePairJS(stem, ca, cb, chains[ca], chains[cb], ordered, resToIdx, mode, { iptm: pairIptm, chain_pair_iptm: chainPairIptm, orig_chain_order: origChainOrder, res_pae_matrix: paeMat }, pairSasaComp, sasaFree[ca], sasaFree[cb], tempK, lambdaPae, isBinary);
             if (res) {
               res.rawStructText = text;
               res.rawStructFormat = sf.name.toLowerCase().endsWith(".pdb") ? "pdb" : "cif";
@@ -2673,7 +2801,7 @@
               const compIdM = `${m1}+${m2}`;
               const sasaMFree = computeResidueSASA(compResM);
               const sasaTernComp = computeResidueSASA([...compResM, ...lcRes]);
-              const tRes = analyzePairJS(stem, compIdM, lc, compResM, lcRes, ordered, resToIdx, mode, { iptm, res_pae_matrix: paeMat }, sasaTernComp, sasaMFree, sasaFree[lc], tempK, lambdaPae, false);
+              const tRes = analyzePairJS(stem, compIdM, lc, compResM, lcRes, ordered, resToIdx, mode, { iptm, chain_pair_iptm: chainPairIptm, orig_chain_order: origChainOrder, res_pae_matrix: paeMat }, sasaTernComp, sasaMFree, sasaFree[lc], tempK, lambdaPae, false);
               if (tRes) {
                 tRes.rawStructText = text;
                 tRes.rawStructFormat = sf.name.toLowerCase().endsWith(".pdb") ? "pdb" : "cif";
@@ -2714,10 +2842,11 @@
 
     function formatKdString(kdNm) {
       if (kdNm >= 1e7) return ">10 mM (NB)";
-      if (kdNm >= 1e6) return `${(kdNm / 1e6).toFixed(2)} mM`;
-      if (kdNm >= 1e3) return `${(kdNm / 1e3).toFixed(2)} µM`;
-      if (kdNm < 0.5) return `${Math.max(0.01, kdNm * 1000).toFixed(1)} pM`;
-      return `${kdNm.toFixed(2)} nM`;
+      const f2 = v => Number(v.toPrecision(2)).toString();
+      if (kdNm >= 1e6) return `~${f2(kdNm / 1e6)} mM`;
+      if (kdNm >= 1e3) return `~${f2(kdNm / 1e3)} µM`;
+      if (kdNm < 0.5) return `~${f2(Math.max(0.01, kdNm * 1000))} pM`;
+      return `~${f2(kdNm)} nM`;
     }
 
     function updateUI() {
@@ -2870,8 +2999,8 @@
             <div style="background:#fff; padding:7px 10px; border-radius:6px; border:1px solid var(--border);">
               <strong>Step 1 (Chain Topology &amp; Contact Detection at d<sub>min</sub> ≤ ${cutoffA} Å):</strong>
               Parsed 3D coordinates: Chain ${cAName} = <strong>${fLenA} ${uA}</strong>, Chain ${cBName} = <strong>${fLenB} ${uB}</strong> (${r.pct_disordered ?? 0}% flexible/disordered residues).
-              Detected <strong>${nConf} confident inter-chain contact pairs</strong> (${nRaw} total raw pairs) across <strong>${r.intf_residues} unique contacting interface residues</strong> within <strong>${(r.lociA && r.lociA.includes(":")) ? r.lociA : `${cAName}:${r.lociA || "—"}`} &leftrightarrow; ${cBName}:${r.lociB || "—"}</strong>
-              (${r.salt_bridges} Salt Bridges [≤4.0 Å], ${r.h_bonds} H-Bonds [≤3.5 Å]${isNucUI ? ` [Base:${r.hb_base||0}, 2'-OH:${r.hb_2oh||0}, BB:${r.hb_backbone||0}]` : ""}, ${r.hydrophobic_contacts} Hydrophobic [≤4.5 Å]${isNucUI ? `, ${r.pi_stacking||0} Base π-Stacks, ${r.cation_pi||0} Cation-π, SSI = ${(r.rna_specificity_idx||0).toFixed(2)}` : ""}${isLigUI ? `, ${r.pi_stacking||0} Ring π-Stacks, ${r.cation_pi||0} Cat-π, ${r.halogen_bonds||0} X-Bonds, Burial = ${(r.lig_burial_pct||0).toFixed(1)}%` : ""}${isMetUI ? `, ${r.metal_coord_bonds||0} Inner-Sphere / ${r.metal_outer_bonds||0} Outer-H2O Metal Bonds` : ""}).
+              Detected <strong>${nConf} confident physics-core pairs (≤5.5 Å)</strong> (${nRaw} pairs shown at ≤${cutoffA} Å) across <strong>${r.intf_residues} unique contacting interface residues</strong> within <strong>${(r.lociA && r.lociA.includes(":")) ? r.lociA : `${cAName}:${r.lociA || "—"}`} &leftrightarrow; ${cBName}:${r.lociB || "—"}</strong>
+              (${r.salt_bridges} Salt Bridges [≤4.0 Å], ${r.h_bonds} H-Bonds [≤3.5 Å]${r.covalent_bonds ? `, ${r.covalent_bonds} Covalent [≤1.95 Å]` : ""}${isNucUI ? ` [Base:${r.hb_base||0}, 2'-OH:${r.hb_2oh||0}, BB:${r.hb_backbone||0}]` : ""}, ${r.hydrophobic_contacts} Hydrophobic [≤4.5 Å]${isNucUI ? `, ${r.pi_stacking||0} Base π-Stacks, ${r.cation_pi||0} Cation-π, SSI = ${(r.rna_specificity_idx||0).toFixed(2)}` : ""}${isLigUI ? `, ${r.pi_stacking||0} Ring π-Stacks, ${r.cation_pi||0} Cat-π, ${r.halogen_bonds||0} X-Bonds, Burial = ${(r.lig_burial_pct||0).toFixed(1)}%` : ""}${isMetUI ? `, ${r.metal_coord_bonds||0} Inner-Sphere / ${r.metal_outer_bonds||0} Outer-H2O Metal Bonds` : ""}).
             </div>
             <div style="background:#fff; padding:7px 10px; border-radius:6px; border:1px solid var(--border);">
               <strong>Step 2 (IDR-Immune Confidence Weighting w<sub>i,j</sub> &amp; Local Interaction Score LIS):</strong>
@@ -2896,17 +3025,16 @@
               &bull; <code>Modality = <strong>${r.modality}</strong> &rarr; Dedicated Metal Coordination Model (Inner-Sphere = <strong>${r.metal_coord_bonds||0}</strong>, Outer-H2O = <strong>${r.metal_outer_bonds||0}</strong>, Q<sub>metal</sub> = <strong>${(r.pocket_quality||0).toFixed(3)}</strong>${r.ternary_burial_split ? `, Bridge: ${r.ternary_burial_split}` : ""}) &rarr; ΔG<sub>met</sub> = <strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong> (K<sub>d</sub> = <strong>${kdStr}</strong>).</code><br>
               ` : `
               &bull; <code>ΔG<sub>PRODIGY</sub> (Vangone &amp; Bonvin 2015) = −0.0946·IC<sub>CC</sub>(${(ic.CHARGED_CHARGED||0).toFixed(1)}) − 0.1001·IC<sub>CA</sub>(${(ic.CHARGED_APOLAR||0).toFixed(1)}) + 0.1958·IC<sub>PP</sub>(${(ic.POLAR_POLAR||0).toFixed(1)}) − 0.2267·IC<sub>PA</sub>(${(ic.POLAR_APOLAR||0).toFixed(1)}) + 0.1868·%NIS<sub>ap</sub>(${r.pctNisAp||35.0}%) + 0.3810·%NIS<sub>ch</sub>(${r.pctNisCh||25.0}%) − 15.9433 = <strong>${r.dG_prodigy_kcal} kcal/mol</strong></code>${nisNote}<br>
-              &bull; <code>ΔG<sub>phys</sub> (Enthalpy–Entropy Compensated 8-Channel Model, E<sub>eff</sub>=15.5·tanh(E<sub>raw</sub>/15.5); IC<sub>AA</sub>=${(ic.APOLAR_APOLAR||0).toFixed(1)}, wHP=${(r.wHp||0).toFixed(1)}, wBSA=${r.wBSA_A2} Å², wSB=${(r.wSb||0).toFixed(1)}, wHB=${(r.wHb||0).toFixed(1)}, IC<sub>PP</sub>=${(ic.POLAR_POLAR||0).toFixed(1)}${r.pi_stacking?`, π=${r.pi_stacking}`:''}${r.steric_clashes?`, Clash=${r.steric_clashes}`:''}${r.helical_prolines?`, ProKink=${r.helical_prolines}`:''}) = <strong>${r.dG_phys_kcal} kcal/mol</strong></code><br>
+              &bull; <code>ΔG<sub>phys</sub> (Enthalpy–Entropy Compensated 8-Channel Model, E<sub>eff</sub>=15.5·tanh(E<sub>raw</sub>/15.5); IC<sub>AA</sub>=${(ic.APOLAR_APOLAR||0).toFixed(1)}, wHP=${(r.wHp||0).toFixed(1)}, wBSA=${r.wBSA_A2} Å², wSB=${(r.wSb||0).toFixed(1)}, wHB=${(r.wHb||0).toFixed(1)}, IC<sub>PP</sub>=${(ic.POLAR_POLAR||0).toFixed(1)}${r.pi_stacking?`, π=${r.pi_stacking}`:''}${r.cation_pi?`, Cat-π=${r.cation_pi}`:''}${r.steric_clashes?`, Clash=${r.steric_clashes}`:''}${r.helical_prolines?`, ProKink=${r.helical_prolines}`:''}) = <strong>${r.dG_phys_kcal} kcal/mol</strong></code><br>
               &bull; <code>Consensus ΔG<sub>uni</sub> = ${r.w_prodigy_blend.toFixed(2)}·ΔG<sub>PRODIGY</sub>(${r.dG_prodigy_kcal.toFixed(2)}) + ${r.w_phys_blend.toFixed(2)}·ΔG<sub>phys</sub>(${r.dG_phys_kcal.toFixed(2)}) = <strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong> &rarr; K<sub>d</sub> = exp(ΔG<sub>uni</sub> / RT) = <strong>${kdStr}</strong></code><br>
               `))}
-              &bull; <code>${isLigUI
-                ? `UIS (${r.modality}) = [${r.mode === "MODE_A_PRED_FULL" ? `0.20·ipTM(${r.ipTM.toFixed(3)}) + 0.25·LIS(${r.LIS.toFixed(3)}) + 0.30·Q_pocket(${(r.pocket_quality||0).toFixed(3)}) + 0.25·σ_aff(${r.sig_aff.toFixed(3)})` : `0.55·Q_pocket(${(r.pocket_quality||0).toFixed(3)}) + 0.45·σ_aff(${r.sig_aff.toFixed(3)})`}] × gate(${r.thermo_gate.toFixed(2)})`
-                : (isMetUI
-                  ? `UIS (${r.modality}) = [0.55·Q_metal(${(r.pocket_quality||0).toFixed(3)}) + 0.45·σ_aff(${r.sig_aff.toFixed(3)})] × gate(${r.thermo_gate.toFixed(2)})`
-                  : (r.mode === "MODE_A_PRED_FULL"
-                ? `UIS = [0.25·ipTM(${r.ipTM.toFixed(3)}) + 0.30·LIS(${r.LIS.toFixed(3)}) + 0.25·pDockQ<sub>PAE</sub>(${r.pDockQ_PAE.toFixed(3)}) + 0.20·σ<sub>aff</sub>(${r.sig_aff.toFixed(3)})] × gate(${r.thermo_gate.toFixed(2)})`
-                : `UIS (Coord Mode) = [0.55·pDockQ<sub>norm</sub>(${Math.min(1, r.pDockQ_coord / 0.742).toFixed(3)}) + 0.45·σ<sub>aff</sub>(${r.sig_aff.toFixed(3)})] × gate(${r.thermo_gate.toFixed(2)})`
-              ))} = <strong>${r.UIS.toFixed(4)}</strong></code>
+              &bull; <code>${(() => {
+                const mCap = r.mode === "MODE_B_PRED_COORD" ? " × 0.85(Mode B cap)" : "";
+                if (isLigUI) return `UIS (${r.modality}) = [${r.mode === "MODE_A_PRED_FULL" ? `0.20·ipTM(${r.ipTM.toFixed(3)}) + 0.25·LIS(${r.LIS.toFixed(3)}) + 0.30·Q_pocket(${(r.pocket_quality||0).toFixed(3)}) + 0.25·σ_aff(${r.sig_aff.toFixed(3)})` : `0.55·Q_pocket(${(r.pocket_quality||0).toFixed(3)}) + 0.45·σ_aff(${r.sig_aff.toFixed(3)})`}]${mCap} × gate(${r.thermo_gate.toFixed(2)})`;
+                if (isMetUI) return `UIS (${r.modality}) = [0.55·Q_metal(${(r.pocket_quality||0).toFixed(3)}) + 0.45·σ_aff(${r.sig_aff.toFixed(3)})]${mCap} × gate(${r.thermo_gate.toFixed(2)})`;
+                if (r.mode === "MODE_A_PRED_FULL") return `UIS = [0.25·ipTM(${r.ipTM.toFixed(3)}) + 0.30·LIS(${r.LIS.toFixed(3)}) + 0.25·pDockQ<sub>norm</sub>(${r.pDockQ_PAE.toFixed(3)}) + 0.20·σ<sub>aff</sub>(${r.sig_aff.toFixed(3)})] × gate(${r.thermo_gate.toFixed(2)})`;
+                return `UIS (${r.mode === "MODE_B_PRED_COORD" ? "Mode B Unverified" : "Exp Coord Mode"}) = [0.55·pDockQ<sub>norm</sub>(${r.pDockQ_PAE.toFixed(3)}) + 0.45·σ<sub>aff</sub>(${r.sig_aff.toFixed(3)})]${mCap} × gate(${r.thermo_gate.toFixed(2)})`;
+              })()} = <strong>${r.UIS.toFixed(4)}</strong></code>
             </div>
           </div>
         `;
@@ -2942,13 +3070,13 @@
         </tr>
         <tr>
           <td><strong>3. Solvation &amp; Contact Thermodynamics</strong></td>
-          <td>ΔG<sub>uni</sub> = ${r.dG_uni_kcal} kcal/mol · SB = ${r.salt_bridges} · HB = ${r.h_bonds}${isNucUI ? ` (Base:${r.hb_base||0}, 2'-OH:${r.hb_2oh||0}, BB:${r.hb_backbone||0})` : ""} · HP = ${r.hydrophobic_contacts} · π = ${r.pi_stacking || 0}${isNucUI ? ` · Cat-π = ${r.cation_pi || 0} · SSI = ${(r.rna_specificity_idx||0).toFixed(2)}` : ""}${isLigUI ? ` · Cat-π = ${r.cation_pi || 0} · XB = ${r.halogen_bonds || 0} · Burial = ${(r.lig_burial_pct||0).toFixed(1)}%` : ""}${isMetUI ? ` · Met-In = ${r.metal_coord_bonds || 0} · Met-H2O = ${r.metal_outer_bonds || 0}` : ""} · SS = ${r.disulfides || 0}</td>
+          <td>ΔG<sub>uni</sub> = ${r.dG_uni_kcal} kcal/mol · SB = ${r.salt_bridges} · HB = ${r.h_bonds}${isNucUI ? ` (Base:${r.hb_base||0}, 2'-OH:${r.hb_2oh||0}, BB:${r.hb_backbone||0})` : ""} · HP = ${r.hydrophobic_contacts} · π = ${r.pi_stacking || 0}${(!isNucUI && !isLigUI && r.cation_pi > 0) ? ` · Cat-π = ${r.cation_pi}` : ""}${isNucUI ? ` · Cat-π = ${r.cation_pi || 0} · SSI = ${(r.rna_specificity_idx||0).toFixed(2)}` : ""}${isLigUI ? ` · Cat-π = ${r.cation_pi || 0} · XB = ${r.halogen_bonds || 0} · Burial = ${(r.lig_burial_pct||0).toFixed(1)}%` : ""}${isMetUI ? ` · Met-In = ${r.metal_coord_bonds || 0} · Met-H2O = ${r.metal_outer_bonds || 0}` : ""} · SS = ${r.disulfides || 0}</td>
           <td>Scores both hydrophobic packing (wBSA = ${r.wBSA_A2} Å²) and polar/electrostatic salt-bridge/H-bond networks above the +2.10 kcal/mol cratic barrier.</td>
         </tr>
         <tr>
           <td><strong>4. Structural Integrity &amp; Kink Audit</strong></td>
-          <td>Strained Helical Prolines = ${r.helical_prolines} · Steric Clashes = ${r.steric_clashes}</td>
-          <td>${r.helical_prolines > 0 ? "WARNING: Unrelaxed/strained internal α-helical Proline kinks detected (+2.20 kcal/mol penalty per Pro)." : "No unrelaxed helix-breaking Proline kinks or severe steric clashes detected at the interface."}</td>
+          <td>Strained Helical Prolines = ${r.helical_prolines} · Covalent Bonds = ${r.covalent_bonds || 0} · Steric Clashes = ${r.steric_clashes}</td>
+          <td>${r.helical_prolines > 0 ? "DIAGNOSTIC WARNING: Strained internal α-helical Proline detected (adjust Proline Penalty parameter if auditing coiled-coil kinks)." : "No strained helical Prolines or severe steric clashes detected."}${r.covalent_bonds > 0 ? " Inter-chain covalent bond(s) detected and excluded from clash penalties." : ""}</td>
         </tr>
         <tr>
           <td><strong>5. Full Chain Lengths, Loci &amp; Sequence Fingerprint</strong></td>
@@ -2961,8 +3089,71 @@
       if (ligBtn) ligBtn.style.display = (r.sdfText && r.sdfText.length > 0) ? "inline-flex" : "none";
       renderContactInspectorTable(r);
       renderHotspotTable(r);
+      renderPlainEnglish3DConclusion(r);
       render3DStructure(r);
       renderSVGMaps(r);
+    }
+
+    function renderPlainEnglish3DConclusion(r) {
+      const box = document.getElementById("plainEnglishConclusionBox");
+      if (!box || !r) return;
+      const cA = r.chainAId || "A", cB = r.chainBId || "B";
+      const kdStr = formatKdString(r.Kd_nM);
+      const isStrong = r.UIS >= 0.65, isAbove = r.UIS >= UIS_THRESHOLD;
+      const affTier = r.dG_uni_kcal <= -11.5 ? "Very tight (sub-nM to low-nM)" : (r.dG_uni_kcal <= -8.5 ? "Strong (nanomolar)" : (r.dG_uni_kcal <= -5.8 ? "Moderate (low-µM)" : "Weak / transient (high-µM to mM)"));
+      const verdictTxt = isStrong
+        ? `<strong style="color:var(--emerald);">YES — High-Confidence 3D Interaction</strong> (UIS = ${r.UIS.toFixed(3)} ≥ 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`
+        : (isAbove
+          ? `<strong style="color:var(--amber);">LIKELY — Moderate 3D Interaction Above Threshold</strong> (UIS = ${r.UIS.toFixed(3)} ≥ 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`
+          : `<strong style="color:var(--rose);">UNLIKELY / WEAK — Below Interaction Threshold</strong> (UIS = ${r.UIS.toFixed(3)} &lt; 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`);
+      box.style.background = isStrong ? "#f0fdf4" : (isAbove ? "#fffbeb" : "#fff1f2");
+      box.style.border = `1px solid ${isStrong ? "#86efac" : (isAbove ? "#fcd34d" : "#fda4af")}`;
+      box.style.borderLeft = `4px solid ${isStrong ? "var(--emerald)" : (isAbove ? "var(--amber)" : "var(--rose)")}`;
+
+      const drivers = [];
+      if ((r.covalent_bonds||0) > 0) drivers.push(`${r.covalent_bonds} covalent adduct bond(s) [≤1.95 Å]`);
+      if ((r.metal_coord_bonds||0) > 0) drivers.push(`${r.metal_coord_bonds} inner-sphere metal coordination bond(s)`);
+      if ((r.salt_bridges||0) > 0) drivers.push(`${r.salt_bridges} electrostatic salt bridge(s)`);
+      if ((r.pi_stacking||0) + (r.cation_pi||0) > 0) drivers.push(`${(r.pi_stacking||0)} π-stack(s) & ${(r.cation_pi||0)} cation–π interaction(s)`);
+      if ((r.halogen_bonds||0) > 0) drivers.push(`${r.halogen_bonds} directional halogen bond(s)`);
+      if ((r.h_bonds||0) > 0) drivers.push(`${r.h_bonds} hydrogen bond(s)`);
+      if ((r.hydrophobic_contacts||0) > 0) drivers.push(`${r.hydrophobic_contacts} hydrophobic contact(s) (wBSA = ${r.wBSA_A2} Å²)`);
+      const driverStr = drivers.length ? drivers.slice(0, 4).join(", ") : "weak non-specific van der Waals proximity only";
+
+      const confC = (r.contacts || []).filter(c => c.weight >= 0.25);
+      const topC = confC.slice().sort((a, b) => ((b.cov*4 + b.sb*3 + b.pi*3 + b.catpi*3 + b.xb*2 + b.mcoord*3 + b.hb*2 + b.hp*0.4) - (a.cov*4 + a.sb*3 + a.pi*3 + a.catpi*3 + a.xb*2 + a.mcoord*3 + a.hb*2 + a.hp*0.4)) || (a.minDist - b.minDist)).slice(0, 5);
+      const pairDesc = topC.length
+        ? topC.map(c => {
+            const k = [c.cov?"Covalent":"", c.mcoord?"Metal-Coord":"", c.xb?"X-Bond":"", c.sb?"Salt Bridge":"", c.catpi?"Cation-π":"", c.pi?"π-Stack":"", c.hb2oh?"2'-OH H-Bond":"", c.hbBase?"Base H-Bond":"", c.hb?"H-Bond":"", c.hp?"Hydrophobic":""].filter(Boolean)[0] || "vdW";
+            return `<code>${c.resA} ↔ ${c.resB}</code> (${k}, ${c.minDist} Å)`;
+          }).join("; ")
+        : "No confident ordered atomic contacts (w ≥ 0.25) were found.";
+
+      const tips = [];
+      if ((r.covalent_bonds||0) > 0) tips.push(`Covalent adduct note: reported ΔG reflects non-covalent pocket packing (Kᵢ), not the irreversible covalent bond enthalpy (k_inact/K_I).`);
+      if (r.steric_clashes > 0) tips.push(`Relieve ${r.steric_clashes} steric clash(es) (<2.2 Å) via side-chain repacking or local energy minimization (FoldX/Rosetta).`);
+      if (r.helical_prolines > 0) tips.push(`Inspect ${r.helical_prolines} strained internal helical Proline(s) — mutating Pro to Ala/Leu may restore helical packing.`);
+      if (["PROTEIN-LIGAND","RNA-LIGAND","DNA-LIGAND","TERNARY-GLUE"].includes(r.modality)) {
+        if ((r.lig_burial_pct || 0) < 60) tips.push(`Ligand is only ${(r.lig_burial_pct||0).toFixed(0)}% buried — extending the scaffold into adjacent pocket sub-cavities will raise wBSA and potency.`);
+        if ((r.h_bonds || 0) < 2) tips.push(`Few directional H-bonds (${r.h_bonds}) — adding a polar H-bond donor/acceptor targeting nearby backbone or nucleobase atoms improves both affinity and selectivity.`);
+        if ((r.halogen_bonds || 0) === 0 && (r.pi_stacking || 0) === 0) tips.push(`No π-stacking or Cl/Br/I σ-hole halogen bonds detected — introducing a planar heteroaromatic ring or Cl/Br substituent aimed at a carbonyl oxygen can gain ~1–2 kcal/mol.`);
+      } else if (["PROTEIN-RNA","PROTEIN-DNA"].includes(r.modality)) {
+        if ((r.pi_stacking || 0) + (r.cation_pi || 0) === 0) tips.push(`No nucleobase π-stacking or Arg/Lys cation–π contacts detected — positioning Phe/Tyr/Trp or Arg near exposed bases boosts sequence specificity (SSI = ${(r.rna_specificity_idx||0).toFixed(2)}).`);
+        if ((r.salt_bridges || 0) < 2) tips.push(`Few phosphate salt bridges (${r.salt_bridges}) — adding Arg/Lys at the interface periphery (or testing Mg²⁺ bridging) increases electrostatic capture.`);
+      } else {
+        if ((r.salt_bridges || 0) < 2) tips.push(`Low electrostatic complementation (${r.salt_bridges} salt bridges) — engineering a complementary Asp/Glu ↔ Arg/Lys pair at peripheral residues can strengthen binding.`);
+        if ((r.hydrophobic_contacts || 0) < 12) tips.push(`Modest apolar packing (${r.hydrophobic_contacts} HP contacts, wBSA = ${r.wBSA_A2} Å²) — substituting small exposed polar interface residues with Leu/Ile/Phe/Tyr improves hydrophobic burial.`);
+      }
+      const hs = computeHotspotList(r);
+      if (hs.length) tips.push(`Protect top anchoring hotspots (${hs.slice(0,3).map(h=>h.label.split(" ")[0]).join(", ")}) — mutating these will strongly weaken binding; target lower-ranked peripheral residues instead for affinity maturation.`);
+
+      const lociStr = (r.lociA && r.lociA !== "None") ? `${r.lociA.includes(":") ? r.lociA : `${cA}:${r.lociA}`} ↔ ${cB}:${r.lociB}` : "No ordered binding core";
+      box.innerHTML = `
+        <div style="font-weight:800; text-transform:uppercase; font-size:11.5px; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:6px;">Plain-English Conclusion &amp; Affinity Optimization Advisor (3D Atomic Audit)</div>
+        <div><strong>1. Interaction Verdict:</strong> ${verdictTxt} <span style="color:var(--text-muted); font-size:12px;">(Structure-based ΔG estimates carry typical ±1.5–2.0 kcal/mol uncertainty.)</span></div>
+        <div style="margin-top:5px;"><strong>2. Which Part of X Interacts with Which Part of Y:</strong> Binding spans <strong>${lociStr}</strong> (${r.confContactCount} confident atomic pairs), driven by ${driverStr}. Key anchors: ${pairDesc}.</div>
+        <div style="margin-top:5px;"><strong>3. How to Make This Interaction Stronger:</strong> ${tips.slice(0,3).join(" ")}</div>
+      `;
     }
 
     let ACTIVE_3D_SHAPES = [];
@@ -3290,6 +3481,7 @@
         if (c.xb > 0) tags.push(`XB:${c.xb}`);
         if (c.mcoord > 0) tags.push(`Met-In:${c.mcoord}`);
         if (c.mouter > 0) tags.push(`Met-H2O:${c.mouter}`);
+        if (c.cov > 0) tags.push(`Cov:${c.cov}`);
         if (c.ss > 0) tags.push(`SS:${c.ss}`);
         if (c.clash > 0) tags.push(`Clash:${c.clash}`);
         if (!tags.length) tags.push("vdW");
@@ -3319,7 +3511,7 @@
     }
 
     function buildMasterDelimited(sep) {
-      const cols = ["complex_id","chain_pair","modality","lociA","lociB","confContactCount","sha256_id","mode","UIS","UIS_threshold","UIS_margin","threshold_call","binding_class","pattern_id","dG_uni_kcal","dG_prodigy_kcal","dG_phys_kcal","Kd_nM","ipTM","LIS","pDockQ_PAE","wBSA_A2","intf_residues","salt_bridges","h_bonds","hb_base","hb_2oh","hb_backbone","hydrophobic_contacts","pi_stacking","cation_pi","halogen_bonds","metal_coord_bonds","metal_outer_bonds","lig_burial_pct","pocket_quality","rna_specificity_idx","ternary_partners","cooperativity_balance","helical_prolines"];
+      const cols = ["complex_id","chain_pair","modality","lociA","lociB","confContactCount","sha256_id","mode","UIS","UIS_threshold","UIS_margin","threshold_call","binding_class","pattern_id","dG_uni_kcal","dG_prodigy_kcal","dG_phys_kcal","Kd_nM","ipTM","LIS","pDockQ_PAE","wBSA_A2","intf_residues","nis_total","salt_bridges","h_bonds","hb_base","hb_2oh","hb_backbone","hydrophobic_contacts","pi_stacking","cation_pi","halogen_bonds","metal_coord_bonds","metal_outer_bonds","covalent_bonds","lig_burial_pct","pocket_quality","rna_specificity_idx","ternary_partners","cooperativity_balance","helical_prolines"];
       const rows = [cols.join(sep)];
       for (const r of ALL_RESULTS) {
         rows.push(cols.map(c => {
@@ -3349,7 +3541,7 @@
     function downloadContactsCSV() {
       const r = ALL_RESULTS[ACTIVE_INDEX];
       if (!r || !r.contacts) return;
-      const cols = ["resA","resB","minDist","pae","weight","sb","hb","hbBase","hb2oh","hbBb","hp","pi","catpi","xb","mcoord","mouter","ss","clash"];
+      const cols = ["resA","resB","minDist","pae","weight","sb","hb","hbBase","hb2oh","hbBb","hp","pi","catpi","xb","mcoord","mouter","cov","ss","clash"];
       const rows = [cols.join(",")];
       for (const c of r.contacts) rows.push(cols.map(k => c[k] ?? "").join(","));
       downloadTextFile(`${r.complex_id}_contacts.csv`, rows.join("\n"));
@@ -3449,7 +3641,7 @@
           <td>${hs.hb.toFixed(1)}</td>
           <td>${hs.hp.toFixed(1)}</td>
           <td>${hs.pi.toFixed(1)}</td>
-          <td><strong>+${hs.ddgEst.toFixed(2)}</strong></td>
+          <td><strong>${hs.ddgEst.toFixed(2)}</strong></td>
           <td><span class="badge-call ${bCls}">${hs.tier}</span></td>
         `;
         tbody.appendChild(tr);
@@ -3460,7 +3652,7 @@
       const r = ALL_RESULTS[ACTIVE_INDEX];
       const rows = computeHotspotList(r);
       if (!rows.length) return;
-      const out = ["rank,residue,buried_pct,wSB,wHB,wHP,wPi_CatPi_XB,est_ddG_pert_kcal,tier"];
+      const out = ["rank,residue,buried_pct,wSB,wHB,wHP,wPi_CatPi_XB,hotspot_priority_score,tier"];
       rows.forEach((h, i) => out.push([i+1, h.label, h.burPct, h.sb, h.hb, h.hp, h.pi, h.ddgEst, `"${h.tier}"`].join(",")));
       downloadTextFile(`${r.complex_id}_hotspots.csv`, out.join("\n"));
     }
@@ -3702,7 +3894,10 @@
         updateStudioSlotUI(s);
       };
       clearExtraStudioComponents();
-      if (preset === "marvas_eif4a") {
+      if (preset === "drug_viral_rna") {
+        setSlot("X", "ligand", "Candidate_RNA_Binder_Drug", "CN1CCN(CC1)C2=CC=C(C=C2)C3=NC4=CC(Cl)=CC=C4N3");
+        setSlot("Y", "rna", "Viral_RNA_StemLoop_Target", "GGCUGAGAGAGAAAGCCUGGGAGGUUGGG");
+      } else if (preset === "marvas_eif4a") {
         setSlot("X", "protein", "Human_eIF4A1", "MSASQDSRSRDNGPDGMEPEGVIESNWNEIVDSFDDMNLSESLLRGIYAYGFEKPSAIQQRAILPCIKGYDVIAQAQSGTGKTATFAISILQQIELDLKATQALVLAPTRELAQQIQKVVMALGDYMGASCHACIGGTNVRAEVQKLQMEAPHIIVGTPGRVFDMLNRRYLSPKYIKMFVLDEADEMLSRGFKDQIYDIFQKLNSNTQVVLLSATMPSDVLEVTKKFMRDPIRILVKKEELTLEGIRQFYINVEREEWKLDTLCDLYETLTITQAVIFINTRRKVDWLTEKMHARDFTVSAMHGDMDQKERDVIMREFRSGSSRVLITTDLLARGIDVQQVSLVINYDLPTNRENYIHRIGRGGRFGRKGVAINMVTEEDKRTLRDIETFYNTSIEEMPLNVADLI");
         setSlot("Y", "rna", "Polypurine_RNA_10nt", "AGAGAGAGAG");
         addExtraStudioComponent({ type:"ligand", name:"Rocaglamide_A", seq:"COC1=CC2=C(C(=C1)OC)[C@@]3([C@H]([C@@H]([C@H]([C@@]3(O2)C4=CC=C(C=C4)OC)O)C(=O)N(C)C)C5=CC=CC=C5)O", count:1 });
@@ -3845,58 +4040,513 @@
       return { entities, warnings };
     }
 
+    function scanProteinBindingPatches(seq) {
+      const n = seq.length;
+      const win = Math.min(9, n);
+      let bestBasic = { score: 0, start: 1, end: win, sub: "" };
+      let bestHydro = { score: -99, start: 1, end: win, sub: "" };
+      let bestAcid = { score: 0, start: 1, end: win, sub: "" };
+      for (let i = 0; i <= n - win; i++) {
+        const sub = seq.slice(i, i + win);
+        let rk = 0, de = 0, arom = 0, hyd = 0;
+        for (const ch of sub) {
+          if (ch === "R" || ch === "K") rk++;
+          if (ch === "D" || ch === "E") de++;
+          if (ch === "F" || ch === "Y" || ch === "W") arom++;
+          hyd += (KD_HYDROPATHY[ONE_TO_THREE[ch]] ?? 0);
+        }
+        const bScore = rk + 0.5 * arom;
+        if (bScore > bestBasic.score) bestBasic = { score: bScore, rk, arom, start: i + 1, end: i + win, sub };
+        if (de > bestAcid.score) bestAcid = { score: de, de, start: i + 1, end: i + win, sub };
+        const hAvg = hyd / win;
+        if (hAvg > bestHydro.score) bestHydro = { score: hAvg, arom, start: i + 1, end: i + win, sub };
+      }
+      return { bestBasic, bestHydro, bestAcid };
+    }
+
+    function scan3DSurfacePatchesFromPDB(rlist) {
+      if (!Array.isArray(rlist) || rlist.length < 6 || rlist.length > 1000) return null;
+      const sasaMap = computeResidueSASA(rlist);
+      const exposed = rlist.map(r => {
+        const maxA = MAX_ASA_TIEN2013[r.canonicalName] || 180.0;
+        const rsa = (sasaMap[r.key] || 0) / maxA;
+        return { resSeq: r.resSeq, ch: THREE_TO_ONE[r.canonicalName] || "A", rsa, isExp: rsa >= 0.20 };
+      });
+      const n = exposed.length, win = Math.min(9, n);
+      let bestBasic = { score: -1, start: exposed[0].resSeq, end: exposed[win-1].resSeq, sub: "", expCount: 0, is3D: true };
+      let bestHydro = { score: -99, start: exposed[0].resSeq, end: exposed[win-1].resSeq, sub: "", expCount: 0, is3D: true };
+      let bestAcid = { score: -1, start: exposed[0].resSeq, end: exposed[win-1].resSeq, sub: "", expCount: 0, is3D: true };
+      for (let i = 0; i <= n - win; i++) {
+        const sl = exposed.slice(i, i + win);
+        const expSl = sl.filter(x => x.isExp);
+        if (expSl.length < 3) continue;
+        let rk = 0, de = 0, arom = 0, hyd = 0;
+        for (const x of expSl) {
+          if (x.ch === "R" || x.ch === "K") rk++;
+          if (x.ch === "D" || x.ch === "E") de++;
+          if (x.ch === "F" || x.ch === "Y" || x.ch === "W") arom++;
+          hyd += (KD_HYDROPATHY[ONE_TO_THREE[x.ch]] ?? 0);
+        }
+        const sub = sl.map(x => x.ch).join("");
+        const bScore = rk + 0.5 * arom;
+        if (bScore > bestBasic.score) bestBasic = { score: bScore, rk, arom, start: sl[0].resSeq, end: sl[win-1].resSeq, sub, expCount: expSl.length, is3D: true };
+        if (de > bestAcid.score) bestAcid = { score: de, de, start: sl[0].resSeq, end: sl[win-1].resSeq, sub, expCount: expSl.length, is3D: true };
+        const hAvg = hyd / expSl.length;
+        if (hAvg > bestHydro.score) bestHydro = { score: hAvg, arom, start: sl[0].resSeq, end: sl[win-1].resSeq, sub, expCount: expSl.length, is3D: true };
+      }
+      return bestBasic.score >= 0 ? { bestBasic, bestHydro, bestAcid, is3D: true } : null;
+    }
+
+    function scanNucleicMotifs(seq) {
+      const s = seq.replace(/T/g, "U"), n = s.length;
+      const motifs = [];
+      const g4Re = /G{3,}[ACGU]{1,7}G{3,}[ACGU]{1,7}G{3,}/g;
+      let mG4;
+      while ((mG4 = g4Re.exec(s)) !== null) {
+        motifs.push({ type: "Putative G-Quadruplex Cavity", start: mG4.index + 1, end: mG4.index + mG4[0].length, seq: mG4[0], strength: 3 });
+      }
+      const wc = (a, b) => (a==="A"&&b==="U")||(a==="U"&&b==="A")||(a==="G"&&b==="C")||(a==="C"&&b==="G")||(a==="G"&&b==="U")||(a==="U"&&b==="G");
+      const hairpins = [];
+      for (let i = 0; i < n - 8; i++) {
+        for (let loop = 3; loop <= 9; loop++) {
+          let stem = 0;
+          while (i - stem >= 0 && i + 1 + loop + stem < n && wc(s[i - stem], s[i + 1 + loop + stem])) stem++;
+          if (stem >= 3) {
+            hairpins.push({ stem, start: i - stem + 2, end: i + 1 + loop + stem, loopStart: i + 2, loopEnd: i + 1 + loop, loopSeq: s.slice(i + 1, i + 1 + loop) });
+          }
+        }
+      }
+      hairpins.sort((a, b) => b.stem - a.stem || (a.loopEnd - a.loopStart) - (b.loopEnd - b.loopStart));
+      const keptHp = [];
+      for (const hp of hairpins) {
+        if (!keptHp.some(k => !(hp.end < k.start || hp.start > k.end))) {
+          keptHp.push(hp);
+          motifs.push({ type: `Hairpin Stem-Loop (${hp.stem} bp stem, loop nt ${hp.loopStart}–${hp.loopEnd})`, start: hp.start, end: hp.end, seq: hp.loopSeq, strength: hp.stem >= 4 ? 3 : 2 });
+          if (keptHp.length >= 2) break;
+        }
+      }
+      const bulgeRe = /[GC]{2}[AU]{2,4}[AG]{1,3}[GC]{2}/g;
+      let mBul;
+      while ((mBul = bulgeRe.exec(s)) !== null) {
+        motifs.push({ type: "GC-Flanked Internal Bulge Pocket", start: mBul.index + 1, end: mBul.index + mBul[0].length, seq: mBul[0], strength: 3 });
+      }
+      let mPur; const purRe = /[AG]{5,}/g;
+      while ((mPur = purRe.exec(s)) !== null) {
+        motifs.push({ type: "Polypurine (A/G) Pocket/Tract", start: mPur.index + 1, end: mPur.index + mPur[0].length, seq: mPur[0], strength: mPur[0].length >= 7 ? 2 : 1 });
+      }
+      if (!motifs.length && n >= 4) {
+        const win = Math.min(8, n);
+        let bestAu = { cnt: -1, start: 1, end: win, sub: s.slice(0, win) };
+        for (let i = 0; i <= n - win; i++) {
+          const sub = s.slice(i, i + win);
+          const cnt = Array.from(sub).filter(c => c === "A" || c === "U").length;
+          if (cnt > bestAu.cnt) bestAu = { cnt, start: i + 1, end: i + win, sub };
+        }
+        motifs.push({ type: "Flexible Unpaired Region", start: bestAu.start, end: bestAu.end, seq: bestAu.sub, strength: 1 });
+      }
+      motifs.sort((a, b) => b.strength - a.strength || a.start - b.start);
+      return motifs;
+    }
+
+    function parseSmilesGraphJS(smiles) {
+      const atoms = [], adj = [];
+      const stack = [], ringOpen = {};
+      let prev = -1, pendingOrder = null, i = 0, n = smiles.length;
+      const addBond = (u, v, ord) => {
+        if (u < 0 || v < 0 || u === v) return;
+        const o = ord !== null ? ord : ((atoms[u].arom && atoms[v].arom) ? 1.5 : 1);
+        adj[u].push({ to: v, ord: o });
+        adj[v].push({ to: u, ord: o });
+      };
+      while (i < n) {
+        const ch = smiles[i];
+        if (ch === "(") { stack.push(prev); i++; continue; }
+        if (ch === ")") { prev = stack.length ? stack.pop() : -1; pendingOrder = null; i++; continue; }
+        if (ch === ".") { prev = -1; pendingOrder = null; i++; continue; }
+        if (ch === "-") { pendingOrder = 1; i++; continue; }
+        if (ch === "=") { pendingOrder = 2; i++; continue; }
+        if (ch === "#") { pendingOrder = 3; i++; continue; }
+        if (ch === ":") { pendingOrder = 1.5; i++; continue; }
+        if (ch === "/" || ch === "\\") { i++; continue; }
+        if (/[0-9]/.test(ch) || ch === "%") {
+          let rKey = ch;
+          if (ch === "%" && i + 2 < n) { rKey = smiles.slice(i + 1, i + 3); i += 3; } else i++;
+          if (ringOpen[rKey] !== undefined) {
+            const [u, uOrd] = ringOpen[rKey];
+            delete ringOpen[rKey];
+            addBond(u, prev, pendingOrder !== null ? pendingOrder : uOrd);
+          } else {
+            ringOpen[rKey] = [prev, pendingOrder];
+          }
+          pendingOrder = null;
+          continue;
+        }
+        let el = "", arom = false, explH = null, charge = 0;
+        if (ch === "[") {
+          const endB = smiles.indexOf("]", i);
+          if (endB === -1) break;
+          const inner = smiles.slice(i + 1, endB).replace(/^\d+/, "");
+          const mEl = inner.match(/^([A-Z][a-z]?|[cnospb])/);
+          if (mEl) {
+            el = mEl[1].toUpperCase();
+            arom = (mEl[1] === mEl[1].toLowerCase());
+            const rest = inner.slice(mEl[1].length);
+            const mH = rest.match(/H(\d*)/);
+            explH = mH ? (mH[1] ? parseInt(mH[1], 10) : 1) : 0;
+            const mCh = rest.match(/([+-])(\d*|[+-]*)/);
+            if (mCh) {
+              const sgn = mCh[1] === "+" ? 1 : -1;
+              charge = mCh[2] ? (/^\d+$/.test(mCh[2]) ? sgn * parseInt(mCh[2], 10) : sgn * (1 + mCh[2].length)) : sgn;
+            }
+          }
+          i = endB + 1;
+        } else if (smiles.slice(i, i + 2) === "Cl" || smiles.slice(i, i + 2) === "Br") {
+          el = smiles.slice(i, i + 2).toUpperCase(); i += 2;
+        } else if (/[BCNOPSFIbcnosp]/.test(ch)) {
+          el = ch.toUpperCase(); arom = (ch === ch.toLowerCase()); i++;
+        } else { i++; continue; }
+        if (!el) continue;
+        const idx = atoms.length;
+        atoms.push({ id: idx, el, arom, explH, charge, hCount: 0, inAromRing: false, inRingDbl: false });
+        adj.push([]);
+        if (prev >= 0) addBond(prev, idx, pendingOrder);
+        prev = idx;
+        pendingOrder = null;
+      }
+      const stdVal = { C:4, N:3, O:2, S:2, P:3, B:3, F:1, CL:1, BR:1, I:1 };
+      atoms.forEach((a, u) => {
+        const bSum = adj[u].reduce((s, e) => s + e.ord, 0);
+        if (a.explH !== null) a.hCount = a.explH;
+        else if (a.arom) a.hCount = a.el === "C" ? Math.max(0, Math.round(4 - bSum)) : 0;
+        else a.hCount = Math.max(0, (stdVal[a.el] || 0) - Math.round(bSum));
+      });
+      const ringKeys = new Set(), rings = [];
+      for (let start = 0; start < atoms.length; start++) {
+        const st = [[start, [start]]];
+        while (st.length) {
+          const [cur, path] = st.pop();
+          if (path.length > 6) continue;
+          for (const e of adj[cur]) {
+            const nxt = e.to;
+            if (nxt === start && (path.length === 5 || path.length === 6)) {
+              const sorted = path.slice().sort((a,b)=>a-b);
+              const rk = sorted.join(",");
+              if (!ringKeys.has(rk)) { ringKeys.add(rk); rings.push(path.slice()); }
+            } else if (nxt > start && !path.includes(nxt) && path.length < 6) {
+              st.push([nxt, [...path, nxt]]);
+            }
+          }
+        }
+      }
+      for (const r of rings) {
+        for (let k = 0; k < r.length; k++) {
+          const u = r[k], v = r[(k + 1) % r.length];
+          const edge = adj[u].find(e => e.to === v);
+          if (edge && edge.ord >= 1.5) { atoms[u].inRingDbl = true; atoms[v].inRingDbl = true; }
+        }
+      }
+      let aromRings = 0, aliphRings = 0;
+      for (const r of rings) {
+        const allLowArom = r.every(u => atoms[u].arom);
+        let dblInRing = 0;
+        for (let k = 0; k < r.length; k++) {
+          const u = r[k], v = r[(k + 1) % r.length];
+          const edge = adj[u].find(e => e.to === v);
+          if (edge && edge.ord >= 2) dblInRing++;
+        }
+        const hasHet = r.some(u => ["N","O","S"].includes(atoms[u].el));
+        const allCarbonsSp2 = r.every(u => atoms[u].el !== "C" || atoms[u].inRingDbl);
+        const isAromR = allLowArom
+          || (r.length === 6 && allCarbonsSp2 && dblInRing >= 2)
+          || (r.length === 5 && hasHet && allCarbonsSp2 && dblInRing >= 1);
+        if (isAromR) {
+          aromRings++;
+          r.forEach(u => { atoms[u].inAromRing = true; });
+        } else {
+          aliphRings++;
+        }
+      }
+      return { atoms, adj, rings, aromRings, aliphRings };
+    }
+
+    function analyzeDrugPharmacophores(val) {
+      const st = analyzeLigandStats(val);
+      if (st.isCcd) {
+        const isNucCof = ["ATP","ANP","ADP","GTP","GNP","AMP","FAD","NAD","NAP","SAM","SAH"].includes(st.code);
+        return { ...st, ringsEst: isNucCof ? 2 : 1, aromRings: isNucCof ? 2 : 1, aliphRings: 0, basicAmines: 0, hbd: isNucCof ? 3 : 1, heavyHalogens: 0, fluorines: 0, summary: isNucCof ? `Nucleotide cofactor CCD:${st.code} (purine ring + anionic phosphates)` : `CCD ligand ${st.code}` };
+      }
+      const g = parseSmilesGraphJS(val);
+      let hba = 0, hbd = 0, basicAmines = 0, heavyHalogens = 0, fluorines = 0, anionicHint = false;
+      g.atoms.forEach((a, u) => {
+        const edges = g.adj[u];
+        if (["CL","BR","I"].includes(a.el)) heavyHalogens++;
+        if (a.el === "F") fluorines++;
+        if ((a.el === "N" || a.el === "O") && a.charge <= 0) hba++;
+        if ((a.el === "N" || a.el === "O") && a.hCount > 0) hbd++;
+        if (a.charge < 0) anionicHint = true;
+        if ((a.el === "C" || a.el === "P" || a.el === "S") && edges.some(e => g.atoms[e.to].el === "O" && e.ord === 2) && edges.some(e => g.atoms[e.to].el === "O" && e.ord === 1 && (g.atoms[e.to].hCount > 0 || g.atoms[e.to].charge < 0))) {
+          anionicHint = true;
+        }
+        if (a.el === "N" && !a.arom && !a.inAromRing && a.charge >= 0) {
+          const allSingle = edges.length >= 1 && edges.length <= 3 && edges.every(e => e.ord === 1);
+          if (allSingle) {
+            const deact = edges.some(e => {
+              const nb = g.atoms[e.to];
+              if (nb.el !== "C" || nb.inAromRing || nb.arom) return true;
+              return g.adj[e.to].some(e2 => e2.to !== u && (g.atoms[e2.to].el === "O" || g.atoms[e2.to].el === "S") && e2.ord === 2);
+            });
+            if (!deact) basicAmines++;
+          }
+        }
+      });
+      const ringsEst = g.aromRings + g.aliphRings;
+      const parts = [];
+      if (g.aromRings > 0) parts.push(`${g.aromRings} aromatic ring(s) [π-stacking]`);
+      if (g.aliphRings > 0) parts.push(`${g.aliphRings} aliphatic ring(s) [3D scaffold]`);
+      if (basicAmines > 0) parts.push(`${basicAmines} basic amine(s) [salt-bridge]`);
+      if (hba > 0 || hbd > 0) parts.push(`${hba} HBA / ${hbd} HBD [H-bonding]`);
+      if (heavyHalogens > 0) parts.push(`${heavyHalogens} Cl/Br/I [σ-hole X-bond]`);
+      if (fluorines > 0) parts.push(`${fluorines} F [dipole/lipophilic]`);
+      if (anionicHint) parts.push("anionic PO₄/COO⁻");
+      return { ...st, heavyEst: g.atoms.length, hba, hbd, anionicHint, ringsEst, aromRings: g.aromRings, aliphRings: g.aliphRings, basicAmines, heavyHalogens, fluorines, summary: parts.join(", ") || "Minimal apolar hydrocarbon" };
+    }
+
+    function findBestDuplexSpan(s1, s2) {
+      const comp = { A:"U", U:"A", T:"A", G:"C", C:"G" };
+      const a = s1.replace(/T/g, "U"), bRev = Array.from(s2.replace(/T/g, "U")).reverse().join("");
+      let best = { len: 0, aStart: 1, aEnd: 1, bStart: 1, bEnd: 1, gc: 0 };
+      for (let shift = -bRev.length + 1; shift < a.length; shift++) {
+        let run = 0, gcRun = 0;
+        for (let i = 0; i < bRev.length; i++) {
+          const ai = shift + i;
+          if (ai >= 0 && ai < a.length && (comp[a[ai]] === bRev[i] || (a[ai]==="G"&&bRev[i]==="U") || (a[ai]==="U"&&bRev[i]==="G"))) {
+            run++;
+            if ((a[ai]==="G"&&bRev[i]==="C")||(a[ai]==="C"&&bRev[i]==="G")) gcRun++;
+            if (run > best.len) {
+              const aEnd = ai + 1, aStart = aEnd - run + 1;
+              const bOrigStart = s2.length - i, bOrigEnd = bOrigStart + run - 1;
+              best = { len: run, aStart, aEnd, bStart: bOrigStart, bEnd: bOrigEnd, gc: gcRun };
+            }
+          } else { run = 0; gcRun = 0; }
+        }
+      }
+      return best;
+    }
+
+    function scanMetalBindingSites(seq, type) {
+      if (type === "protein") {
+        const zf = seq.match(/C.{2,4}C.{8,16}[CH].{2,5}[CH]/);
+        if (zf) return { motif: "Zinc-Finger / Cys-His Chelation Motif", start: zf.index + 1, end: zf.index + zf[0].length, seq: zf[0], strength: 3 };
+        const mg = seq.match(/[DE].{1,3}[DE]/);
+        if (mg) return { motif: "Acidic Asp/Glu Metal-Triad Motif (Mg²⁺/Mn²⁺/Ca²⁺)", start: mg.index + 1, end: mg.index + mg[0].length, seq: mg[0], strength: 2 };
+        return { motif: "Exposed Asp/Glu/His/Cys Surface Side Chains", start: 1, end: Math.min(20, seq.length), seq: seq.slice(0, 12), strength: 1 };
+      }
+      if (type === "rna" || type === "dna") {
+        const gRun = seq.replace(/T/g, "U").match(/G{2,}/);
+        if (gRun) return { motif: "Phosphate Backbone + Guanine N7/O6 Metal Pocket", start: gRun.index + 1, end: gRun.index + gRun[0].length, seq: gRun[0], strength: 3 };
+        return { motif: "Polyanionic Phosphate Backbone (Outer/Inner-Sphere)", start: 1, end: seq.length, seq: seq.slice(0, 12), strength: 2 };
+      }
+      return { motif: "Anionic / Heteroatom Chelating Group", start: 1, end: 1, seq: seq.slice(0, 20), strength: 2 };
+    }
+
     function runUniversalStudioPreScreen() {
       const { entities, warnings } = buildStudioEntities();
       if (entities.length < 2) { alert("Please enter or upload at least Partner X and Partner Y."); return; }
       const outPanel = document.getElementById("studioOutputPanel");
       if (outPanel) outPanel.style.display = "block";
 
-      // Compute individual descriptors & pairwise compatibility
       const cards = [];
-      const charges = [];
+      const statsMap = {};
       let hasCustomSmiles = false;
+      let hasUnsupportedAf3Lig = false;
       for (const e of entities) {
         const mutTag = e.mutNotes.length ? ` [Mut: ${e.mutNotes.join(",")}]` : "";
         if (e.type === "protein") {
           const st = analyzeProteinSeqStats(e.seq);
-          charges.push(st.q72);
-          cards.push(`<div class="descriptor"><span>${e.slot}: ${e.name} (Protein${mutTag})</span><strong>${st.len} aa · ${st.mwKda.toFixed(1)} kDa · Q<sub>7.2</sub>=${st.q72>=0?"+":""}${st.q72.toFixed(1)} · pI=${st.pI.toFixed(2)}</strong><span style="font-size:11px;">Basic R/K patches: ${st.basicPatches} · Arom: ${st.aromPct.toFixed(1)}% · GRAVY: ${st.gravy.toFixed(2)}</span></div>`);
+          const pickEl = (e.slot === "X" || e.slot === "Y") ? document.getElementById(`slot${e.slot}ChainPick`) : null;
+          const pdbChainRes = (e.slot === "X" || e.slot === "Y") && STUDIO_SLOT_PARSED[e.slot] && pickEl ? STUDIO_SLOT_PARSED[e.slot][pickEl.value] : null;
+          const surf3D = pdbChainRes ? scan3DSurfacePatchesFromPDB(pdbChainRes) : null;
+          const patches = surf3D || scanProteinBindingPatches(e.seq);
+          statsMap[e.slot] = { ...st, patches, has3DSurface: !!surf3D };
+          const srcTag = surf3D ? "3D Exposed Surface" : "1D Patch";
+          cards.push(`<div class="descriptor"><span>${e.slot}: ${e.name} (Protein${mutTag})</span><strong>${st.len} aa · ${st.mwKda.toFixed(1)} kDa · Q<sub>7.2</sub>=${st.q72>=0?"+":""}${st.q72.toFixed(1)} · pI=${st.pI.toFixed(2)}</strong><span style="font-size:11px;">${srcTag}: Basic aa ${patches.bestBasic.start}–${patches.bestBasic.end} · Apolar aa ${patches.bestHydro.start}–${patches.bestHydro.end} · Arom: ${st.aromPct.toFixed(1)}%</span></div>`);
         } else if (e.type === "rna" || e.type === "dna") {
           const st = analyzeNucleicSeqStats(e.seq, e.type);
-          charges.push(st.q72);
-          cards.push(`<div class="descriptor"><span>${e.slot}: ${e.name} (${e.type.toUpperCase()}${mutTag})</span><strong>${st.len} nt · Q<sub>phos</sub>=${st.q72} · GC=${st.gc.toFixed(1)}%</strong><span style="font-size:11px;">Purine (A+G): ${st.pur.toFixed(1)}% · Longest (A/G)<sub>n</sub> tract: ${st.maxPurRun} nt</span></div>`);
+          const motifs = scanNucleicMotifs(e.seq);
+          statsMap[e.slot] = { ...st, motifs };
+          cards.push(`<div class="descriptor"><span>${e.slot}: ${e.name} (${e.type.toUpperCase()}${mutTag})</span><strong>${st.len} nt · Q<sub>phos</sub>=${st.q72} · GC=${st.gc.toFixed(1)}%</strong><span style="font-size:11px;">${motifs.length} pocket motif(s) · Top: ${motifs[0] ? `${motifs[0].type} (nt ${motifs[0].start}–${motifs[0].end})` : "None"}</span></div>`);
         } else if (e.type === "ligand") {
-          const st = analyzeLigandStats(e.seq);
-          if (!st.isCcd) hasCustomSmiles = true;
-          charges.push(st.anionicHint ? -2.0 : 0.0);
-          cards.push(`<div class="descriptor"><span>${e.slot}: ${e.name} (${st.isCcd ? "CCD Ligand" : "Custom SMILES"})</span><strong>${st.isCcd ? `CCD ${st.code}` : `~${st.heavyEst} heavy atoms · Arom:${st.aromAtoms} · HBA:${st.hba}`}</strong><span style="font-size:11px;">Halogens (X-Bond): ${st.halogens} · Anionic PO₄/COO⁻: ${st.anionicHint ? "Yes" : "No"}</span></div>`);
+          const st = analyzeDrugPharmacophores(e.seq);
+          if (!st.isCcd) { hasCustomSmiles = true; hasUnsupportedAf3Lig = true; }
+          else if (!AF3_ALLOWED_CCDS.has(st.code)) {
+            hasUnsupportedAf3Lig = true;
+            warnings.push(`Ligand CCD '${st.code}' is not in the AlphaFold 3 Server web allowlist — use the generated Boltz-1/2 YAML or Chai-1 FASTA tab for co-folding.`);
+          }
+          statsMap[e.slot] = st;
+          cards.push(`<div class="descriptor"><span>${e.slot}: ${e.name} (${st.isCcd ? "CCD Ligand" : "Custom SMILES"})</span><strong>${st.isCcd ? `CCD ${st.code}` : `${st.heavyEst} heavy · ${st.aromRings} arom/${st.aliphRings} aliph ring · ${st.basicAmines} amine`}</strong><span style="font-size:11px;">HBA:${st.hba} · HBD:${st.hbd} · Cl/Br/I:${st.heavyHalogens} · Anionic:${st.anionicHint ? "Yes" : "No"}</span></div>`);
         } else {
-          charges.push(2.0);
+          statsMap[e.slot] = { ion: e.seq.toUpperCase(), q72: 2.0 };
           cards.push(`<div class="descriptor"><span>${e.slot}: ${e.name} (Catalytic Metal / Ion)</span><strong>${e.seq.toUpperCase()}²⁺</strong><span style="font-size:11px;">Inner-sphere N/O/S + hydrated outer-sphere coordination ready</span></div>`);
+        }
+        if ((e.slot === "X" || e.slot === "Y") && Array.isArray(STUDIO_SLOT_RESNUMS[e.slot]) && STUDIO_SLOT_RESNUMS[e.slot].length > 1) {
+          const rn = STUDIO_SLOT_RESNUMS[e.slot];
+          let nGaps = 0;
+          for (let g = 1; g < rn.length; g++) if (rn[g] - rn[g - 1] > 1) nGaps++;
+          if (nGaps > 0) warnings.push(`Partner ${e.slot} (${e.name}) from crystal PDB has ${nGaps} missing-loop gap(s) — consider clicking 'UniProt' to co-fold the full-length native sequence.`);
         }
       }
       document.getElementById("studioPrescreenGrid").innerHTML = cards.join("");
 
-      const e0 = entities[0], e1 = entities[1];
-      const types = new Set(entities.map(e => e.type));
-      const notes = [];
-      if (charges.length >= 2) {
-        const prod = charges[0] * charges[1];
-        if (prod < -5) notes.push(`Strong electrostatic complementarity between ${e0.slot} (${charges[0]>=0?"+":""}${charges[0].toFixed(1)}) and ${e1.slot} (${charges[1]>=0?"+":""}${charges[1].toFixed(1)}).`);
-        else if (prod > 15) notes.push(`Net like-charge repulsion at pH 7.2 (${charges[0].toFixed(1)} vs ${charges[1].toFixed(1)}) — binding requires localized complementary patches, hydrophobic burial, or bridging divalent cations (Mg²⁺/Zn²⁺).`);
-      }
-      if ((e0.type === "rna" || e0.type === "dna") && (e1.type === "rna" || e1.type === "dna")) {
-        const bpRun = maxDuplexComplementarity(e0.seq, e1.seq);
-        notes.push(`Longest continuous antiparallel Watson–Crick/G·U base-paired tract = <strong>${bpRun} bp</strong>.`);
-      }
-      if (types.has("rna") && entities.some(e => e.type === "rna" && analyzeNucleicSeqStats(e.seq, "rna").maxPurRun >= 6)) {
-        notes.push(`RNA contains a ≥6-nt polypurine (A/G) tract — high compatibility for DEAD-box helicase / rocaglate molecular-glue clamping.`);
-      }
-      if (entities.length >= 3) {
-        notes.push(`Multi-component (${entities.length}-entity) complex configured (${entities.map(e=>`${e.slot}:${e.type.toUpperCase()}`).join(" + ")}) — Tab 1 will automatically trigger Ternary Molecular-Glue & Metal-Bridge auditing on the resulting 3D structure.`);
-      }
       if (hasCustomSmiles) {
-        warnings.push("Custom SMILES detected: AlphaFold 3 Server web UI restricts ligands to supported CCD codes. Use the generated Boltz-1/2 YAML or Chai-1 FASTA file to co-fold ANY custom synthetic lab molecule, then drop the resulting .cif/.pdb into Tab 1.");
+        warnings.push("Custom SMILES detected: AlphaFold 3 Server web UI restricts ligands to built-in CCD codes. Use the generated Boltz-1/2 YAML, Chai-1 FASTA, or 1-Click Colab Cell to co-fold ANY custom drug, then drop the resulting .cif into Tab 1.");
+      }
+
+      const e0 = entities[0], e1 = entities[1];
+      const s0 = statsMap[e0.slot], s1 = statsMap[e1.slot];
+      const hasIonZ = entities.slice(2).some(z => z.type === "ion");
+      const hasGlueZ = entities.slice(2).some(z => z.type === "ligand");
+      let ci = 0.25, xSiteShort = "—", ySiteShort = "—", whereInteract = "", selectivityNote = "";
+      const siteRows = [];
+      const optTips = [];
+
+      const isNuc0 = (e0.type === "rna" || e0.type === "dna"), isNuc1 = (e1.type === "rna" || e1.type === "dna");
+      if ((e0.type === "ligand" && isNuc1) || (e1.type === "ligand" && isNuc0)) {
+        const ligE = e0.type === "ligand" ? e0 : e1, ligS = statsMap[ligE.slot];
+        const nucE = isNuc0 ? e0 : e1, nucS = statsMap[nucE.slot];
+        const topMotif = nucS.motifs[0];
+        const polarTot = (ligS.hba || 0) + (ligS.hbd || 0) + (ligS.basicAmines || 0);
+        const isTinyOrApolar = (!ligS.isCcd && (ligS.heavyEst < 8 || polarTot === 0));
+        ci = (isTinyOrApolar ? 0.06 : 0.16)
+           + Math.min(0.28, (ligS.aromRings || 0) * 0.12)
+           + Math.min(0.06, (ligS.aliphRings || 0) * 0.03)
+           + Math.min(0.22, (ligS.basicAmines || 0) * 0.11)
+           + Math.min(0.16, ((ligS.hba || 0) * 0.018 + (ligS.hbd || 0) * 0.045))
+           + Math.min(0.10, (ligS.heavyHalogens || 0) * 0.05)
+           + (topMotif && topMotif.strength >= 2 ? 0.12 : 0.04)
+           - (ligS.anionicHint && !hasIonZ ? 0.30 : 0.0) + (ligS.anionicHint && hasIonZ ? 0.08 : 0.0)
+           - (isTinyOrApolar ? 0.15 : 0.0);
+        ci = clamp(ci, 0.05, 0.95);
+
+        if (ligS.basicAmines >= 4) {
+          selectivityNote = `<strong>Off-Target Risk Warning:</strong> ${ligS.basicAmines} basic amines create high polycationic charge — likely binds RNA non-specifically via the phosphate backbone (high risk of off-target host/human RNA binding unless balanced with base-specific H-bond recognition).`;
+        } else if (ligS.anionicHint && !hasIonZ) {
+          selectivityNote = `<strong>Electrostatic Repulsion:</strong> Anionic carboxylate/phosphate groups repel the negatively charged viral RNA backbone unless bridged by Mg²⁺.`;
+        } else if (ligS.aromRings >= 2 && ligS.hbd >= 1 && ligS.basicAmines <= 2) {
+          selectivityNote = `<strong>Selectivity Profile:</strong> Balanced planar aromatic π-stacking (${ligS.aromRings} aromatic rings) + directional HBD (${ligS.hbd}) + controlled basicity (${ligS.basicAmines} amine) favors pocket-selective viral RNA recognition over non-specific polyelectrolyte binding.`;
+        } else {
+          selectivityNote = `<strong>Selectivity Profile:</strong> Moderate pharmacophore specificity — confirm pocket selectivity against bacterial/host RNA decoys via 3D co-folding.`;
+        }
+
+        const ligShort = ligS.isCcd ? `CCD:${ligS.code}` : `${ligS.aromRings} arom ring, ${ligS.basicAmines} amine, ${ligS.hbd} HBD`;
+        const nucShort = `nt ${topMotif.start}–${topMotif.end} (${topMotif.seq.slice(0,14)})`;
+        xSiteShort = e0 === ligE ? ligShort : nucShort;
+        ySiteShort = e0 === ligE ? nucShort : ligShort;
+        whereInteract = `<strong>${ligE.name}</strong> (${ligS.summary}) is predicted to target <strong>${nucE.name}</strong> at <strong>nt ${topMotif.start}–${topMotif.end}</strong> (${topMotif.type}: <code>${topMotif.seq}</code>).`;
+        nucS.motifs.slice(0, 3).forEach((m, idx) => {
+          siteRows.push([
+            `${ligE.name}: ${idx === 0 ? (ligS.aromRings >= 1 ? "Planar aromatic ring(s) + H-bond core" : "Polar H-bond scaffold") : (ligS.basicAmines > 0 ? "Basic amine(s)" : "Peripheral HBA/HBD")}`,
+            `${nucE.name}: nt ${m.start}–${m.end} (${m.type})`,
+            idx === 0 ? "Nucleobase π-stacking + base-edge H-bonding" : "Phosphate electrostatics / groove recognition",
+            idx === 0 ? "Primary Pocket (#1)" : `Alternative Site (#${idx+1})`
+          ]);
+        });
+        if (isTinyOrApolar) optTips.push("Molecule is too small or purely apolar (lacks H-bond/electrostatic anchors) — expand scaffold with a planar heteroaromatic core + H-bond donors/acceptors.");
+        if ((ligS.basicAmines || 0) === 0) optTips.push("Introduce 1–2 protonatable basic amines (pKa > 8.5, e.g., piperazine/alkylamine) for electrostatic attraction to the viral RNA phosphate backbone without causing polycationic off-target toxicity.");
+        if ((ligS.aromRings || 0) < 2) optTips.push("Add a planar heteroaromatic ring system (e.g., benzimidazole, quinazoline, or purine-like core) to drive π-stacking inside RNA stem-loops or internal bulges.");
+        if ((ligS.hbd || 0) < 2) optTips.push("Add directional H-bond donors (–NH– / –OH) spaced ~2.8–3.2 Å apart to recognize Watson–Crick/Hoogsteen edges of unpaired G/A bases (raising viral vs. host selectivity).");
+        if (ligS.anionicHint && !hasIonZ) optTips.push("Neutralize anionic acid/phosphate groups OR add Mg²⁺ via '+ Add Component (Z)' to test metal-bridged binding.");
+        if ((ligS.heavyHalogens || 0) === 0) optTips.push("Test a Cl or Br substituent directed toward a nucleobase or phosphate oxygen for a directional σ-hole halogen bond.");
+      } else if ((e0.type === "protein" && isNuc1) || (e1.type === "protein" && isNuc0)) {
+        const pE = e0.type === "protein" ? e0 : e1, pS = statsMap[pE.slot];
+        const nE = isNuc0 ? e0 : e1, nS = statsMap[nE.slot];
+        const topM = nS.motifs[0];
+        ci = clamp(0.22 + (pS.q72 > 2 ? 0.22 : (pS.q72 > -2 ? 0.12 : 0.04)) + Math.min(0.24, pS.basicPatches * 0.08) + Math.min(0.16, pS.aromPct * 0.015) + (topM && topM.strength >= 2 ? 0.10 : 0.04) + (hasGlueZ ? 0.08 : 0.0), 0.05, 0.95);
+        const surfLbl = pS.has3DSurface ? "3D surface-exposed basic/aromatic patch" : "basic/aromatic sequence patch";
+        const pShort = `aa ${pS.patches.bestBasic.start}–${pS.patches.bestBasic.end} (${pS.patches.bestBasic.sub})`;
+        const nShort = `nt ${topM.start}–${topM.end} (${topM.seq.slice(0,14)})`;
+        xSiteShort = e0 === pE ? pShort : nShort;
+        ySiteShort = e0 === pE ? nShort : pShort;
+        whereInteract = `<strong>${pE.name}</strong> ${surfLbl} <strong>${pShort}</strong> ↔ <strong>${nE.name}</strong> motif <strong>nt ${topM.start}–${topM.end}</strong> (${topM.type}).`;
+        nS.motifs.slice(0, 2).forEach((m, idx) => {
+          siteRows.push([`${pE.name}: ${pShort} [${pS.has3DSurface ? "3D Exposed" : "1D"}]`, `${nE.name}: nt ${m.start}–${m.end} (${m.type})`, "Arg/Lys phosphate salt bridges + Phe/Tyr/Trp base π-stacking", idx === 0 ? "Primary Site (#1)" : "Secondary Site (#2)"]);
+        });
+        if (pS.basicPatches === 0) optTips.push(`Protein lacks a dense R/K patch — introducing Arg/Lys substitutions near aa ${pS.patches.bestBasic.start}–${pS.patches.bestBasic.end} strengthens RNA phosphate capture.`);
+        if (pS.q72 < -4 && !hasIonZ) optTips.push("Net negative protein charge repels RNA — add Mg²⁺/Zn²⁺ in Slot Z to test cation-bridged recognition.");
+        if (pS.aromPct < 6) optTips.push("Position Phe/Tyr/Trp adjacent to basic Arg/Lys residues to add base-specific π-stacking.");
+      } else if (isNuc0 && isNuc1) {
+        const dup = findBestDuplexSpan(e0.seq, e1.seq);
+        ci = clamp(0.15 + dup.len * 0.09 + (dup.gc / Math.max(1, dup.len)) * 0.15, 0.05, 0.96);
+        xSiteShort = `nt ${dup.aStart}–${dup.aEnd}`; ySiteShort = `nt ${dup.bStart}–${dup.bEnd}`;
+        whereInteract = dup.len >= 4 ? `Antiparallel base-paired duplex spanning <strong>${e0.name} nt ${dup.aStart}–${dup.aEnd} ↔ ${e1.name} nt ${dup.bStart}–${dup.bEnd}</strong> (${dup.len} continuous Watson–Crick/G·U bp, ${dup.gc} G·C pairs).` : `Only ${dup.len} contiguous complementary base pairs detected — weak direct hybridization.`;
+        siteRows.push([`${e0.name}: nt ${dup.aStart}–${dup.aEnd}`, `${e1.name}: nt ${dup.bStart}–${dup.bEnd}`, `Antiparallel Duplex (${dup.len} bp, ${dup.gc} G·C)`, dup.len >= 6 ? "Strong Hybridization" : "Weak/Partial"]);
+        if (dup.len < 8) optTips.push("Extend continuous antiparallel Watson–Crick complementarity to ≥8–12 bp (especially a high-GC seed) to drive stable duplex binding.");
+        if (dup.gc / Math.max(1, dup.len) < 0.45) optTips.push("Increase G·C base-pair content where biologically permitted to stabilize duplex ΔG and melting temperature.");
+      } else if ((e0.type === "protein" && e1.type === "ligand") || (e1.type === "protein" && e0.type === "ligand")) {
+        const pE = e0.type === "protein" ? e0 : e1, pS = statsMap[pE.slot];
+        const lE = e0.type === "ligand" ? e0 : e1, lS = statsMap[lE.slot];
+        const polarTot = (lS.hba || 0) + (lS.hbd || 0);
+        const isTiny = !lS.isCcd && lS.heavyEst < 8;
+        ci = clamp((isTiny ? 0.12 : 0.24) + Math.min(0.24, (lS.aromRings||0)*0.09 + (lS.aliphRings||0)*0.04) + Math.min(0.22, polarTot*0.025) + Math.min(0.12, (lS.heavyHalogens||0)*0.06) + (pS.aromPct >= 6 ? 0.10 : 0.04), 0.10, 0.92);
+        const pShort = `aa ${pS.patches.bestHydro.start}–${pS.patches.bestHydro.end} (${pS.has3DSurface ? "3D exposed pocket" : "apolar patch"})`;
+        const lShort = lS.isCcd ? `CCD:${lS.code}` : `${lS.aromRings} arom ring, ${lS.hba} HBA / ${lS.hbd} HBD`;
+        xSiteShort = e0 === pE ? pShort : lShort; ySiteShort = e0 === pE ? lShort : pShort;
+        whereInteract = `<strong>${lE.name}</strong> (${lS.summary}) is compatible with pocket regions on <strong>${pE.name}</strong> (candidate ${pS.has3DSurface ? "3D surface-exposed " : ""}apolar region around <strong>aa ${pS.patches.bestHydro.start}–${pS.patches.bestHydro.end}</strong>; exact 3D pocket pose requires co-folding).`;
+        siteRows.push([`${pE.name}: ${pShort}`, `${lE.name}: ${lShort}`, "Hydrophobic pocket burial + directional H-bond hinge / π-stacking", "Primary Pre-3D Match"]);
+        if (polarTot < 3) optTips.push("Add H-bond donor/acceptor motifs (e.g., amide/aminopyrimidine) to anchor the ligand specifically inside the protein pocket.");
+        if ((lS.heavyHalogens || 0) === 0) optTips.push("Test a Cl or Br halogen-bond donor or lipophilic substituent to increase pocket burial and residence time.");
+        if (lS.anionicHint && pS.q72 < -5 && !hasIonZ) optTips.push("Anionic ligand paired with acidic protein — add Mg²⁺/Mn²⁺/Zn²⁺ in Slot Z if this is a kinase/metalloenzyme site.");
+      } else if (e0.type === "ion" || e1.type === "ion") {
+        const ionE = e0.type === "ion" ? e0 : e1, otherE = e0.type === "ion" ? e1 : e0;
+        const mHit = scanMetalBindingSites(otherE.seq, otherE.type);
+        ci = clamp(0.35 + mHit.strength * 0.18, 0.25, 0.92);
+        xSiteShort = e0 === ionE ? `${ionE.seq.toUpperCase()}²⁺` : `${mHit.motif.slice(0,22)} (${mHit.start}–${mHit.end})`;
+        ySiteShort = e0 === ionE ? `${mHit.motif.slice(0,22)} (${mHit.start}–${mHit.end})` : `${ionE.seq.toUpperCase()}²⁺`;
+        whereInteract = `<strong>${ionE.seq.toUpperCase()}²⁺</strong> is predicted to coordinate <strong>${otherE.name}</strong> at <strong>${mHit.motif}</strong> (positions ${mHit.start}–${mHit.end}: <code>${mHit.seq}</code>).`;
+        siteRows.push([`${ionE.seq.toUpperCase()}²⁺ coordination shell`, `${otherE.name}: ${mHit.start}–${mHit.end} (${mHit.motif})`, "Inner-sphere N/O/S or hydrated outer-sphere chelation", mHit.strength >= 2 ? "Strong Chelating Motif" : "General Electrostatic"]);
+        optTips.push("Confirm tetrahedral (Zn²⁺) vs. octahedral (Mg²⁺/Ca²⁺/Mn²⁺) geometry in 3D via Boltz-1/2 or AF3 co-folding, then audit inner/outer-sphere bonds in Tab 1.");
+      } else if (e0.type === "protein" && e1.type === "protein") {
+        const prod = s0.q72 * s1.q72;
+        const elecComp = prod < -5 ? 0.25 : (prod > 15 ? -0.10 : 0.08);
+        ci = clamp(0.35 + elecComp + (s0.patches.bestHydro.score > 0.8 && s1.patches.bestHydro.score > 0.8 ? 0.22 : 0.10) + (hasIonZ || hasGlueZ ? 0.08 : 0.0), 0.10, 0.92);
+        xSiteShort = `aa ${s0.patches.bestHydro.start}–${s0.patches.bestHydro.end} / ${s0.patches.bestBasic.start}–${s0.patches.bestBasic.end}`;
+        ySiteShort = `aa ${s1.patches.bestHydro.start}–${s1.patches.bestHydro.end} / ${s1.patches.bestAcid.start}–${s1.patches.bestAcid.end}`;
+        whereInteract = `Complementary surface patches: <strong>${e0.name}</strong> (${s0.has3DSurface?"3D exposed ":""}apolar <strong>aa ${s0.patches.bestHydro.start}–${s0.patches.bestHydro.end}</strong>, basic <strong>aa ${s0.patches.bestBasic.start}–${s0.patches.bestBasic.end}</strong>) ↔ <strong>${e1.name}</strong> (${s1.has3DSurface?"3D exposed ":""}apolar <strong>aa ${s1.patches.bestHydro.start}–${s1.patches.bestHydro.end}</strong>, acidic <strong>aa ${s1.patches.bestAcid.start}–${s1.patches.bestAcid.end}</strong>).`;
+        siteRows.push([`${e0.name}: aa ${s0.patches.bestHydro.start}–${s0.patches.bestHydro.end}`, `${e1.name}: aa ${s1.patches.bestHydro.start}–${s1.patches.bestHydro.end}`, "Hydrophobic interface packing", "Apolar Core Match"]);
+        siteRows.push([`${e0.name}: aa ${s0.patches.bestBasic.start}–${s0.patches.bestBasic.end}`, `${e1.name}: aa ${s1.patches.bestAcid.start}–${s1.patches.bestAcid.end}`, "Electrostatic salt-bridge steering", prod < -5 ? "Complementary Charge" : "Local Patch Only"]);
+        if (prod > 15) optTips.push("Both proteins carry the same net charge at pH 7.2 — introduce charge-reversal mutations at peripheral interface residues or test a bridging cofactor/ion in Slot Z.");
+        optTips.push("Run 3D co-folding below and upload the 5-model .zip to Tab 1 to confirm the exact 3D binding locus, ΔG, Kd, and Wet-Lab Hotspots.");
+      } else {
+        ci = 0.50; xSiteShort = e0.name; ySiteShort = e1.name;
+        whereInteract = `Multi-modal pair (${e0.name} + ${e1.name}) configured for 3D co-folding.`;
+        siteRows.push([e0.name, e1.name, "Direct non-covalent / stacking / H-bond association", "Co-Fold Recommended"]);
+        optTips.push("Run Boltz-1/2 or Chai-1 3D co-folding below and drop the output .cif into Tab 1 for exact atomic scoring.");
+      }
+
+      const ciPass = ci >= 0.50;
+      const ciBadge = ci >= 0.70
+        ? `<span class="badge-call badge-above">HIGH (LIKELY)</span>`
+        : (ciPass ? `<span class="badge-call badge-mod">MODERATE</span>` : `<span class="badge-call badge-below">LOW (UNLIKELY)</span>`);
+      const recEngine = hasUnsupportedAf3Lig ? "Boltz-1/2 (Custom SMILES)" : "AF3 Server / Boltz-1/2";
+
+      const scWrap = document.getElementById("studioSummaryCards");
+      if (scWrap) {
+        scWrap.innerHTML = `
+          <div class="summary-metric primary-metric"><span>1D Compatibility Score</span><strong>${ci.toFixed(2)} / 1.00</strong></div>
+          <div class="summary-metric"><span>Pre-3D Call (≥ 0.50)</span><strong>${ciBadge}</strong></div>
+          <div class="summary-metric"><span>Predicted X Region</span><strong style="font-size:13px;">${xSiteShort}</strong></div>
+          <div class="summary-metric"><span>Predicted Y Region</span><strong style="font-size:13px;">${ySiteShort}</strong></div>
+          <div class="summary-metric"><span>Best 3D Co-Fold Engine</span><strong style="font-size:13px;">${recEngine}</strong></div>
+        `;
+      }
+
+      const smWrap = document.getElementById("studioSiteMapWrap");
+      if (smWrap && siteRows.length) {
+        smWrap.innerHTML = `
+          <div style="font-size:12px; font-weight:700; color:var(--primary); text-transform:uppercase; margin-bottom:6px;">Predicted Site-to-Site Interaction Map (Stage 1 Pre-Screen)</div>
+          <div class="table-wrap"><table><thead><tr><th>Part of Partner X</th><th>Part of Partner Y</th><th>Predicted Mechanism</th><th>Priority</th></tr></thead><tbody>
+          ${siteRows.map(rw => `<tr><td><strong>${rw[0]}</strong></td><td><strong>${rw[1]}</strong></td><td>${rw[2]}</td><td><span class="badge-call badge-persist">${rw[3]}</span></td></tr>`).join("")}
+          </tbody></table></div>
+        `;
       }
 
       const warnBox = document.getElementById("studioWarningBanner");
@@ -3905,15 +4555,22 @@
         else warnBox.style.display = "none";
       }
 
-      document.getElementById("studioVerdictBox").innerHTML = `
-        <strong>Biophysical Pre-Screen Summary:</strong> ${notes.length ? notes.join(" ") : "Multi-modal entities validated and ready for 3D co-folding."}
-        <br><span style="color:var(--text-muted); font-size:12px;"><strong>Honest Physics Guarantee:</strong> UniPPI-OWL never fabricates atomic ΔG/K<sub>d</sub> from 1D sequences alone. Export one of the 3D co-fold jobs below, run it (~2 min), and drop the output <code>.zip</code>/<code>.cif</code> into <strong>Tab 1</strong> for exact atomic ΔG, K<sub>d</sub>, UIS, 3Dmol.js &amp; SVG maps.</span>
+      const vb = document.getElementById("studioVerdictBox");
+      vb.style.background = ci >= 0.70 ? "#f0fdf4" : (ciPass ? "#fffbeb" : "#fff1f2");
+      vb.style.border = `1px solid ${ci >= 0.70 ? "#86efac" : (ciPass ? "#fcd34d" : "#fda4af")}`;
+      vb.style.borderLeft = `4px solid ${ci >= 0.70 ? "var(--emerald)" : (ciPass ? "var(--amber)" : "var(--rose)")}`;
+      vb.innerHTML = `
+        <div style="font-weight:800; text-transform:uppercase; font-size:11.5px; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:6px;">Plain-English Conclusion — Stage 1 Pre-Screen &amp; Strengthening Plan</div>
+        <div style="margin-bottom:6px;"><strong>1. Will They Interact?</strong> <code>Compatibility Index = ${ci.toFixed(2)} / 1.00</code> (Threshold ≥ 0.50) &rarr; ${ciBadge}</div>
+        <div style="margin-bottom:6px;"><strong>2. Which Part of X Interacts with Which Part of Y:</strong> ${whereInteract}</div>
+        ${selectivityNote ? `<div style="margin-bottom:6px;"><strong>3. Selectivity &amp; Off-Target Audit:</strong> ${selectivityNote}</div>` : ""}
+        <div style="margin-bottom:6px;"><strong>${selectivityNote ? "4." : "3."} How to Make This Interaction Stronger:</strong> ${optTips.length ? optTips.slice(0,3).join(" ") : "Pharmacophore and sequence features are already well matched; proceed directly to 3D co-folding to confirm exact atomic geometry."}</div>
+        <div style="color:var(--text-muted); font-size:12px; border-top:1px solid var(--border); padding-top:6px; margin-top:6px;"><strong>Next Step for Verified Atomic ΔG &amp; K<sub>d</sub> (Stage 2):</strong> 1D/surface pre-screens estimate compatibility, never exact 3D free energy. Click <strong>Copy 1-Click Colab Cell</strong> or <strong>Download Boltz-1/2 .YAML</strong> below (~2 min on free Google Colab T4), then drop the output <code>.cif/.zip</code> into <strong>Tab 1</strong>.</div>
       `;
 
-      // Build strictly schema-valid AF3 Server JSON, Boltz-1/2 YAML, Chai-1 FASTA & Boltz-1 Runner
       const jobName = entities.map(e => e.name).join("_vs_").slice(0, 64);
       const ION_TO_SMILES = { MG:"[Mg+2]", ZN:"[Zn+2]", CA:"[Ca+2]", MN:"[Mn+2]", FE:"[Fe+2]", CU:"[Cu+2]", CO:"[Co+2]", NI:"[Ni+2]", NA:"[Na+]", K:"[K+]", CL:"[Cl-]" };
-      const af3Seqs = entities.filter(e => !(e.type === "ligand" && !analyzeLigandStats(e.seq).isCcd)).map(e => {
+      const af3Seqs = entities.filter(e => !(e.type === "ligand" && (!analyzeLigandStats(e.seq).isCcd || !AF3_ALLOWED_CCDS.has(analyzeLigandStats(e.seq).code)))).map(e => {
         const cnt = e.count || 1;
         if (e.type === "protein") return { proteinChain: { sequence: e.seq, count: cnt } };
         if (e.type === "rna") return { rnaSequence: { sequence: e.seq, count: cnt } };
@@ -3921,8 +4578,8 @@
         if (e.type === "ion") return { ion: { ion: e.seq.toUpperCase(), count: cnt } };
         return { ligand: { ligand: `CCD_${analyzeLigandStats(e.seq).code}`, count: cnt } };
       });
-      const af3Json = hasCustomSmiles
-        ? JSON.stringify({ error: "AlphaFold 3 Server web UI does not accept arbitrary custom SMILES ligands. Use the Boltz-1/2 YAML or Chai-1 FASTA tab instead (both natively co-fold custom SMILES + Protein + RNA + Ions)." }, null, 2)
+      const af3Json = hasUnsupportedAf3Lig
+        ? JSON.stringify({ error: "AlphaFold 3 Server web UI only accepts its built-in CCD ligand allowlist (not custom SMILES or custom CCDs). Use the Boltz-1/2 YAML or Chai-1 FASTA tab instead (both natively co-fold custom SMILES + RNA + Proteins + Ions)." }, null, 2)
         : JSON.stringify([{ name: jobName, modelSeeds: [], sequences: af3Seqs, dialect: "alphafoldserver", version: 1 }], null, 2);
 
       const boltzLines = ["version: 1", "sequences:"];
@@ -3956,8 +4613,7 @@
 
       const colabSh = [
         "#!/usr/bin/env bash",
-        `# UniPPI-OWL v2.1-MARVAS — 1-Click Boltz-1/2 Co-Folding Script (${jobName})`,
-        "# Works on any Linux GPU or Google Colab T4 cell (!bash run_cofold.sh)",
+        `# UniPPI-OWL v2.2 — 1-Click Boltz-1/2 Co-Folding Script (${jobName})`,
         "pip install -q boltz",
         `cat << 'YAML_EOF' > ${jobName}_boltz.yaml`,
         boltzYaml,
@@ -3966,10 +4622,25 @@
         `echo "Done! Drop ./boltz_${jobName}/predictions/${jobName}_boltz/*.cif + confidence JSONs into UniPPI-OWL Tab 1."`
       ].join("\n");
 
-      LAST_STUDIO_JOBS = { jobName, af3: af3Json, boltz: boltzYaml, chai: chaiFasta, colab: colabSh, hasCustomSmiles };
+      const colabCell = [
+        "!pip install -q boltz",
+        `with open("${jobName}_boltz.yaml", "w") as f:\n    f.write("""${boltzYaml}""")`,
+        `!boltz predict ${jobName}_boltz.yaml --use_msa_server --diffusion_samples 5 --out_dir ./boltz_${jobName}`,
+        `!zip -r ${jobName}_cofold_results.zip ./boltz_${jobName}/predictions/${jobName}_boltz/`
+      ].join("\n");
+
+      LAST_STUDIO_JOBS = { jobName, af3: af3Json, boltz: boltzYaml, chai: chaiFasta, colab: colabSh, colabCell, hasCustomSmiles: hasUnsupportedAf3Lig };
       const fmtSel = document.getElementById("studioPreviewFormat");
-      if (fmtSel && hasCustomSmiles) fmtSel.value = "boltz";
+      if (fmtSel && hasUnsupportedAf3Lig) fmtSel.value = "boltz";
       renderStudioJobPreview();
+    }
+
+    function copyColabCell() {
+      if (!LAST_STUDIO_JOBS) runUniversalStudioPreScreen();
+      if (LAST_STUDIO_JOBS && navigator.clipboard) {
+        navigator.clipboard.writeText(LAST_STUDIO_JOBS.colabCell);
+        alert("Copied 1-Click Google Colab Boltz-1/2 cell! Paste into a Colab GPU cell, run it, and drop the generated .zip into Tab 1.");
+      }
     }
 
     function renderStudioJobPreview() {
@@ -4101,7 +4772,7 @@
             }
             const oi = origOrder.indexOf(chains[ca][0]?.origChainId || ca), oj = origOrder.indexOf(chains[cb][0]?.origChainId || cb);
             const pIptm = (Array.isArray(chainPairIptm) && oi>=0 && oj>=0 && oi!==oj && chainPairIptm[oi] && typeof chainPairIptm[oi][oj]==="number") ? chainPairIptm[oi][oj] : iptm;
-            const res = analyzePairJS(stem, ca, cb, chains[ca], chains[cb], ordered, resToIdx, mode, { iptm: pIptm, res_pae_matrix: paeMat }, pairSasa, sasaFree[ca], sasaFree[cb], tempK, lambdaPae, isBinary);
+            const res = analyzePairJS(stem, ca, cb, chains[ca], chains[cb], ordered, resToIdx, mode, { iptm: pIptm, chain_pair_iptm: chainPairIptm, orig_chain_order: origOrder, res_pae_matrix: paeMat }, pairSasa, sasaFree[ca], sasaFree[cb], tempK, lambdaPae, isBinary);
             if (res) { fileRes.push(res); out.push(res); }
           }
         }
@@ -4123,7 +4794,7 @@
               hits.sort((a,b)=>b[1]-a[1]);
               const [m1] = hits[0], [m2] = hits[1];
               const compM = [...chains[m1], ...chains[m2]], cidM = `${m1}+${m2}`;
-              const tRes = analyzePairJS(stem, cidM, lc, compM, lcRes, ordered, resToIdx, mode, { iptm, res_pae_matrix: paeMat }, computeResidueSASA([...compM, ...lcRes]), computeResidueSASA(compM), sasaFree[lc], tempK, lambdaPae, false);
+              const tRes = analyzePairJS(stem, cidM, lc, compM, lcRes, ordered, resToIdx, mode, { iptm, chain_pair_iptm: chainPairIptm, orig_chain_order: origOrder, res_pae_matrix: paeMat }, computeResidueSASA([...compM, ...lcRes]), computeResidueSASA(compM), sasaFree[lc], tempK, lambdaPae, false);
               if (tRes) out.push(tRes);
             }
           }
@@ -4189,6 +4860,18 @@
       return x < (a + 1) / (a + b + 2) ? bt * cf(x, a, b) / a : 1 - bt * cf(1 - x, b, a) / b;
     }
 
+    function hedgesG(arrA, arrB) {
+      const n1 = arrA.length, n2 = arrB.length;
+      if (n1 < 2 || n2 < 2) return null;
+      const m1 = meanArr(arrA), m2 = meanArr(arrB);
+      const v1 = arrA.reduce((s,x)=>s+(x-m1)*(x-m1),0) / (n1 - 1);
+      const v2 = arrB.reduce((s,x)=>s+(x-m2)*(x-m2),0) / (n2 - 1);
+      const df = n1 + n2 - 2;
+      const sp = Math.sqrt(Math.max(0, ((n1 - 1) * v1 + (n2 - 1) * v2) / df));
+      if (sp < 1e-12) return Math.abs(m2 - m1) < 1e-9 ? 0.0 : (m2 > m1 ? Infinity : -Infinity);
+      return (1.0 - 3.0 / (4.0 * df - 1.0)) * (m2 - m1) / sp;
+    }
+
     function welchTTestPVal(arrA, arrB) {
       const n1 = arrA.length, n2 = arrB.length;
       if (n1 < 2 || n2 < 2) return null;
@@ -4225,19 +4908,23 @@
         return arr.length > 1 ? `${m.toFixed(dec)} ± ${sd.toFixed(dec)}` : m.toFixed(dec);
       };
       const fmtP = p => p === null ? "N/A (N<2)" : (p < 0.0001 ? "< 1e-4 ***" : (p < 0.001 ? `${p.toFixed(4)} ***` : (p < 0.01 ? `${p.toFixed(4)} **` : (p < 0.05 ? `${p.toFixed(4)} *` : `${p.toFixed(3)} (ns)`))));
+      const fmtG = g => g === null ? "N/A" : (!Number.isFinite(g) ? (g > 0 ? "+∞ (0 SD)" : "−∞ (0 SD)") : `${g>=0?"+":""}${g.toFixed(2)}`);
 
       const dgA = meanArr(subA.map(r=>r.dG_uni_kcal)), dgB = meanArr(subB.map(r=>r.dG_uni_kcal));
       const ddg = dgB - dgA;
       const kdFold = Math.exp(ddg / (R_GAS_KCAL * tempK));
       const uisA = meanArr(subA.map(r=>r.UIS)), uisB = meanArr(subB.map(r=>r.UIS));
       const pDdg = welchTTestPVal(subA.map(r=>r.dG_uni_kcal), subB.map(r=>r.dG_uni_kcal));
+      const gDdg = hedgesG(subA.map(r=>r.dG_uni_kcal), subB.map(r=>r.dG_uni_kcal));
       const verdict = ddg >= 1.0 ? "DESTABILIZING / ESCAPE PERTURBATION (Binding Weakened in B)" : (ddg <= -1.0 ? "STABILIZING / GAIN-OF-BINDING (Binding Strengthened in B)" : "NEUTRAL / MODEST EFFECT (|ΔΔG| < 1.0 kcal/mol)");
+      const shortCall = ddg >= 1.0 ? `<span class="badge-call badge-lost">ESCAPE / WEAKER</span>` : (ddg <= -1.0 ? `<span class="badge-call badge-gained">STRONGER IN B</span>` : `<span class="badge-call badge-persist">NEUTRAL</span>`);
 
       document.getElementById("diffResultsWrap").style.display = "block";
       document.getElementById("btnExportDiffCSV").style.display = "inline-flex";
       const hb = document.getElementById("diffHeadlineBanner");
-      hb.style.borderLeftColor = ddg >= 1.0 ? "var(--rose)" : (ddg <= -1.0 ? "var(--emerald)" : "var(--primary)");
-      hb.innerHTML = `<strong>${verdict}</strong> (N<sub>A</sub>=${subA.length} vs N<sub>B</sub>=${subB.length})<br>ΔΔG (B − A) = <strong>${ddg>=0?"+":""}${ddg.toFixed(2)} kcal/mol</strong> · K<sub>d</sub> Fold-Change = <strong>${kdFold >= 1000 ? `${kdFold.toExponential(2)}×` : `${kdFold.toFixed(2)}×`}</strong> · ΔUIS = <strong>${(uisB-uisA)>=0?"+":""}${(uisB-uisA).toFixed(3)}</strong> · Welch p(ΔG) = <strong>${fmtP(pDdg)}</strong>`;
+      hb.style.borderLeft = `4px solid ${ddg >= 1.0 ? "var(--rose)" : (ddg <= -1.0 ? "var(--emerald)" : "var(--primary)")}`;
+      const foldDisp = kdFold >= 1000 ? `${kdFold.toExponential(1)}×` : `${Number(kdFold.toPrecision(2))}×`;
+      hb.innerHTML = `<strong>${verdict}</strong> (N<sub>A</sub>=${subA.length} vs N<sub>B</sub>=${subB.length})<br>ΔΔG (B − A) = <strong>${ddg>=0?"+":""}${ddg.toFixed(2)} kcal/mol</strong> · K<sub>d</sub> Fold-Change = <strong>${foldDisp}</strong> · ΔUIS = <strong>${(uisB-uisA)>=0?"+":""}${(uisB-uisA).toFixed(3)}</strong> · Hedges' <em>g</em>(ΔG) = <strong>${fmtG(gDdg)}</strong> · Welch <em>p</em>(ΔG) = <strong>${fmtP(pDdg)}</strong><br><span style="font-size:11px; color:var(--text-muted);">Statistical note: Multi-seed ensembles are recommended for formal inferential p-values; single-seed diffusion samples measure sampling consistency.</span>`;
 
       const metrics = [
         ["UniPPI UIS Score", r=>r.UIS, 3, d => d <= -0.08 ? "Confidence drop" : (d >= 0.08 ? "Confidence gain" : "Stable")],
@@ -4253,10 +4940,10 @@
         const aVals = subA.map(fn), bVals = subB.map(fn);
         const d = meanArr(bVals) - meanArr(aVals);
         const pv = welchTTestPVal(aVals, bVals);
-        return `<tr><td><strong>${lbl}</strong></td><td>${mSdStr(aVals, dec)}</td><td>${mSdStr(bVals, dec)}</td><td><strong>${d>=0?"+":""}${d.toFixed(dec)}</strong></td><td>${fmtP(pv)}</td><td>${noteFn(d)}</td></tr>`;
+        const gv = hedgesG(aVals, bVals);
+        return `<tr><td><strong>${lbl}</strong></td><td>${mSdStr(aVals, dec)}</td><td>${mSdStr(bVals, dec)}</td><td><strong>${d>=0?"+":""}${d.toFixed(dec)}</strong></td><td>${fmtG(gv)}</td><td>${fmtP(pv)}</td><td>${noteFn(d)}</td></tr>`;
       }).join("");
 
-      // Contact Rewiring Audit across Ensembles
       const aggContacts = (sub) => {
         const m = new Map();
         const chTag = c => [c.mcoord?"Met-In":"", c.mouter?"Met-H2O":"", c.xb?"XB":"", c.sb?"SB":"", c.hb2oh?"2'-OH":"", c.hb?"HB":"", (c.pi||c.catpi)?"π":"", c.hp?"HP":""].filter(Boolean).join("/") || "vdW";
@@ -4274,6 +4961,7 @@
         }
         return m;
       };
+      const chemPrio = tStr => /Met-In|SB|XB|π/.test(tStr) ? 4 : (/HB|2'-OH/.test(tStr) ? 3 : (/HP/.test(tStr) ? 2 : 1));
       const mapA = aggContacts(subA), mapB = aggContacts(subB);
       const allKeys = new Set([...mapA.keys(), ...mapB.keys()]);
       const rewiring = [];
@@ -4284,16 +4972,61 @@
         if (occA >= 0.6 && occB < 0.4) { status = "LOST"; rank = 0; }
         else if (occA < 0.4 && occB >= 0.6) { status = "GAINED"; rank = 1; }
         else if (occA < 0.4 && occB < 0.4) continue;
+        const tA = a ? [...a.tags].join(",") : "—", tB = b ? [...b.tags].join(",") : "—";
         rewiring.push({
-          status, rank,
+          status, rank, prio: Math.max(chemPrio(tA), chemPrio(tB)),
           pair: a && b && a.label !== b.label ? `${a.label} [B: ${b.label}]` : (a?.label || b?.label || k),
           occA: Math.round(occA*100), occB: Math.round(occB*100),
           dA: a ? meanArr(a.dists).toFixed(2) : "—", dB: b ? meanArr(b.dists).toFixed(2) : "—",
-          tA: a ? [...a.tags].join(",") : "—", tB: b ? [...b.tags].join(",") : "—"
+          tA, tB
         });
       }
-      rewiring.sort((x, y) => x.rank - y.rank || Math.abs(y.occA - y.occB) - Math.abs(x.occA - x.occB));
+      rewiring.sort((x, y) => x.rank - y.rank || y.prio - x.prio || Math.abs(y.occA - y.occB) - Math.abs(x.occA - x.occB));
       DIFF_STATE.lastRewiring = rewiring;
+
+      const lostList = rewiring.filter(x => x.status === "LOST");
+      const gainList = rewiring.filter(x => x.status === "GAINED");
+      const persList = rewiring.filter(x => x.status === "PERSISTENT");
+
+      const dCards = document.getElementById("diffSummaryCards");
+      if (dCards) {
+        dCards.innerHTML = `
+          <div class="summary-metric"><span>Mutation / State Verdict</span><strong>${shortCall}</strong></div>
+          <div class="summary-metric primary-metric"><span>ΔΔG (Cond B − A)</span><strong>${ddg>=0?"+":""}${ddg.toFixed(2)} kcal/mol</strong></div>
+          <div class="summary-metric"><span>K<sub>d</sub> Fold-Change</span><strong>${foldDisp}</strong></div>
+          <div class="summary-metric primary-metric"><span>ΔUIS Shift</span><strong>${(uisB-uisA)>=0?"+":""}${(uisB-uisA).toFixed(3)}</strong></div>
+          <div class="summary-metric"><span>Contact Rewiring</span><strong>${lostList.length} LOST / ${gainList.length} GAIN</strong></div>
+          <div class="summary-metric"><span>Effect Size (Hedges' g)</span><strong>${fmtG(gDdg)}</strong></div>
+        `;
+      }
+
+      const pBox = document.getElementById("diffPlainConclusionBox");
+      if (pBox) {
+        const dSb = meanArr(subB.map(r=>r.salt_bridges)) - meanArr(subA.map(r=>r.salt_bridges));
+        const dHb = meanArr(subB.map(r=>r.h_bonds)) - meanArr(subA.map(r=>r.h_bonds));
+        const dHp = meanArr(subB.map(r=>r.hydrophobic_contacts)) - meanArr(subA.map(r=>r.hydrophobic_contacts));
+        const summarySentence = ddg >= 1.0
+          ? `Condition B significantly <strong>weakens binding</strong> by <strong>+${ddg.toFixed(2)} kcal/mol</strong> (~${foldDisp} weaker K<sub>d</sub>; UIS drops from ${uisA.toFixed(3)} to ${uisB.toFixed(3)}). This matches a real resistance/escape perturbation.`
+          : (ddg <= -1.0
+            ? `Condition B <strong>strengthens binding</strong> by <strong>${ddg.toFixed(2)} kcal/mol</strong> (UIS rises from ${uisA.toFixed(3)} to ${uisB.toFixed(3)}), indicating gain-of-affinity.`
+            : `Condition B produces only a <strong>modest / neutral shift</strong> (ΔΔG = ${ddg>=0?"+":""}${ddg.toFixed(2)} kcal/mol; UIS ${uisA.toFixed(3)} → ${uisB.toFixed(3)}), consistent with a passenger or compensated variant.`);
+        const mechTxt = `<strong>${lostList.length} contact(s) LOST</strong>${lostList.length ? ` (highest-impact lost anchors: ${lostList.slice(0,4).map(x=>`<code>${x.pair}</code> [${x.tA}]`).join(", ")})` : ""}, <strong>${gainList.length} GAINED</strong>${gainList.length ? ` (${gainList.slice(0,3).map(x=>`<code>${x.pair}</code> [${x.tB}]`).join(", ")})` : ""}, and <strong>${persList.length} PERSISTENT</strong>.`;
+        const rescueTips = [];
+        if (dSb <= -1) rescueTips.push(`Electrostatic network lost ${Math.abs(dSb).toFixed(1)} salt bridge(s) — restoring charge complementarity or adding a basic/acidic group near the LOST salt-bridge pair can recover affinity.`);
+        if (dHb <= -1) rescueTips.push(`H-bond network dropped by ${Math.abs(dHb).toFixed(1)} bond(s) — redirect an H-bond donor/acceptor toward the surviving PERSISTENT interface anchors.`);
+        if (dHp <= -3) rescueTips.push(`Hydrophobic core lost ${Math.abs(dHp).toFixed(1)} apolar contact(s) — bulkier hydrophobic packing near the disrupted locus can stabilize Condition B.`);
+        if (!rescueTips.length) rescueTips.push(ddg >= 1.0 ? "Prioritize the LOST high-impact anchors above for counter-mutations or scaffold modification to overcome escape." : "Core contacts remain largely conserved across both ensembles.");
+
+        pBox.style.border = "1px solid var(--border-strong)";
+        pBox.style.borderLeft = `4px solid ${ddg >= 1.0 ? "var(--rose)" : (ddg <= -1.0 ? "var(--emerald)" : "var(--primary)")}`;
+        pBox.innerHTML = `
+          <div style="font-weight:800; text-transform:uppercase; font-size:11.5px; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:6px;">Plain-English Conclusion — WT vs. Mutant / Apo vs. Holo Verdict</div>
+          <div><strong>1. Overall Effect:</strong> ${summarySentence}</div>
+          <div style="margin-top:5px;"><strong>2. Exact Molecular Rewiring:</strong> ${mechTxt}</div>
+          <div style="margin-top:5px;"><strong>3. How to Rescue or Strengthen Binding:</strong> ${rescueTips.join(" ")}</div>
+        `;
+      }
+
       document.getElementById("diffRewiringBody").innerHTML = rewiring.slice(0, 80).map(rw => {
         const bCls = rw.status === "LOST" ? "badge-lost" : (rw.status === "GAINED" ? "badge-gained" : "badge-persist");
         return `<tr><td><span class="badge-call ${bCls}">${rw.status}</span></td><td><strong>${rw.pair}</strong></td><td>${rw.occA}%</td><td>${rw.occB}%</td><td>${rw.dA} → ${rw.dB}</td><td>${rw.tA} → ${rw.tB}</td></tr>`;
@@ -4352,7 +5085,7 @@
         return resOut;
       };
       DIFF_STATE.A = mkModels("WT_complex", 2.94, 2.05, 0.87, 93.4, false);
-      DIFF_STATE.B = mkModels("EscapeMut_complex", 3.65, 8.80, 0.44, 76.0, true);
+      DIFF_STATE.B = mkModels("EscapeMut_complex", 3.18, 5.40, 0.56, 82.0, true);
       document.getElementById("diffACount").textContent = "5 models (Demo WT)";
       document.getElementById("diffBCount").textContent = "5 models (Demo Escape Mutant)";
       document.getElementById("diffAStatus").textContent = "Loaded 5-model WT AF3 ensemble (A-B).";
