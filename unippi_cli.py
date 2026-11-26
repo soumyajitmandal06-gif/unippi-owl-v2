@@ -17,7 +17,7 @@ import argparse
 from dataclasses import dataclass, field
 from typing import List, Dict, Tuple, Optional, Set
 
-MODEL_VERSION = "UniPPI-v2.2"
+MODEL_VERSION = "UniPPI-v1.0"
 
 UIS_DECISION_THRESHOLD = 0.5000
 

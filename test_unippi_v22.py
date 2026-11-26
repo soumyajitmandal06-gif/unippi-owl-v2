@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Automated physics, edge-case & regression verification suite for UniPPI-OWL v2.2."""
+"""Automated physics, edge-case & regression verification suite for UniPPI-OWL v1.0."""
 import os
 import tempfile
 import unippi_cli as u
@@ -9,9 +9,9 @@ def _mk_atom(serial, name, res_name, chain, res_seq, x, y, z, el, bfac=90.0, het
 
 def run_tests():
     # 1. Version & Halogen Fluorine check
-    assert u.MODEL_VERSION == "UniPPI-v2.2", f"Bad version: {u.MODEL_VERSION}"
+    assert u.MODEL_VERSION == "UniPPI-v1.0", f"Bad version: {u.MODEL_VERSION}"
     assert "F" not in u.HALOGEN_ELEMENTS and {"CL", "BR", "I"} == u.HALOGEN_ELEMENTS
-    print("[PASS 1] Model version (UniPPI-v2.2) & Halogens (Cl/Br/I only, F excluded)")
+    print("[PASS 1] Model version (UniPPI-v1.0) & Halogens (Cl/Br/I only, F excluded)")
 
     # 2. Modified RNA nucleotide stays NUCLEIC (not LIGAND) & Calcium stays CA (not C)
     assert u.infer_element("CA", "", "CA") == "CA", "Calcium ion misclassified as Carbon!"
