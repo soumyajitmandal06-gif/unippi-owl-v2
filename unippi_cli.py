@@ -1670,7 +1670,7 @@ def analyze_interface_pair(
             + 0.10 * w_hp
             + 0.0025 * w_bsa
         )
-        e_eff = 16.5 * math.tanh(e_raw / 16.5)
+        e_eff = 16.5 * math.tanh((0.72 * e_raw) / 16.5)
         dg_phys = dg_cratic - e_eff + 1.50 * w_clash
     elif is_ligand_pair:
         e_raw = (
@@ -1893,7 +1893,18 @@ def analyze_interface_pair(
         nums = [int(m.group(1)) for k in keys for m in [re.search(r"(\d+)$", k)] if m]
         return f"{min(nums)}-{max(nums)}" if nums else "None"
 
+    _p_res_all = [r for r in (list(residues_a) + list(residues_b)) if getattr(r, "entity_type", "") == "PROTEIN"]
+    _n_res_all = [r for r in (list(residues_a) + list(residues_b)) if getattr(r, "entity_type", "") == "NUCLEIC"]
+    _p_apr = (sum(len(r.atoms) for r in _p_res_all) / len(_p_res_all)) if _p_res_all else 9.0
+    _n_apr = (sum(len(r.atoms) for r in _n_res_all) / len(_n_res_all)) if _n_res_all else 20.0
+    _inc_warn = ""
+    if (_p_res_all and _p_apr < 5.0) or (_n_res_all and _n_apr < 14.0):
+        _w_parts = ([f"prot={_p_apr:.1f} at/res"] if _p_res_all else []) + ([f"nuc={_n_apr:.1f} at/res"] if _n_res_all else [])
+        _inc_warn = f"BACKBONE_ONLY_TRACE ({', '.join(_w_parts)})"
+        import sys as _sys_w
+        print(f"[WARN] {"complex"} ({f"{chain_a_id}-{chain_b_id}"}): {_inc_warn} — side-chain/base atoms missing; dG unreliable.", file=_sys_w.stderr)
     return {
+        "incomplete_atoms_warning": _inc_warn,
         "chain_pair": f"{chain_a_id}-{chain_b_id}",
         "modality": modality,
         "len_a": len(residues_a),
@@ -2520,11 +2531,11 @@ def main():
         description="UniPPI-OWL CLI v2.2: Universal Multi-Modal Structure-to-Affinity & Interface Auditing Engine"
     )
     parser.add_argument("-i", "--input", type=str, help="Input directory, .zip archive, or single .cif/.pdb file")
-    parser.add_argument("-o", "--output", type=str, default="./unippi_results", help="Output directory")
+    parser.add_argument("-o", "--output", "--out", type=str, default="./unippi_results", help="Output directory")
     parser.add_argument("--cutoff", type=float, default=5.5, help="Heavy-atom contact cutoff in A (default: 5.5 A)")
     parser.add_argument("--temp", type=float, default=298.15, help="Temperature in Kelvin (default: 298.15 K)")
     parser.add_argument("--lambda-pae", type=float, default=8.0, help="PAE exponential decay constant (default: 8.0 A)")
-    parser.add_argument("--ionic-strength", type=float, default=150.0, help="Ionic strength in mM NaCl (default: 150.0 mM)")
+    parser.add_argument("--ionic-strength", "--salt", type=float, default=150.0, help="Ionic strength in mM NaCl (default: 150.0 mM)")
     parser.add_argument("--ph", type=float, default=7.2, help="Solution pH (default: 7.2)")
     parser.add_argument("--proline-penalty", type=float, default=0.0, help="Optional kcal/mol penalty per strained helical Proline (default: 0.0, diagnostic warning only)")
     parser.add_argument("--mutate", type=str, default="", help="Comma-separated custom mutations (e.g. A:LEU5PRO,A:GLU1LYS)")

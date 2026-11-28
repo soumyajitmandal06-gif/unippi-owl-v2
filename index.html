@@ -840,6 +840,10 @@
           <button class="btn btn-secondary btn-sm" type="button" onclick="loadSampleAF3Ensemble()">Load 5-Model Example</button>
           <button class="btn btn-secondary btn-sm" type="button" onclick="downloadActiveRawAF3Pair()">Download Sample .CIF + .JSON</button>
         </div>
+        <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+          <input type="text" id="tab1PdbIdInput" placeholder="Or fetch 3D RCSB PDB ID directly (e.g. 1YCR, 5ZC9, 1URN)" style="padding:6px 10px; border:1px solid var(--border-strong); border-radius:6px; font-family:var(--font-mono); font-size:12px; width:330px; background:#fff;">
+          <button class="btn btn-secondary btn-sm" type="button" onclick="fetchRcsbIntoTab1()">Fetch &amp; Audit 3D PDB</button>
+        </div>
         <div id="batchFileQueueWrap" style="text-align:left; background:#ffffff; border:1px solid var(--border); border-radius:6px; padding:9px 12px; font-family:var(--font-mono); font-size:11.5px; max-height:130px; overflow-y:auto;">
           <div style="font-weight:700; color:var(--text-muted); margin-bottom:3px;">Active Batch Manifest</div>
           <div id="batchFileQueueList" style="color:var(--text-light);">Ready. Drop structures above or click <strong>Load 5-Model Example</strong>.</div>
@@ -1194,8 +1198,8 @@
             <h3><span>Partner Y (Target / Molecule 2)</span><span id="slotYBadge" style="font-size:11px; font-family:var(--font-mono); color:var(--text-muted);">Empty</span></h3>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
               <select id="slotYType" onchange="updateStudioSlotUI('Y')">
-                <option value="rna">RNA (A/C/G/U / PDB)</option>
                 <option value="protein">Protein (aa sequence / PDB)</option>
+                <option value="rna">RNA (A/C/G/U / PDB)</option>
                 <option value="dna">DNA (A/C/G/T / PDB)</option>
                 <option value="ligand">Small Molecule (SMILES / CCD)</option>
                 <option value="ion">Catalytic Metal / Ion (MG/ZN...)</option>
@@ -1422,7 +1426,7 @@
       <section class="about-section">
         <div class="about-section-head"><span>05</span><div><div class="section-kicker">Reproducibility &amp; Standalone CLI</div><h2>Zero-Drift Python CLI &amp; Parity Suite</h2></div></div>
         <div class="about-cards">
-          <article><h3>Batch Python CLI</h3><p>Score hundreds of AlphaFold 3 or crystal complexes locally with identical outputs:<br><code>python3 unippi_cli.py --input ./af3_runs/ --out ./results/ --ph 7.2 --salt 150</code></p></article>
+          <article><h3>Batch Python CLI</h3><p>Score hundreds of AlphaFold 3 or crystal complexes locally with identical outputs:<br><code>python3 unippi_cli.py --input ./af3_runs/ --output ./results/ --ph 7.2 --ionic-strength 150</code></p></article>
           <article><h3>Verified Software Parity</h3><p>Regression-tested across 52 interfaces (PPI, Protein–RNA, Protein–Ligand, Ternary Glues, Metal Bridges, pH/salt sweeps, and Intra-Domain splits).</p></article>
           <article><h3>Local Privacy Guarantee</h3><p>Zero files or sequences leave your workstation. Both the HTML SPA and Python CLI run entirely offline.</p></article>
         </div>
@@ -2592,7 +2596,7 @@
       if (isNucleicPair) {
         const dKapRna = Math.exp(-0.85 * ((Math.sqrt(iM) / 3.04) - (Math.sqrt(0.15) / 3.04)) * 3.5);
         const eRawRna = 0.60*wSb*dKapRna + 0.65*wHbBase + 0.55*wHb2oh + 0.35*wHbBb + 0.95*wPiRna + 0.85*wCatPi + 0.10*wHp + 0.0025*wBsa;
-        dgPhys = 2.10 - 16.5 * Math.tanh(eRawRna / 16.5) + 1.50*wClash;
+        dgPhys = 2.10 - 16.5 * Math.tanh((0.72 * eRawRna) / 16.5) + 1.50*wClash;
       } else if (isLigandPair) {
         const eRawLig = 0.85*wSb*dKap + 0.65*wHb + 0.55*wXb + 0.90*wPiRna + 0.80*wCatPi + 0.14*wHp + 0.0055*wBsa;
         dgPhys = 1.80 - 15.0 * Math.tanh(eRawLig / 15.0) + 1.50*wClash;
@@ -2711,11 +2715,21 @@
         patDesc = `Unverified Coordinate-Only Prediction (${modality}; supply PAE JSON for full Mode A verification)`;
       }
 
+      const _pResAll = [...resA, ...resB].filter(r => r.entityType === "PROTEIN");
+      const _nResAll = [...resA, ...resB].filter(r => r.entityType === "NUCLEIC");
+      const _pAtPerRes = _pResAll.length ? (_pResAll.reduce((s, r) => s + r.atoms.length, 0) / _pResAll.length) : 9.0;
+      const _nAtPerRes = _nResAll.length ? (_nResAll.reduce((s, r) => s + r.atoms.length, 0) / _nResAll.length) : 20.0;
+      const _wParts = [];
+      if (_pResAll.length) _wParts.push(`protein ${_pAtPerRes.toFixed(1)} heavy atoms/res`);
+      if (_nResAll.length) _wParts.push(`nucleic ${_nAtPerRes.toFixed(1)} heavy atoms/res`);
+      const incompleteAtomsWarning = ((_pResAll.length && _pAtPerRes < 5.0) || (_nResAll.length && _nAtPerRes < 14.0))
+        ? `Backbone-only / incomplete atoms detected (${_wParts.join(", ")}). All-atom side chains & bases are required for accurate ΔG scoring.`
+        : "";
       const rnaTotSpec = nSb + nHbBase + nHb2oh + nHbBb + nPi + nCatPi;
       const rnaSsi = isNucleicPair ? Number(((nHbBase + nPi + nCatPi) / Math.max(1, rnaTotSpec)).toFixed(3)) : 0.0;
 
       return {
-        complex_id: complexId, chain_pair: `${caId}-${cbId}`, chainAId: caId, chainBId: cbId, unitA, unitB, modality, sha256_id, mode,
+        complex_id: complexId, chain_pair: `${caId}-${cbId}`, incomplete_atoms_warning: incompleteAtomsWarning, chainAId: caId, chainBId: cbId, unitA, unitB, modality, sha256_id, mode,
         UIS: uis, UIS_threshold: UIS_THRESHOLD, UIS_margin: margin, threshold_call: call, binding_class: bindClass,
         pattern_id: patId, pattern_desc: patDesc,
         dG_uni_kcal: Number(dgUni.toFixed(2)), dG_prodigy_kcal: Number(dgProdigy.toFixed(2)), dG_phys_kcal: Number(dgPhys.toFixed(2)),
@@ -2773,6 +2787,24 @@
     // =========================================================================
     // CLEAN NEUTRAL SAMPLE, AF3 .ZIP / BATCH PARSER, 3D ZOOM & 3-PANEL SVGs
     // =========================================================================
+
+    async function fetchRcsbIntoTab1() {
+      const idIn = (document.getElementById("tab1PdbIdInput")?.value || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (idIn.length !== 4) { showToast("Enter a valid 4-character RCSB PDB ID (e.g. 1YCR, 5ZC9, 1URN)."); return; }
+      const qList = document.getElementById("batchFileQueueList");
+      if (qList) qList.innerHTML = `<div style="color:var(--primary); font-weight:600;">Fetching ${idIn}.cif from RCSB PDB...</div>`;
+      try {
+        const resp = await fetch(`https://files.rcsb.org/download/${idIn}.cif`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const text = await resp.text();
+        const fileObj = new File([text], `${idIn}.cif`, { type: "text/plain" });
+        await handleFileSelect([fileObj]);
+        showToast(`Fetched and audited 3D structure ${idIn}.cif.`);
+      } catch (err) {
+        if (qList) qList.innerHTML = `<div style="color:var(--rose); font-weight:700;">Could not fetch ${idIn}.cif (${err.message}). Check internet connection or PDB ID.</div>`;
+      }
+    }
+
     function loadSampleAF3Ensemble() {
       switchWorkspaceTab("auditor");
       LAST_UPLOADED_FILES = null;
@@ -3368,7 +3400,7 @@
               <strong>Step 4 (Thermodynamic Free Energy Equations &amp; UIS Score at T = ${tempK} K, pH = ${phDisp.toFixed(1)}, I = ${saltDisp} mM NaCl):</strong><br>
               ${isNucUI ? `
               &bull; <code>Modality = <strong>${r.modality}</strong> &rarr; Protein–Protein PRODIGY term automatically disabled (0% weight).</code><br>
-              &bull; <code>ΔG<sub>RNA</sub> (Dedicated 9-Channel ${r.modality} Model, E<sub>eff</sub>=16.5·tanh(E<sub>raw</sub>/16.5); wSB<sub>phos</sub>=${(r.wSb||0).toFixed(1)}, wHB<sub>base</sub>=${(r.wHbBase||0).toFixed(1)}, wHB<sub>2'OH</sub>=${(r.wHb2oh||0).toFixed(1)}, wHB<sub>bb</sub>=${(r.wHbBb||0).toFixed(1)}, wπ<sub>RNA</sub>=${(r.wPiRna||0).toFixed(1)}, wCatπ=${(r.wCatPi||0).toFixed(1)}, wHP=${(r.wHp||0).toFixed(1)}, wBSA=${r.wBSA_A2} Å²) = <strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong> &rarr; K<sub>d</sub> = <strong>${kdStr}</strong></code><br>
+              &bull; <code>ΔG<sub>RNA</sub> (Dedicated 9-Channel ${r.modality} Model, E<sub>eff</sub>=16.5·tanh(0.72·E<sub>raw</sub>/16.5); wSB<sub>phos</sub>=${(r.wSb||0).toFixed(1)}, wHB<sub>base</sub>=${(r.wHbBase||0).toFixed(1)}, wHB<sub>2'OH</sub>=${(r.wHb2oh||0).toFixed(1)}, wHB<sub>bb</sub>=${(r.wHbBb||0).toFixed(1)}, wπ<sub>RNA</sub>=${(r.wPiRna||0).toFixed(1)}, wCatπ=${(r.wCatPi||0).toFixed(1)}, wHP=${(r.wHp||0).toFixed(1)}, wBSA=${r.wBSA_A2} Å²) = <strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong> &rarr; K<sub>d</sub> = <strong>${kdStr}</strong></code><br>
               ` : (isLigUI ? `
               &bull; <code>Modality = <strong>${r.modality}</strong> &rarr; Protein–Protein PRODIGY disabled; Ligand Burial = <strong>${(r.lig_burial_pct||0).toFixed(1)}%</strong>, Pocket Quality Q<sub>pocket</sub> = <strong>${(r.pocket_quality||0).toFixed(3)}</strong>${r.ternary_burial_split ? ` (${r.ternary_burial_split}, Balance=${(r.cooperativity_balance||0).toFixed(2)})` : ""}.</code><br>
               &bull; <code>ΔG<sub>lig</sub> (Dedicated ${r.modality} Pocket Model, E<sub>eff</sub>=15.0·tanh(E<sub>raw</sub>/15.0); wSB=${(r.wSb||0).toFixed(1)}, wHB=${(r.wHb||0).toFixed(1)}, wXB=${(r.wXb||0).toFixed(1)}, wπ=${(r.wPiRna||0).toFixed(1)}, wCatπ=${(r.wCatPi||0).toFixed(1)}, wHP=${(r.wHp||0).toFixed(1)}, wBSA=${r.wBSA_A2} Å²) = <strong>${r.dG_uni_kcal.toFixed(2)} kcal/mol</strong> &rarr; K<sub>d</sub> = <strong>${kdStr}</strong></code><br>
@@ -3452,11 +3484,19 @@
       const kdStr = formatKdString(r.Kd_nM);
       const isStrong = r.UIS >= 0.65, isAbove = r.UIS >= UIS_THRESHOLD;
       const affTier = r.dG_uni_kcal <= -11.5 ? "Very tight (sub-nM to low-nM)" : (r.dG_uni_kcal <= -8.5 ? "Strong (nanomolar)" : (r.dG_uni_kcal <= -5.8 ? "Moderate (low-µM)" : "Weak / transient (high-µM to mM)"));
-      const verdictTxt = isStrong
-        ? `<strong style="color:var(--emerald);">YES — High-Confidence 3D Interaction</strong> (UIS = ${r.UIS.toFixed(3)} ≥ 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`
-        : (isAbove
-          ? `<strong style="color:var(--amber);">LIKELY — Moderate 3D Interaction Above Threshold</strong> (UIS = ${r.UIS.toFixed(3)} ≥ 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`
-          : `<strong style="color:var(--rose);">UNLIKELY / WEAK — Below Interaction Threshold</strong> (UIS = ${r.UIS.toFixed(3)} &lt; 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`);
+      const isMonoSplit = (r.modality === "INTRA-DOMAIN (MONOMER)");
+      const incBanner = r.incomplete_atoms_warning
+        ? `<div style="background:var(--amber-bg); color:var(--amber); border:1px solid #fcd34d; padding:8px 11px; border-radius:6px; margin-bottom:8px; font-size:12.5px; font-weight:700;">⚠ INCOMPLETE ALL-ATOM INPUT: ${r.incomplete_atoms_warning}</div>`
+        : "";
+      const verdictTxt = r.incomplete_atoms_warning
+        ? `<strong style="color:var(--amber);">UNRELIABLE (INCOMPLETE BACKBONE-ONLY STRUCTURE)</strong> — Missing side-chain/base atoms prevent valid all-atom ΔG evaluation (UIS = ${r.UIS.toFixed(3)}, ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol).`
+        : (isMonoSplit
+          ? `<strong style="color:var(--primary);">INTRA-CHAIN DOMAIN PACKING (SINGLE-CHAIN MONOMER — NOT AN INTER-MOLECULAR COMPLEX)</strong> — This file contains only 1 polymer chain, auto-sliced into N/C domains (${cA} ↔ ${cB}) to inspect internal domain packing (UIS = ${r.UIS.toFixed(3)}, packing score = ${r.dG_uni_kcal.toFixed(2)} kcal/mol). Upload a multi-chain complex to score intermolecular binding.`
+          : (isStrong
+            ? `<strong style="color:var(--emerald);">YES — High-Confidence 3D Interaction</strong> (UIS = ${r.UIS.toFixed(3)} ≥ 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`
+            : (isAbove
+              ? `<strong style="color:var(--amber);">LIKELY — Moderate 3D Interaction Above Threshold</strong> (UIS = ${r.UIS.toFixed(3)} ≥ 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`
+              : `<strong style="color:var(--rose);">UNLIKELY / WEAK — Below Interaction Threshold</strong> (UIS = ${r.UIS.toFixed(3)} &lt; 0.50; ${affTier}: ΔG = ${r.dG_uni_kcal.toFixed(2)} kcal/mol, K<sub>d</sub> ${kdStr}).`)));
       box.style.background = isStrong ? "#f0fdf4" : (isAbove ? "#fffbeb" : "#fff1f2");
       box.style.border = `1px solid ${isStrong ? "#86efac" : (isAbove ? "#fcd34d" : "#fda4af")}`;
       box.style.borderLeft = `4px solid ${isStrong ? "var(--emerald)" : (isAbove ? "var(--amber)" : "var(--rose)")}`;
@@ -3500,7 +3540,7 @@
 
       const lociStr = (r.lociA && r.lociA !== "None") ? `${r.lociA.includes(":") ? r.lociA : `${cA}:${r.lociA}`} ↔ ${cB}:${r.lociB}` : "No ordered binding core";
       box.innerHTML = `
-        <div style="font-weight:800; text-transform:uppercase; font-size:11.5px; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:6px;">Plain-English Conclusion &amp; Affinity Optimization Advisor (3D Atomic Audit)</div>
+        ${incBanner}<div style="font-weight:800; text-transform:uppercase; font-size:11.5px; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:6px;">Plain-English Conclusion &amp; Affinity Optimization Advisor (3D Atomic Audit)</div>
         <div><strong>1. Interaction Verdict:</strong> ${verdictTxt} <span style="color:var(--text-muted); font-size:12px;">(Rigid-structure ΔG carries ~2.5 kcal/mol typical MAE on experimental PPIs; prioritize relative ΔΔG ranking and UIS together rather than absolute Kd alone.)</span></div>
         <div style="margin-top:5px;"><strong>2. Which Part of X Interacts with Which Part of Y:</strong> Binding spans <strong>${lociStr}</strong> (${r.confContactCount} confident atomic pairs), driven by ${driverStr}. Key anchors: ${pairDesc}.</div>
         <div style="margin-top:5px;"><strong>3. How to Make This Interaction Stronger:</strong> ${tips.slice(0,3).join(" ")}</div>
@@ -3514,6 +3554,7 @@
         container.innerHTML = `<div style="color:#fff; padding:20px;">3Dmol.js viewer ready.</div>`;
         return;
       }
+      if (container.clientWidth === 0 || container.clientHeight === 0) return;
       container.innerHTML = "";
       ACTIVE_3D_SHAPES = [];
       VIEWER_3D = $3Dmol.createViewer(container, { backgroundColor: "#0f172a" });
@@ -3862,13 +3903,15 @@
     }
 
     function buildMasterDelimited(sep) {
-      const cols = ["complex_id","chain_pair","modality","lociA","lociB","confContactCount","sha256_id","mode","UIS","UIS_threshold","UIS_margin","threshold_call","binding_class","pattern_id","dG_uni_kcal","dG_prodigy_kcal","dG_phys_kcal","Kd_nM","ipTM","LIS","pDockQ_PAE","wBSA_A2","intf_residues","nis_total","salt_bridges","h_bonds","hb_base","hb_2oh","hb_backbone","hydrophobic_contacts","pi_stacking","cation_pi","halogen_bonds","metal_coord_bonds","metal_outer_bonds","covalent_bonds","lig_burial_pct","pocket_quality","rna_specificity_idx","ternary_partners","cooperativity_balance","helical_prolines"];
+      const cols = ["complex_id","chain_pair","modality","loci_a","loci_b","conf_contacts","sha256_id","mode","UIS","UIS_threshold","UIS_margin","threshold_call","binding_class","pattern_id","dG_uni_kcal","dG_prodigy_kcal","dG_phys_kcal","Kd_M","Kd_nM","ipTM","LIS","pDockQ_PAE","pDockQ_coord","mean_intf_pLDDT","mean_intf_PAE_A","BSA_A2","wBSA_A2","intf_residues","nis_total","n_cb8_contacts","salt_bridges","h_bonds","hb_base","hb_2oh","hb_backbone","hydrophobic_contacts","pi_stacking","cation_pi","halogen_bonds","metal_coord_bonds","metal_outer_bonds","covalent_bonds","disulfides","steric_clashes","helical_prolines","proline_warning","f_apolar","elec_density_1000A2","mean_w_intf","lig_burial_pct","pocket_quality","rna_specificity_idx","ternary_partners","cooperativity_balance","incomplete_atoms_warning"];
+      const aliasMap = { loci_a: "lociA", loci_b: "lociB", conf_contacts: "confContactCount" };
       const rows = [cols.join(sep)];
       for (const r of ALL_RESULTS) {
         rows.push(cols.map(c => {
           if (c === "LIS" && r.mode !== "MODE_A_PRED_FULL") return "NA";
           if (c === "ipTM" && r.mode !== "MODE_A_PRED_FULL" && !r.hasJsonIptm) return "NA";
-          const val = r[c] ?? "";
+          const key = aliasMap[c] || c;
+          const val = r[key] ?? "";
           return sep === "," && String(val).includes(",") ? `"${val}"` : val;
         }).join(sep));
       }
@@ -4403,8 +4446,38 @@
 
     let LAST_STUDIO_JOBS = null;
 
+    function validateStudioSlotInput(rawInput, kind, slotLabel) {
+      const stripped = (rawInput || "").split(/\r?\n/).filter(l => !l.trim().startsWith(">")).join("").trim();
+      if (!stripped) return { error: "", warning: "" };
+      const compact = stripped.replace(/\s+/g, "");
+      if ((kind === "protein" || kind === "rna" || kind === "dna") && /^[0-9][A-Za-z0-9]{3}$/.test(compact)) {
+        return { error: `Partner ${slotLabel}: '${compact.toUpperCase()}' looks like a 4-character RCSB PDB ID pasted into the sequence box. Paste it into the PDB/UniProt field above and click PDB (or fetch it directly in Tab 1).`, warning: "" };
+      }
+      if (kind === "rna" || kind === "dna") {
+        const letters = compact.toUpperCase().replace(/[^A-Z]/g, "");
+        const bad = [...new Set(Array.from(letters).filter(ch => !"ACGTUN".includes(ch)))];
+        if (bad.length > 0) {
+          return { error: `Partner ${slotLabel} is set to ${kind.toUpperCase()}, but the pasted sequence contains non-nucleic amino-acid letter(s) (${bad.slice(0,8).join(", ")}). Switch Partner ${slotLabel} type to Protein (aa sequence) and re-run.`, warning: "" };
+        }
+      } else if (kind === "protein") {
+        const letters = compact.toUpperCase().replace(/[^A-Z]/g, "");
+        if (letters.length >= 10) {
+          const nucFrac = Array.from(letters).filter(ch => "ACGTU".includes(ch)).length / letters.length;
+          if (letters.includes("U") || nucFrac >= 0.95) {
+            return { error: "", warning: `Partner ${slotLabel} is set to Protein, but ${(nucFrac*100).toFixed(0)}% of letters are A/C/G/T/U (nucleic alphabet). Verify whether Partner ${slotLabel} should be set to RNA or DNA.` };
+          }
+        }
+      } else if (kind === "ligand") {
+        if (compact.length >= 25 && /^[ACDEFGHIKLMNPQRSTVWY]+$/.test(compact)) {
+          return { error: `Partner ${slotLabel} is set to Small Molecule (SMILES/CCD), but this input looks like a ${compact.length}-aa protein sequence. Switch Partner ${slotLabel} type to Protein.`, warning: "" };
+        }
+      }
+      return { error: "", warning: "" };
+    }
+
     function buildStudioEntities() {
       const warnings = [];
+      const errors = [];
       const entities = [];
       const chainPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       let nextCh = 0;
@@ -4416,7 +4489,11 @@
       for (const slot of ["X", "Y"]) {
         const tp = document.getElementById(`slot${slot}Type`)?.value || "protein";
         const name = (document.getElementById(`slot${slot}Name`)?.value || `Partner_${slot}`).trim().replace(/\s+/g, "_");
-        const raw = cleanSeqInput(document.getElementById(`slot${slot}Seq`)?.value || "", tp);
+        const rawUnfiltered = document.getElementById(`slot${slot}Seq`)?.value || "";
+        const chk = validateStudioSlotInput(rawUnfiltered, tp, slot);
+        if (chk.error) errors.push(chk.error);
+        if (chk.warning) warnings.push(chk.warning);
+        const raw = cleanSeqInput(rawUnfiltered, tp);
         const count = clamp(parseInt(document.getElementById(`slot${slot}Count`)?.value || "1", 10) || 1, 1, 6);
         if (!raw) continue;
         let seq = raw, mutNotes = [];
@@ -4435,7 +4512,7 @@
         const cids = takeIds(cnt);
         entities.push({ slot: `Z${idx+1}`, chainId: cids[0], chainIds: cids, count: cnt, type: ec.type, name: (ec.name || `Comp_Z${idx+1}`).trim().replace(/\s+/g, "_"), seq: raw, mutNotes: [] });
       });
-      return { entities, warnings };
+      return { entities, warnings, errors };
     }
 
     function scanProteinBindingPatches(seq) {
@@ -4748,9 +4825,23 @@
     }
 
     function runUniversalStudioPreScreen() {
-      const { entities, warnings } = buildStudioEntities();
-      if (entities.length < 2) { alert("Please enter or upload at least Partner X and Partner Y."); return; }
+      const { entities, warnings, errors } = buildStudioEntities();
       const outPanel = document.getElementById("studioOutputPanel");
+      if (errors && errors.length) {
+        if (outPanel) outPanel.style.display = "block";
+        const warnBox = document.getElementById("studioWarningBanner");
+        if (warnBox) {
+          warnBox.style.display = "block";
+          warnBox.style.background = "var(--rose-bg)";
+          warnBox.style.color = "var(--rose)";
+          warnBox.style.border = "1px solid #fda4af";
+          warnBox.innerHTML = errors.map(e => `✕ INPUT TYPE ERROR: ${e}`).join("<br>");
+        }
+        const vb = document.getElementById("studioVerdictBox");
+        if (vb) vb.innerHTML = "<strong>Stopped due to input molecule-type mismatch above.</strong> Fix the dropdown selection or pasted input and click Run again.";
+        return;
+      }
+      if (entities.length < 2) { showToast("Please enter or upload at least Partner X and Partner Y."); return; }
       if (outPanel) outPanel.style.display = "block";
 
       const cards = [];
@@ -4904,15 +4995,17 @@
         optTips.push("Confirm tetrahedral (Zn²⁺) vs. octahedral (Mg²⁺/Ca²⁺/Mn²⁺) geometry in 3D via Boltz-1/2 or AF3 co-folding, then audit inner/outer-sphere bonds in Tab 1.");
       } else if (e0.type === "protein" && e1.type === "protein") {
         const prod = s0.q72 * s1.q72;
-        const elecComp = prod < -5 ? 0.25 : (prod > 15 ? -0.10 : 0.08);
-        ci = clamp(0.35 + elecComp + (s0.patches.bestHydro.score > 0.8 && s1.patches.bestHydro.score > 0.8 ? 0.22 : 0.10) + (hasIonZ || hasGlueZ ? 0.08 : 0.0), 0.10, 0.92);
-        xSiteShort = `aa ${s0.patches.bestHydro.start}–${s0.patches.bestHydro.end} / ${s0.patches.bestBasic.start}–${s0.patches.bestBasic.end}`;
-        ySiteShort = `aa ${s1.patches.bestHydro.start}–${s1.patches.bestHydro.end} / ${s1.patches.bestAcid.start}–${s1.patches.bestAcid.end}`;
-        whereInteract = `Complementary surface patches: <strong>${e0.name}</strong> (${s0.has3DSurface?"3D exposed ":""}apolar <strong>aa ${s0.patches.bestHydro.start}–${s0.patches.bestHydro.end}</strong>, basic <strong>aa ${s0.patches.bestBasic.start}–${s0.patches.bestBasic.end}</strong>) ↔ <strong>${e1.name}</strong> (${s1.has3DSurface?"3D exposed ":""}apolar <strong>aa ${s1.patches.bestHydro.start}–${s1.patches.bestHydro.end}</strong>, acidic <strong>aa ${s1.patches.bestAcid.start}–${s1.patches.bestAcid.end}</strong>).`;
-        siteRows.push([`${e0.name}: aa ${s0.patches.bestHydro.start}–${s0.patches.bestHydro.end}`, `${e1.name}: aa ${s1.patches.bestHydro.start}–${s1.patches.bestHydro.end}`, "Hydrophobic interface packing", "Apolar Core Match"]);
-        siteRows.push([`${e0.name}: aa ${s0.patches.bestBasic.start}–${s0.patches.bestBasic.end}`, `${e1.name}: aa ${s1.patches.bestAcid.start}–${s1.patches.bestAcid.end}`, "Electrostatic salt-bridge steering", prod < -5 ? "Complementary Charge" : "Local Patch Only"]);
-        if (prod > 15) optTips.push("Both proteins carry the same net charge at pH 7.2 — introduce charge-reversal mutations at peripheral interface residues or test a bridging cofactor/ion in Slot Z.");
-        optTips.push("Run 3D co-folding below and upload the 5-model .zip to Tab 1 to confirm the exact 3D binding locus, ΔG, Kd, and Wet-Lab Hotspots.");
+        const src0 = s0.has3DSurface ? "3D exposed" : "1D sequence";
+        const src1 = s1.has3DSurface ? "3D exposed" : "1D sequence";
+        xSiteShort = `${src0}: apolar ${s0.patches.bestHydro.start}–${s0.patches.bestHydro.end}`;
+        ySiteShort = `${src1}: apolar ${s1.patches.bestHydro.start}–${s1.patches.bestHydro.end}`;
+        const chargeNote = prod < -5
+          ? `Opposite global net charges at pH 7.2 (${e0.name}: ${s0.q72>=0?"+":""}${s0.q72.toFixed(1)}, ${e1.name}: ${s1.q72>=0?"+":""}${s1.q72.toFixed(1)}).`
+          : `Same-sign global net charge at pH 7.2 (${e0.name}: ${s0.q72>=0?"+":""}${s0.q72.toFixed(1)}, ${e1.name}: ${s1.q72>=0?"+":""}${s1.q72.toFixed(1)}) — common in multi-domain eukaryotic proteins with acidic IDRs (e.g., MDM2–p53) and does NOT rule out local hydrophobic-cleft or domain-mediated binding.`;
+        whereInteract = `<strong>1D/Surface Descriptor Summary (Not a 3D Binding-Site Prediction):</strong> ${chargeNote} 1D hydrophobic windows often sit inside buried protein cores unless filtered by a 3D structure. Run Stage 2 co-folding below to identify the true 3D interface.`;
+        siteRows.push([`${e0.name}: ${src0} hydrophobic peak (aa ${s0.patches.bestHydro.start}–${s0.patches.bestHydro.end})`, `${e1.name}: ${src1} hydrophobic peak (aa ${s1.patches.bestHydro.start}–${s1.patches.bestHydro.end})`, "Sequence hydrophobic regions (confirm surface exposure in 3D)", "1D Feature Only"]);
+        siteRows.push([`${e0.name}: local basic aa ${s0.patches.bestBasic.start}–${s0.patches.bestBasic.end} / acidic aa ${s0.patches.bestAcid.start}–${s0.patches.bestAcid.end}`, `${e1.name}: local basic aa ${s1.patches.bestBasic.start}–${s1.patches.bestBasic.end} / acidic aa ${s1.patches.bestAcid.start}–${s1.patches.bestAcid.end}`, "Local charge patches (multi-domain electrostatics)", "1D Feature Only"]);
+        optTips.push("Do not judge protein–protein binding from 1D sequence charge alone. Co-fold these full-length sequences (or interacting domains) in AlphaFold 3 Server or Boltz-1/2 below, then drop the resulting .zip/.cif into Tab 1 for verified 3D ΔG, Kd, UIS, and Hotspot mutagenesis targets.");
       } else {
         ci = 0.50; xSiteShort = e0.name; ySiteShort = e1.name;
         whereInteract = `Multi-modal pair (${e0.name} + ${e1.name}) configured for 3D co-folding.`;
@@ -4920,28 +5013,26 @@
         optTips.push("Run Boltz-1/2 or Chai-1 3D co-folding below and drop the output .cif into Tab 1 for exact atomic scoring.");
       }
 
-      const ciPass = ci >= 0.50;
-      const ciBadge = ci >= 0.70
-        ? `<span class="badge-call badge-above">HIGH (LIKELY)</span>`
-        : (ciPass ? `<span class="badge-call badge-mod">MODERATE</span>` : `<span class="badge-call badge-below">LOW (UNLIKELY)</span>`);
       const recEngine = hasUnsupportedAf3Lig ? "Boltz-1/2 (Custom SMILES)" : "AF3 Server / Boltz-1/2";
+      const hasAny3D = Boolean((s0 && s0.has3DSurface) || (s1 && s1.has3DSurface));
+      const stageBadge = `<span class="badge-call badge-persist">CO-FOLD REQUIRED</span>`;
 
       const scWrap = document.getElementById("studioSummaryCards");
       if (scWrap) {
         scWrap.innerHTML = `
-          <div class="summary-metric primary-metric"><span>1D Compatibility Score</span><strong>${ci.toFixed(2)} / 1.00</strong></div>
-          <div class="summary-metric"><span>Pre-3D Call (≥ 0.50)</span><strong>${ciBadge}</strong></div>
-          <div class="summary-metric"><span>Predicted X Region</span><strong style="font-size:13px;">${xSiteShort}</strong></div>
-          <div class="summary-metric"><span>Predicted Y Region</span><strong style="font-size:13px;">${ySiteShort}</strong></div>
-          <div class="summary-metric"><span>Best 3D Co-Fold Engine</span><strong style="font-size:13px;">${recEngine}</strong></div>
+          <div class="summary-metric primary-metric"><span>Stage 1 Input Mode</span><strong style="font-size:14px;">${hasAny3D ? "3D Surface + 1D Seq" : "1D Sequence / Chem"}</strong></div>
+          <div class="summary-metric"><span>Interaction Verdict</span><strong>${stageBadge}</strong></div>
+          <div class="summary-metric"><span>Partner X Feature</span><strong style="font-size:13px;">${xSiteShort}</strong></div>
+          <div class="summary-metric"><span>Partner Y Feature</span><strong style="font-size:13px;">${ySiteShort}</strong></div>
+          <div class="summary-metric"><span>Recommended 3D Engine</span><strong style="font-size:13px;">${recEngine}</strong></div>
         `;
       }
 
       const smWrap = document.getElementById("studioSiteMapWrap");
       if (smWrap && siteRows.length) {
         smWrap.innerHTML = `
-          <div style="font-size:12px; font-weight:700; color:var(--primary); text-transform:uppercase; margin-bottom:6px;">Predicted Site-to-Site Interaction Map (Stage 1 Pre-Screen)</div>
-          <div class="table-wrap"><table><thead><tr><th>Part of Partner X</th><th>Part of Partner Y</th><th>Predicted Mechanism</th><th>Priority</th></tr></thead><tbody>
+          <div style="font-size:12px; font-weight:700; color:var(--primary); text-transform:uppercase; margin-bottom:6px;">Stage 1 Sequence / Chemical Feature Profile (Pre-3D Only — Not an Interaction Verdict)</div>
+          <div class="table-wrap"><table><thead><tr><th>Partner X Feature</th><th>Partner Y Feature</th><th>Biophysical Context</th><th>Scope</th></tr></thead><tbody>
           ${siteRows.map(rw => `<tr><td><strong>${rw[0]}</strong></td><td><strong>${rw[1]}</strong></td><td>${rw[2]}</td><td><span class="badge-call badge-persist">${rw[3]}</span></td></tr>`).join("")}
           </tbody></table></div>
         `;
@@ -4949,21 +5040,24 @@
 
       const warnBox = document.getElementById("studioWarningBanner");
       if (warnBox) {
+        warnBox.style.background = "var(--amber-bg)";
+        warnBox.style.color = "var(--amber)";
+        warnBox.style.border = "1px solid #fcd34d";
         if (warnings.length) { warnBox.style.display = "block"; warnBox.innerHTML = warnings.map(w => `⚠ ${w}`).join("<br>"); }
         else warnBox.style.display = "none";
       }
 
       const vb = document.getElementById("studioVerdictBox");
-      vb.style.background = ci >= 0.70 ? "#f0fdf4" : (ciPass ? "#fffbeb" : "#fff1f2");
-      vb.style.border = `1px solid ${ci >= 0.70 ? "#86efac" : (ciPass ? "#fcd34d" : "#fda4af")}`;
-      vb.style.borderLeft = `4px solid ${ci >= 0.70 ? "var(--emerald)" : (ciPass ? "var(--amber)" : "var(--rose)")}`;
+      vb.style.background = "var(--primary-soft)";
+      vb.style.border = "1px solid #cfe4f5";
+      vb.style.borderLeft = "4px solid var(--primary)";
       vb.innerHTML = `
-        <div style="font-weight:800; text-transform:uppercase; font-size:11.5px; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:6px;">Plain-English Conclusion — Stage 1 Pre-Screen &amp; Strengthening Plan</div>
-        <div style="margin-bottom:6px;"><strong>1. Will They Interact?</strong> <code>Compatibility Index = ${ci.toFixed(2)} / 1.00</code> (Threshold ≥ 0.50) &rarr; ${ciBadge}</div>
-        <div style="margin-bottom:6px;"><strong>2. Which Part of X Interacts with Which Part of Y:</strong> ${whereInteract}</div>
-        ${selectivityNote ? `<div style="margin-bottom:6px;"><strong>3. Selectivity &amp; Off-Target Audit:</strong> ${selectivityNote}</div>` : ""}
-        <div style="margin-bottom:6px;"><strong>${selectivityNote ? "4." : "3."} How to Make This Interaction Stronger:</strong> ${optTips.length ? optTips.slice(0,3).join(" ") : "Pharmacophore and sequence features are already well matched; proceed directly to 3D co-folding to confirm exact atomic geometry."}</div>
-        <div style="color:var(--text-muted); font-size:12px; border-top:1px solid var(--border); padding-top:6px; margin-top:6px;"><strong>Next Step for Verified Atomic ΔG &amp; K<sub>d</sub> (Stage 2):</strong> 1D/surface pre-screens estimate compatibility, never exact 3D free energy. Click <strong>Copy 1-Click Colab Cell</strong> or <strong>Download Boltz-1/2 .YAML</strong> below (~2 min on free Google Colab T4), then drop the output <code>.cif/.zip</code> into <strong>Tab 1</strong>.</div>
+        <div style="font-weight:800; text-transform:uppercase; font-size:11.5px; letter-spacing:0.06em; color:var(--primary); margin-bottom:6px;">Stage 1 Biophysical Profile &amp; 3D Co-Folding Workflow (Zero-Faking Standard)</div>
+        <div style="margin-bottom:6px;"><strong>1. Interaction Call:</strong> ${stageBadge} — UniPPI-OWL does <strong>not</strong> issue YES/NO binding verdicts from 1D sequence composition alone, because global sequence charge and 1D windows cannot capture local domain pockets, induced-fit folding, or short linear motifs (SLiMs).</div>
+        <div style="margin-bottom:6px;"><strong>2. Sequence / Pharmacophore Features:</strong> ${whereInteract}</div>
+        ${selectivityNote ? `<div style="margin-bottom:6px;"><strong>3. Chemical Selectivity Notes:</strong> ${selectivityNote}</div>` : ""}
+        <div style="margin-bottom:6px;"><strong>${selectivityNote ? "4." : "3."} Recommended Next Step:</strong> ${optTips.length ? optTips.slice(0,2).join(" ") : "Co-fold this complex below and audit the resulting 3D coordinates in Tab 1."}</div>
+        <div style="color:var(--text-muted); font-size:12px; border-top:1px solid #cfe4f5; padding-top:6px; margin-top:6px;"><strong>Stage 2 (Verified Atomic ΔG, K<sub>d</sub>, UIS &amp; Hotspots):</strong> Export the <strong>AlphaFold 3 .JSON</strong>, <strong>Boltz-1/2 .YAML</strong>, or <strong>1-Click Colab Cell</strong> below (~2 min on free GPU), then drop the output <code>.zip</code> / <code>.cif</code> into <strong>Tab 1 (3D Interface Auditor)</strong>.</div>
       `;
 
       const jobName = entities.map(e => e.name).join("_vs_").slice(0, 64);
