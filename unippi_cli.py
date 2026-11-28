@@ -2370,7 +2370,7 @@ def _welch_t_pval_py(a: List[float], b: List[float]) -> Optional[float]:
     v2 = sum((x - m2) ** 2 for x in b) / (n2 - 1)
     se2 = v1 / n1 + v2 / n2
     if se2 < 1e-12:
-        return 1.0 if abs(m1 - m2) < 1e-9 else 1e-9
+        return 1.0 if abs(m1 - m2) < 1e-9 else min(1.0, 2.0 / math.comb(n1 + n2, n1))
     t_val = (m2 - m1) / math.sqrt(se2)
     df = (se2 * se2) / (((v1 / n1) ** 2) / (n1 - 1) + ((v2 / n2) ** 2) / (n2 - 1))
     x = df / (df + t_val * t_val)
@@ -2410,7 +2410,7 @@ def _hedges_g_py(a: List[float], b: List[float]) -> Optional[float]:
     df = n1 + n2 - 2
     sp = math.sqrt(max(0.0, ((n1 - 1) * v1 + (n2 - 1) * v2) / df))
     if sp < 1e-12:
-        return 0.0 if abs(m2 - m1) < 1e-9 else (math.inf if m2 > m1 else -math.inf)
+        return 0.0 if abs(m2 - m1) < 1e-9 else None
     j_corr = 1.0 - (3.0 / (4.0 * df - 1.0))
     return j_corr * (m2 - m1) / sp
 
@@ -2439,7 +2439,7 @@ def run_cli_ensemble_diff(recs_a: List[Dict], recs_b: List[Dict], out_dir: str, 
     g_uis = _hedges_g_py(uis_a, uis_b)
     print(f"\n{'='*96}")
     print(f"[ENSEMBLE DIFF: Condition A (N={len(sub_a)}) vs Condition B (N={len(sub_b)})]")
-    _fmt_g = lambda g: "N/A" if g is None else (f"{g:+.2f}" if math.isfinite(g) else ("+inf (0 SD)" if g > 0 else "-inf (0 SD)"))
+    _fmt_g = lambda g: "N/A" if g is None else (f"{g:+.2f}" if math.isfinite(g) else ("N/A (0 SD)" if g > 0 else "N/A (0 SD)"))
     print(f"  dUIS = {duis:+.3f} | Hedges' g = {_fmt_g(g_uis)} | Welch p = {f'{p_uis:.4g}' if p_uis is not None else 'N/A'}")
     print(f"  ddG  = {ddg:+.2f} kcal/mol | Kd Fold-Change = {kd_fold:.2g}x | Hedges' g = {_fmt_g(g_dg)} | Welch p = {f'{p_dg:.4g}' if p_dg is not None else 'N/A'}")
     print("  [Statistical Note] Multi-seed ensembles are recommended for formal inferential p-values; single-seed diffusion samples measure sampling consistency.")
